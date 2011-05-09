@@ -14,22 +14,23 @@ public class BookmarkUtil  {
 	public   String DefBookmarks = "Al-Wird,0,1#Al-Kahf,295,0";
 	public ArrayList<Bookmark> arr = new ArrayList<Bookmark>();
 	private Integer iDefault = 0;
-	SharedPreferences mySharedPreferences;
-	SharedPreferences.Editor editor;
+	//SharedPreferences mySharedPreferences;
+	//SharedPreferences.Editor editor;
 
-	public BookmarkUtil(SharedPreferences myShared, String strBookmarks) {
-		mySharedPreferences = myShared;
-		editor = mySharedPreferences.edit();
+	//public BookmarkUtil(SharedPreferences myShared, String strBookmarks) {
+		//mySharedPreferences = myShared;
+		//editor = mySharedPreferences.edit();
+		//LoadBookmarks(strBookmarks);
+	//}
+	public BookmarkUtil( String strBookmarks) {
 		LoadBookmarks(strBookmarks);
-
 	}
 
 	protected String saveBookmarks() {
 		String strBookmarks = getBookmarksString();
 		Log.d("Bookmarks", strBookmarks );
-		editor.putString("Bookmarks", strBookmarks);
-		 
-		editor.commit();
+		//editor.putString("Bookmarks", strBookmarks);		 
+		//editor.commit();
 		return strBookmarks;
 	}
 
@@ -57,15 +58,15 @@ public class BookmarkUtil  {
 		saveBookmarks();
 	}
 
-	protected void InitiateBookmars() {
-		arr.clear();
-		arr.add(new Bookmark("AlWird", 1, 1));
-		arr.add(new Bookmark("AlKahf", 300, 0));
+	//protected void InitiateBookmars() {
+	//	arr.clear();
+	//	arr.add(new Bookmark("AlWird", 1, 1));
+	//	arr.add(new Bookmark("AlKahf", 300, 0));
 
-		editor.putString("Bookmarks", DefBookmarks);
-		editor.commit();
-		iDefault = 0;
-	}
+		//editor.putString("Bookmarks", DefBookmarks);
+		//editor.commit();
+	//	iDefault = 0;
+	//}
 
 	protected void LoadBookmarks(String strBookmarks) {
 		try {
@@ -73,9 +74,9 @@ public class BookmarkUtil  {
 			// Retrieve an editor to modify the shared preferences.
 			// Store new primitive types in the shared preferences object.
 
-			if (strBookmarks == null || strBookmarks.length() == 0)
-				strBookmarks = mySharedPreferences.getString("Bookmarks",
-						DefBookmarks);
+			//if (strBookmarks == null || strBookmarks.length() == 0)
+				//strBookmarks = mySharedPreferences.getString("Bookmarks",
+					//	DefBookmarks);
 			// InitiateBookmars();
 			Log.d("err ->", strBookmarks);
 			String[] row = strBookmarks.split("#");
@@ -89,7 +90,7 @@ public class BookmarkUtil  {
 			}
 		} catch (Throwable t) {
 			Log.d("err ->", t.toString());
-			InitiateBookmars();
+			//InitiateBookmars();
 		}
 	}
 }

@@ -46,8 +46,10 @@ public class AboutActivity extends Activity {
 	    
 		String strAbout = "<center><H1>";
 		strAbout += "<font color='black'>";
-		strAbout += "القرآن الكريم <br />";
+		strAbout += " القرآن الكريم <br />";
 		strAbout += "مصحف المدينة <br />";
+		strAbout += " الإصدار الأول V 1.0 <br />";
+		
 		strAbout += "</H1>";
 		strAbout += "محاولة لدعم البرامج الاسلامية في سوق الاندرويد <br />";
 		strAbout += "البرنامج مفتوح المصدر و يمكنك الذهاب الي موقع المصدر حيث يمكنكم الدعم او النسخ من  <br />";
