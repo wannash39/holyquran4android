@@ -71,8 +71,8 @@ public class MainActivity extends Activity {
 			}
 			// //////////////////////
 			AC = (ApplicationController) getApplicationContext();
-			SharedPreferences mySharedPreferences = getSharedPreferences(
-					MYPREFS, mode);
+			// SharedPreferences mySharedPreferences = getSharedPreferences(
+			// MYPREFS, mode);
 			// Begin
 
 			// Reference the Gallery view
@@ -90,8 +90,7 @@ public class MainActivity extends Activity {
 				bFirstTime = true;
 			}
 			// Check first time
-			AC.bookmarkUtitliy = new BookmarkUtil(mySharedPreferences,
-					ReadSettings());
+			AC.bookmarkUtitliy = new BookmarkUtil(ReadSettings());
 
 			if (bFirstTime) {
 				// Toast.makeText(this, "not exist",
@@ -245,17 +244,8 @@ public class MainActivity extends Activity {
 			String baseDir = Environment.getExternalStorageDirectory()
 					.getAbsolutePath()
 					+ "/hQuran/img/";
-			imgView.setScaleType(ScaleType.FIT_XY);
+			// imgView.setScaleType(ScaleType.FIT_XY);
 
-			/*
-			 * int i =
-			 * AC.bookmarkUtitliy.arr.get(AC.bookmarkUtitliy.getDefault())
-			 * .getPage(); Toast.makeText(mContext, Integer.toString(i),
-			 * Toast.LENGTH_LONG) .show();
-			 */
-			// Toast.makeText(mContext, Integer.toString(position),
-			// Toast.LENGTH_LONG)
-			// .show();
 			// to let it work like Arabic we will subtract position by 604
 			// imgView.setImageResource(mImageIds[position]);
 			String strFile = baseDir + Integer.toString(604 - position)
@@ -264,9 +254,6 @@ public class MainActivity extends Activity {
 			// http://dl.dropbox.com/u/27675084/img/9.gif
 			File f = new File(strFile);
 			if (!f.exists()) {
-				// Toast.makeText(mContext, R.string.notexistpage,
-				// Toast.LENGTH_LONG).show();
-				// Download
 				// ImageManager.DownloadFromUrl(Integer.toString(position),strFile);
 				// callOptionsItemSelected(null, R.id.mnu_settings);
 				strFile = baseDir + "no.gif";
@@ -278,7 +265,6 @@ public class MainActivity extends Activity {
 			}
 			// i.setScaleType(ImageView.ScaleType.FIT_XY);
 			// i.setLayoutParams(new Gallery.LayoutParams(136, 88));
-
 			// The preferred Gallery item background
 			imgView.setBackgroundResource(mGalleryItemBackground);
 			// imgView. setOnLongClickListener(new OnLongClickListener() {
@@ -291,10 +277,6 @@ public class MainActivity extends Activity {
 
 			return imgView;
 		}
-		// private Integer[] mImageIds = { R.drawable.img_10, R.drawable.img_11,
-		// R.drawable.img_12, R.drawable.img_13, R.drawable.img_14,
-		// R.drawable.img_15, R.drawable.img_16, R.drawable.img_17,
-		// R.drawable.img_18, R.drawable.img_19, R.drawable.img_20 };
 	}
 
 	public void WriteSettings(String data) {
