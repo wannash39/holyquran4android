@@ -6,14 +6,17 @@ import com.hamdyghanem.holyquran.R;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class SettingsActivity extends Activity {
 	/** Called when the activity is first created. */
@@ -25,10 +28,35 @@ public class SettingsActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		 final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+			
 		setContentView(R.layout.settings);
+///////////CHANGE THE TITLE BAR///////////////
+		Typeface arabicFont = Typeface.createFromAsset(getAssets(),
+		"fonts/DroidSansArabic.ttf");
+
+		if ( customTitleSupported ) {
+	        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.mytitle);
+	    }
+	
+	    final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
+	    if ( myTitleText != null ) {
+	    	myTitleText.setTypeface(arabicFont);
+	        myTitleText.setText(R.string.settings );
+	        //myTitleText.setBackgroundColor(R.color.blackblue);
+	    }
+////////////////////////
+	    
 		getWindow().setLayout(LayoutParams.FILL_PARENT,
 				LayoutParams.WRAP_CONTENT);
 		AC = (ApplicationController) getApplicationContext();
+		// Arabizarion
+		((Button) findViewById(R.id.btnSettDownload)).setTypeface(arabicFont);
+		((Button) findViewById(R.id.btnTafserDownload)).setTypeface(arabicFont);
+		//
+		
+
+		//
 		if (AC.NeedDownload())
 			downloadNow();
 	}

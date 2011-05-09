@@ -11,13 +11,16 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TableLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class GoToActivity extends Activity {
@@ -31,10 +34,25 @@ public class GoToActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		try {
 			super.onCreate(savedInstanceState);
+			 final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+				
 			setContentView(R.layout.navigate);
-			AC = (ApplicationController) getApplicationContext(); // RadioGroup.VERTICAL
+	///////////CHANGE THE TITLE BAR///////////////
 			Typeface arabicFont = Typeface.createFromAsset(getAssets(),
-					"fonts/DroidSansArabic.ttf");
+			"fonts/DroidSansArabic.ttf");
+
+			if ( customTitleSupported ) {
+		        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.mytitle);
+		    }
+		
+		    final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
+		    if ( myTitleText != null ) {
+		    	myTitleText.setTypeface(arabicFont);
+		        myTitleText.setText(R.string.GoToActivity );
+		        //myTitleText.setBackgroundColor(R.color.blackblue);
+		    }
+	////////////////////////
+			AC = (ApplicationController) getApplicationContext(); // RadioGroup.VERTICAL
 			//
 			tl = (TableLayout) findViewById(R.id.TableLayoutBody);
 			editPage = (EditText) findViewById(R.id.txtPageNum);
@@ -68,6 +86,14 @@ public class GoToActivity extends Activity {
 			//
 			findViewById(R.id.ButOK).setOnClickListener(ok_listener);
 			findViewById(R.id.ButCancel).setOnClickListener(cancel_listener);
+			// Arabizarion
+			((Button) findViewById(R.id.ButOK)).setTypeface(arabicFont);
+			((Button) findViewById(R.id.ButCancel)).setTypeface(arabicFont);
+			((TextView) findViewById(R.id.lblChapter)).setTypeface(arabicFont);
+			((TextView) findViewById(R.id.lblSora)).setTypeface(arabicFont);
+			((TextView) findViewById(R.id.lblPageNum)).setTypeface(arabicFont);
+			((TextView) findViewById(R.id.TextViewHeader)).setTypeface(arabicFont);
+			
 		} catch (Throwable t) {
 			Toast.makeText(this, "err ->" + t.toString(), Toast.LENGTH_LONG)
 					.show();

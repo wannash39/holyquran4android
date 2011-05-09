@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
@@ -109,6 +110,11 @@ public class MainActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.hq_menu, menu);
+		//
+		// Arabizarion
+		Typeface arabicFont = Typeface.createFromAsset(getAssets(),
+		"fonts/DroidSansArabic.ttf");
+	//
 		return true;
 	}
 

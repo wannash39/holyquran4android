@@ -4,6 +4,7 @@ import com.hamdyghanem.holyquran.R;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 
 import android.os.Bundle;
 import android.text.InputFilter;
@@ -11,6 +12,7 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
@@ -41,7 +43,24 @@ public class BookmarkEditActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		try {
 			super.onCreate(savedInstanceState);
+			 final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+				
 			setContentView(R.layout.bookmarkedit);
+	///////////CHANGE THE TITLE BAR///////////////
+			Typeface arabicFont = Typeface.createFromAsset(getAssets(),
+			"fonts/DroidSansArabic.ttf");
+
+			if ( customTitleSupported ) {
+		        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.mytitle);
+		    }
+		
+		    final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
+		    if ( myTitleText != null ) {
+		    	myTitleText.setTypeface(arabicFont);
+		        myTitleText.setText(R.string.BookmarkEdit );
+		        //myTitleText.setBackgroundColor(R.color.blackblue);
+		    }
+	////////////////////////
 			AC = (ApplicationController) getApplicationContext(); // RadioGroup.VERTICAL
 			int i = 0;
 			tl = (TableLayout) findViewById(R.id.TableLayoutBody);
@@ -57,6 +76,12 @@ public class BookmarkEditActivity extends Activity {
 			findViewById(R.id.ButNew).setOnClickListener(new_listener);
 			findViewById(R.id.ButOK).setOnClickListener(ok_listener);
 			findViewById(R.id.ButCancel).setOnClickListener(cancel_listener);
+			//
+			// Arabizarion
+			((Button) findViewById(R.id.ButNew)).setTypeface(arabicFont);
+			((Button) findViewById(R.id.ButOK)).setTypeface(arabicFont);
+			((Button) findViewById(R.id.ButCancel)).setTypeface(arabicFont);
+		
 		} catch (Throwable t) {
 			Toast.makeText(this, "err ->" + t.toString(), Toast.LENGTH_LONG)
 					.show();
@@ -106,6 +131,16 @@ public class BookmarkEditActivity extends Activity {
 		TextView lbl2 = new TextView(this);
 		TextView lbl3 = new TextView(this);
 		TextView lbl4 = new TextView(this);
+		//
+		// Arabizarion
+		Typeface arabicFont = Typeface.createFromAsset(getAssets(),
+		"fonts/DroidSansArabic.ttf");
+		lbl1.setTypeface(arabicFont);
+		lbl2.setTypeface(arabicFont);
+		lbl3.setTypeface(arabicFont);
+		lbl4.setTypeface(arabicFont);
+		
+		
 		//
 		lbl1.setText(R.string.Delete);
 		lbl2.setText(R.string.Name);
