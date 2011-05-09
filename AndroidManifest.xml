@@ -18,8 +18,7 @@
 
 		<activity android:name=".BookmarkEditActivity" android:label="@string/BookmarkEdit">
 		</activity>
-		<activity android:name=".TafseerActivity" 
-			android:theme="@android:style/Theme.Dialog">
+		<activity android:name=".TafseerActivity" android:theme="@android:style/Theme.Dialog">
 		</activity>
 		<activity android:name=".AboutActivity" android:label="@string/AboutActivity"
 			android:theme="@android:style/Theme.Dialog">
@@ -29,6 +28,7 @@
 		</activity>
 	</application>
 	<uses-sdk android:minSdkVersion="2" />
-
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
 	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
+
 </manifest>

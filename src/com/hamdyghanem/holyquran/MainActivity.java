@@ -1,12 +1,11 @@
 package com.hamdyghanem.holyquran;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-
 import com.hamdyghanem.holyquran.R;
 import android.app.Activity;
 import android.content.Context;
@@ -24,45 +23,77 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ImageView.ScaleType;
 
 public class MainActivity extends Activity {
 	public static final String MYPREFS = "mySharedPreferences";
 	int mode = Activity.MODE_PRIVATE;
 	int duration = Toast.LENGTH_SHORT;
+	String strFileBookmarks = "";
 	ApplicationController AC;
 	Gallery g;
 	String DefBookmarks = "Al-Wird,0,1#Al-Kahf,293,0";
-	
-	
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		try {
 			super.onCreate(savedInstanceState);
+			final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 			setContentView(R.layout.main);
 			// Create Folder
+			strFileBookmarks = Environment.getExternalStorageDirectory()
+					.getAbsolutePath()
+					+ File.separator
+					+ "hQuran"
+					+ File.separator
+					+ "bookmarks.dat";
+			// /////////CHANGE THE TITLE BAR///////////////
+			Typeface arabicFont = Typeface.createFromAsset(getAssets(),
+					"fonts/DroidSansArabic.ttf");
+
+			if (customTitleSupported) {
+				getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
+						R.layout.mytitle);
+			}
+
+			final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
+			if (myTitleText != null) {
+				myTitleText.setTypeface(arabicFont);
+				myTitleText.setText(R.string.holyquran);
+				// myTitleText.setBackgroundColor(R.color.blackblue);
+			}
+			// //////////////////////
 			AC = (ApplicationController) getApplicationContext();
 			SharedPreferences mySharedPreferences = getSharedPreferences(
 					MYPREFS, mode);
 			// Begin
-			
+
 			// Reference the Gallery view
 			g = (Gallery) findViewById(R.id.Gallery01);
 			g.setAdapter(new ImageAdapter(this));
 			// Set the adapter to our custom adapter (below)
 			//
+			Boolean bFirstTime = false;
 			String baseDir = Environment.getExternalStorageDirectory()
 					.getAbsolutePath()
 					+ "/hQuran";
 			File file = new File(baseDir);
-			// Check first time
-			
 			if (!file.exists()) {
-				WriteSettings(DefBookmarks);
+				file.mkdirs();
+				bFirstTime = true;
+			}
+			// Check first time
+			AC.bookmarkUtitliy = new BookmarkUtil(mySharedPreferences,
+					ReadSettings());
+
+			if (bFirstTime) {
 				// Toast.makeText(this, "not exist",
 				// Toast.LENGTH_LONG).show();
 				file.mkdirs();
@@ -79,19 +110,10 @@ public class MainActivity extends Activity {
 				// Open settings to load images directly
 				g.setSelection(604);
 				callOptionsItemSelected(null, R.id.mnu_settings);
-				AC.bookmarkUtitliy = new BookmarkUtil(mySharedPreferences,
-						ReadSettings());
-			
-			} else {
-				AC.bookmarkUtitliy = new BookmarkUtil(mySharedPreferences,
-						ReadSettings());
-			
-				file = new File(baseDir + "/tafseer/");
-				if (!file.exists())
-					file.mkdirs();
 
-				if (AC.NeedDownload())
-					callOptionsItemSelected(null, R.id.mnu_settings);
+			} else {
+				// if (AC.NeedDownload())
+				// callOptionsItemSelected(null, R.id.mnu_settings);
 				g.setSelection(604 - AC.bookmarkUtitliy.arr.get(
 						AC.bookmarkUtitliy.getDefault()).getPage());
 			}
@@ -100,6 +122,7 @@ public class MainActivity extends Activity {
 					Toast.LENGTH_LONG).show();
 		}
 	}
+
 	@Override
 	public void onStop() {
 		saveBookmarks();
@@ -111,10 +134,6 @@ public class MainActivity extends Activity {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.hq_menu, menu);
 		//
-		// Arabizarion
-		Typeface arabicFont = Typeface.createFromAsset(getAssets(),
-		"fonts/DroidSansArabic.ttf");
-	//
 		return true;
 	}
 
@@ -226,6 +245,7 @@ public class MainActivity extends Activity {
 			String baseDir = Environment.getExternalStorageDirectory()
 					.getAbsolutePath()
 					+ "/hQuran/img/";
+			imgView.setScaleType(ScaleType.FIT_XY);
 
 			/*
 			 * int i =
@@ -278,56 +298,44 @@ public class MainActivity extends Activity {
 	}
 
 	public void WriteSettings(String data) {
-		FileOutputStream fOut = null;
-		OutputStreamWriter osw = null;
+		File file = new File(strFileBookmarks);
+		FileWriter writer;
 		try {
-			fOut = openFileOutput("bookmarks.dat", MODE_PRIVATE);
-			osw = new OutputStreamWriter(fOut);
-			osw.write(data);
-			osw.flush();
-		} catch (Exception e) {
+			writer = new FileWriter(file);
+			writer.write(data);
+			writer.flush();
+			writer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-			Log.d("err ->", e.toString());
-		} finally {
-			try {
-				osw.close();
-				fOut.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-				Log.d("err ->", e.toString());
-			}
+			Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
 		}
+		// Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
+
 	}
 
 	public String ReadSettings() {
-		String strFile="\\data\\data\\com.hamdyghanem.holyquran\files\bookmarks.dat";
-		File f=new File(strFile);
-		if (!f.exists())
-			WriteSettings(DefBookmarks);
-		
 		// SaveBookmark
 		String data = "Al-Wird,0,1#Al-Kahf,293,0";
-		//File file = new File("bookmarks.dat");
-		FileInputStream fIn = null;
-		InputStreamReader isr = null;
-		char[] inputBuffer = new char[255];
-		try {
-			fIn = openFileInput("bookmarks.dat");
-			isr = new InputStreamReader(fIn);
-			isr.read(inputBuffer);
-			data = new String(inputBuffer);
-		} catch (Exception e) {
-			Log.d("err ->", e.toString());
+		File file = new File(strFileBookmarks);
+		if (!file.exists())
 			WriteSettings(DefBookmarks);
+		FileReader reader = null;
+		try {
+			reader = new FileReader(file);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} finally {
-			try {
-				isr.close();
-				fIn.close();
-			} catch (IOException e) {
-				Log.d("err ->", e.toString());
-				e.printStackTrace();
+		}
+		BufferedReader br = new BufferedReader(reader);
+		String thisLine = null;
+		try {
+			while ((thisLine = br.readLine()) != null) {
+				data = thisLine;
 			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		// Toast.makeText(this, "Request failed: " + data,
 		// Toast.LENGTH_LONG).show();

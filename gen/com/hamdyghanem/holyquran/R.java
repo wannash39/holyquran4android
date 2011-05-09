@@ -110,33 +110,34 @@ containing a value of this type.
     }
     public static final class string {
         public static final int AboutActivity=0x7f060006;
-        public static final int BookmarkEdit=0x7f06000f;
-        public static final int BookmarksActivity=0x7f06000e;
-        public static final int ButtCancel=0x7f060011;
-        public static final int ButtNew=0x7f060012;
-        public static final int ButtOK=0x7f060010;
-        public static final int Default=0x7f060016;
-        public static final int Delete=0x7f060013;
+        public static final int BookmarkEdit=0x7f060010;
+        public static final int BookmarksActivity=0x7f06000f;
+        public static final int ButtCancel=0x7f060012;
+        public static final int ButtNew=0x7f060013;
+        public static final int ButtOK=0x7f060011;
+        public static final int Default=0x7f060017;
+        public static final int Delete=0x7f060014;
         public static final int GoToActivity=0x7f060005;
-        public static final int Name=0x7f060014;
-        public static final int Page=0x7f060015;
-        public static final int about=0x7f060009;
+        public static final int Name=0x7f060015;
+        public static final int Page=0x7f060016;
+        public static final int about=0x7f06000a;
         public static final int app_name=0x7f060000;
-        public static final int bookmark=0x7f06000c;
+        public static final int bookmark=0x7f06000d;
         public static final int btn_download_pages=0x7f060001;
         public static final int btn_download_tafser=0x7f060002;
         public static final int defaultname=0x7f060007;
         public static final int downloading=0x7f060003;
-        public static final int gotoPage1=0x7f060019;
-        public static final int gotoPage2=0x7f06001a;
-        public static final int gotoPage3=0x7f06001b;
-        public static final int gotoPageHeader=0x7f060018;
-        public static final int gotomenu=0x7f06000a;
-        public static final int lbl_settings=0x7f06000b;
-        public static final int newbookmark=0x7f06000d;
+        public static final int gotoPage1=0x7f06001a;
+        public static final int gotoPage2=0x7f06001b;
+        public static final int gotoPage3=0x7f06001c;
+        public static final int gotoPageHeader=0x7f060019;
+        public static final int gotomenu=0x7f06000b;
+        public static final int holyquran=0x7f060008;
+        public static final int lbl_settings=0x7f06000c;
+        public static final int newbookmark=0x7f06000e;
         public static final int notexistpage=0x7f060004;
-        public static final int settings=0x7f060008;
-        public static final int tafseer=0x7f060017;
+        public static final int settings=0x7f060009;
+        public static final int tafseer=0x7f060018;
     }
     public static final class style {
         public static final int MyDefaultTextAppearance=0x7f080001;
