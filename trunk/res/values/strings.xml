@@ -11,6 +11,8 @@
 	<string name="AboutActivity">عن البرنامج</string>
 		<string name="defaultname">افتراضية</string>
 
+<string name="notexisttafser">ملف التفسير لهذه الصفحة غير موجود . من فضلك قم
+	بتنزيل التفسير من قائمة اعدادات</string>
 
 
 <string name="holyquran">القرآن الكريم</string>
@@ -27,6 +29,7 @@
 	<string name="ButtCancel">إلغاء</string>
 	<string name="ButtNew">جديد</string>
 	
+	<string name="Static">ثابتة</string>
 	<string name="Delete">حذف</string>
 	<string name="Name">اسم</string>
 	<string name="Page">صفحة</string>
