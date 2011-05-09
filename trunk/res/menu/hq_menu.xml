@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+<item android:id="@+id/mnu_bookmark"
+          android:icon="@drawable/ic_bookmark"
+          android:title="@string/bookmark" />
+
+<item android:id="@+id/mnu_goto"
+          android:icon="@drawable/ic_goto"
+          android:title="@string/gotomenu" />
+          <item android:id="@+id/mnu_tafseer"
+          android:icon="@drawable/ic_tafseer"
+          android:title="@string/tafseermenu" />
+          
+          <item android:id="@+id/mnu_newbookmark"
+          android:icon="@drawable/ic_newbookmark"
+          android:title="@string/newbookmark" />
+          
+    <item android:id="@+id/mnu_settings"
+          android:icon="@drawable/ic_settings"
+          android:title="@string/settings" />
+          
+       <item android:id="@+id/mnu_about"
+          android:icon="@drawable/ic_about"
+          android:title="@string/about" />
+          
+             
+</menu>
