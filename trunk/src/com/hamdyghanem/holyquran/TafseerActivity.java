@@ -20,6 +20,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -31,8 +32,24 @@ public class TafseerActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.tafseer);
-		//
+		 final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+			
+		 setContentView(R.layout.tafseer);
+		///////////CHANGE THE TITLE BAR///////////////
+			Typeface arabicFont = Typeface.createFromAsset(getAssets(),
+			"fonts/DroidSansArabic.ttf");
+
+			if ( customTitleSupported ) {
+		        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.mytitle);
+		    }
+		
+		    final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
+		    if ( myTitleText != null ) {
+		    	myTitleText.setTypeface(arabicFont);
+		        myTitleText.setText(R.string.tafseer );
+		        //myTitleText.setBackgroundColor(R.color.blackblue);
+		    }
+////////////////////////  
 		TextView lbl = (TextView) findViewById(R.id.TextView01);
 		AC = (ApplicationController) getApplicationContext(); // RadioGroup.VERTICAL
 		Integer i=AC.bookmarkUtitliy.arr.get(
@@ -64,9 +81,7 @@ public class TafseerActivity extends Activity {
 
 			lbl.setMovementMethod(new ScrollingMovementMethod());
 
-			Typeface arabicFont = Typeface.createFromAsset(getAssets(),
-					"fonts/DroidSansArabic.ttf");
-
+		
 			lbl.setTypeface(arabicFont);
 			lbl.setBackgroundResource(R.color.whiteyellow);
 			lbl.setTextColor(getResources().getColor(R.color.blackblue));

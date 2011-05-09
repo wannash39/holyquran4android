@@ -1,4 +1,4 @@
-package com.hamdyghanem.holyquran;
+ï»¿package com.hamdyghanem.holyquran;
 
 import com.hamdyghanem.holyquran.R;
 
@@ -24,21 +24,39 @@ public class AboutActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		 final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+			
 		setContentView(R.layout.about);
 		//
+///////////CHANGE THE TITLE BAR///////////////
+		Typeface arabicFont = Typeface.createFromAsset(getAssets(),
+		"fonts/DroidSansArabic.ttf");
+
+		if ( customTitleSupported ) {
+	        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.mytitle);
+	    }
+	
+	    final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
+	    if ( myTitleText != null ) {
+	    	myTitleText.setTypeface(arabicFont);
+	        myTitleText.setText(R.string.AboutActivity );
+	        //myTitleText.setBackgroundColor(R.color.blackblue);
+	    }
+////////////////////////
+	    
 		String strAbout = "<center><H1>";
 		strAbout += "<font color='black'>";
-		strAbout += "ÇáŞÑÂä ÇáßÑíã <br />";
-		strAbout += "ãÕÍİ ÇáãÏíäÉ <br />";
+		strAbout += "Ø§Ù„Ù‚Ø±Ø¢Ù† Ø§Ù„ÙƒØ±ÙŠÙ… <br />";
+		strAbout += "Ù…ØµØ­Ù Ø§Ù„Ù…Ø¯ÙŠÙ†Ø© <br />";
 		strAbout += "</H1>";
-		strAbout += "ãÍÇæáÉ áÏÚã ÇáÈÑÇãÌ ÇáÇÓáÇãíÉ İí ÓæŞ ÇáÇäÏÑæíÏ <br />";
-		strAbout += "ÇáÈÑäÇãÌ ãİÊæÍ ÇáãÕÏÑ æ íãßäß ÇáĞåÇÈ Çáí ãæŞÚ ÇáãÕÏÑ ÍíË íãßäßã ÇáÏÚã Çæ ÇáäÓÎ ãä  <br />";
-		strAbout += "<a href=\'http://code.google.com/p/holyquran4android/'>åäÇ</a> <br />";
+		strAbout += "Ù…Ø­Ø§ÙˆÙ„Ø© Ù„Ø¯Ø¹Ù… Ø§Ù„Ø¨Ø±Ø§Ù…Ø¬ Ø§Ù„Ø§Ø³Ù„Ø§Ù…ÙŠØ© ÙÙŠ Ø³ÙˆÙ‚ Ø§Ù„Ø§Ù†Ø¯Ø±ÙˆÙŠØ¯ <br />";
+		strAbout += "Ø§Ù„Ø¨Ø±Ù†Ø§Ù…Ø¬ Ù…ÙØªÙˆØ­ Ø§Ù„Ù…ØµØ¯Ø± Ùˆ ÙŠÙ…ÙƒÙ†Ùƒ Ø§Ù„Ø°Ù‡Ø§Ø¨ Ø§Ù„ÙŠ Ù…ÙˆÙ‚Ø¹ Ø§Ù„Ù…ØµØ¯Ø± Ø­ÙŠØ« ÙŠÙ…ÙƒÙ†ÙƒÙ… Ø§Ù„Ø¯Ø¹Ù… Ø§Ùˆ Ø§Ù„Ù†Ø³Ø® Ù…Ù†  <br />";
+		strAbout += "<a href=\'http://code.google.com/p/holyquran4android/'>Ù‡Ù†Ø§</a> <br />";
 
-		strAbout += " ááãÓÇÚÏÉ æ ÇáÔÑÍ íãßäß ÇáÊÕİÍ ãä  ";
-		strAbout += "<a href=\'http://knol.google.com/k/hamdy-ghanem/holyquran4android/3n0yrj5rx5x7a/29?hd=ns# '>åäÇ </a> <br />";
+		strAbout += " Ù„Ù„Ù…Ø³Ø§Ø¹Ø¯Ø© Ùˆ Ø§Ù„Ø´Ø±Ø­ ÙŠÙ…ÙƒÙ†Ùƒ Ø§Ù„ØªØµÙØ­ Ù…Ù†  ";
+		strAbout += "<a href=\'http://knol.google.com/k/hamdy-ghanem/holyquran4android/3n0yrj5rx5x7a/29?hd=ns# '>Ù‡Ù†Ø§ </a> <br />";
 		strAbout += "<br />";
-		strAbout += "ááÊæÇÕá";
+		strAbout += "Ù„Ù„ØªÙˆØ§ØµÙ„";
 		strAbout += "<a href='mailto:Hamdy.ghanem@gmail.com'>Hamdy.ghanem@gmail.com</a> ";
 		strAbout += "<br />";
 		strAbout += "</font>";
@@ -51,8 +69,6 @@ public class AboutActivity extends Activity {
 		lbl.setGravity(Gravity.CENTER);
 		lbl.setTextColor(getResources().getColor(R.color.blackblue));
 
-		Typeface arabicFont = Typeface.createFromAsset(getAssets(),
-				"fonts/DroidSansArabic.ttf");
 		lbl.setTypeface(arabicFont);
 		
 	}

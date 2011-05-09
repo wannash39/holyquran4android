@@ -18,7 +18,7 @@
 
 		<activity android:name=".BookmarkEditActivity" android:label="@string/BookmarkEdit">
 		</activity>
-		<activity android:name=".TafseerActivity" android:label="@string/tafseer"
+		<activity android:name=".TafseerActivity" 
 			android:theme="@android:style/Theme.Dialog">
 		</activity>
 		<activity android:name=".AboutActivity" android:label="@string/AboutActivity"
