@@ -89,7 +89,7 @@ public class TafseerActivity extends Activity {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			lbl.setText(e.getMessage());
+			lbl.setText(R.string.notexisttafser);
 		}
 	}
 }

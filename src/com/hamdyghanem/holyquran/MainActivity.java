@@ -38,7 +38,7 @@ public class MainActivity extends Activity {
 	String strFileBookmarks = "";
 	ApplicationController AC;
 	Gallery g;
-	String DefBookmarks = "Al-Wird,0,1#Al-Kahf,293,0";
+	String DefBookmarks = "Al-Wird,0,0,1#Al-Kahf,293,0,0";
 
 	/** Called when the activity is first created. */
 	@Override

@@ -66,7 +66,7 @@ public class BookmarkEditActivity extends Activity {
 			tl = (TableLayout) findViewById(R.id.TableLayoutBody);
 			addHeaderRow();
 			for (Bookmark b : AC.bookmarkUtitliy.arr) {
-				addRow(b.getBookmarkName(), b.getPage(), b.getDefault());
+				addRow(b.getBookmarkName(), b.getPage(),  b.getStatic(),b.getDefault());
 				if (b.getDefault() == 1)
 					iCurrentDefault = i;
 				// rb.setOnClickListener(radio_listener);
@@ -88,9 +88,10 @@ public class BookmarkEditActivity extends Activity {
 		}
 	}
 
-	private void addRow(String strName, Integer iPage, int iDef) {
+	private void addRow(String strName, Integer iPage, int iSttc, int iDef) {
 		TableRow tr = new TableRow(this);
 		CheckBox chk = new CheckBox(this);
+		CheckBox chkStatic = new CheckBox(this);
 		EditText edit = new EditText(this);
 		EditText editPage = new EditText(this);
 		RadioButton rb = new RadioButton(this);
@@ -111,14 +112,17 @@ public class BookmarkEditActivity extends Activity {
 
 		editPage.setText(iPage.toString());
 		rb.setChecked(iDef == 1);
+		chkStatic.setChecked(iSttc == 1);
 		rb.setTag(tl.getChildCount() - 1);
 		rb.setOnClickListener(radio_listener);
 		tr.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
 				LayoutParams.WRAP_CONTENT));
-
+	
+		
 		tr.addView(chk);
 		tr.addView(edit);
 		tr.addView(editPage);
+		tr.addView(chkStatic);
 		tr.addView(rb);
 		tl.addView(tr, new TableLayout.LayoutParams(LayoutParams.FILL_PARENT,
 				LayoutParams.WRAP_CONTENT));
@@ -131,6 +135,7 @@ public class BookmarkEditActivity extends Activity {
 		TextView lbl2 = new TextView(this);
 		TextView lbl3 = new TextView(this);
 		TextView lbl4 = new TextView(this);
+		TextView lbl5 = new TextView(this);
 		//
 		// Arabizarion
 		Typeface arabicFont = Typeface.createFromAsset(getAssets(),
@@ -139,13 +144,13 @@ public class BookmarkEditActivity extends Activity {
 		lbl2.setTypeface(arabicFont);
 		lbl3.setTypeface(arabicFont);
 		lbl4.setTypeface(arabicFont);
-		
-		
+		lbl5.setTypeface(arabicFont);
 		//
 		lbl1.setText(R.string.Delete);
 		lbl2.setText(R.string.Name);
 		lbl3.setText(R.string.Page);
-		lbl4.setText(R.string.Default);
+		lbl4.setText(R.string.Static);
+		lbl5.setText(R.string.Default);
 		tr.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
 				LayoutParams.WRAP_CONTENT));
 
@@ -153,6 +158,7 @@ public class BookmarkEditActivity extends Activity {
 		tr.addView(lbl2);
 		tr.addView(lbl3);
 		tr.addView(lbl4);
+		tr.addView(lbl5);
 		tl.addView(tr, new TableLayout.LayoutParams(LayoutParams.FILL_PARENT,
 				LayoutParams.WRAP_CONTENT));
 
@@ -190,6 +196,7 @@ public class BookmarkEditActivity extends Activity {
 					CheckBox chk = (CheckBox) row.getChildAt(0);
 					EditText edit = (EditText) row.getChildAt(1);
 					EditText editPage = (EditText) row.getChildAt(2);
+					CheckBox chkStatic = (CheckBox) row.getChildAt(3);
 					//
 					String strPage = editPage.getText().toString();
 					Integer iPage = Integer.parseInt(strPage);
@@ -201,7 +208,7 @@ public class BookmarkEditActivity extends Activity {
 					if (!chk.isChecked()
 							&& edit.getText().toString().length() != 0) {
 						AC.bookmarkUtitliy.arr.add(new Bookmark(edit.getText()
-								.toString(), iPage, 0));
+								.toString(), iPage,chkStatic.isChecked()?1:0, 0));
 					} else {
 						if (i <= iCurrentDefault)
 							iCurrentDefault--;
@@ -209,7 +216,7 @@ public class BookmarkEditActivity extends Activity {
 				}
 				if (AC.bookmarkUtitliy.arr.size() == 0)
 					AC.bookmarkUtitliy.arr.add(new Bookmark(
-							getString(R.string.defaultname), 0, 0));
+							getString(R.string.defaultname), 0,0, 0));
 
 				AC.bookmarkUtitliy.setDefault(iCurrentDefault);
 				// Send back to the main
@@ -241,7 +248,7 @@ public class BookmarkEditActivity extends Activity {
 					return;
 				}
 			}
-			addRow("", 0, 0);
+			addRow("",0, 0, 0);
 
 		}
 
