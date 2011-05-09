@@ -23,7 +23,8 @@ public class ImageManager {
 		// downloader
 		// method
 		try {
-			URL url = new URL("http://dl.dropbox.com/u/27675084/img/" + imgName
+			//http://dl.dropbox.com/u/27675084/img240/0.gif
+			URL url = new URL("http://dl.dropbox.com/u/27675084/img240/" + imgName
 					+ ".gif");
 			File file = new File(fileName);
 

@@ -38,7 +38,6 @@ public class MainActivity extends Activity {
 	String strFileBookmarks = "";
 	ApplicationController AC;
 	Gallery g;
-	String DefBookmarks = "Al-Wird,0,0,1#Al-Kahf,293,0,0";
 
 	/** Called when the activity is first created. */
 	@Override
@@ -52,8 +51,7 @@ public class MainActivity extends Activity {
 					.getAbsolutePath()
 					+ File.separator
 					+ "hQuran"
-					+ File.separator
-					+ "bookmarks.dat";
+					+ File.separator + "bookmarks.dat";
 			// /////////CHANGE THE TITLE BAR///////////////
 			Typeface arabicFont = Typeface.createFromAsset(getAssets(),
 					"fonts/DroidSansArabic.ttf");
@@ -82,8 +80,7 @@ public class MainActivity extends Activity {
 			//
 			Boolean bFirstTime = false;
 			String baseDir = Environment.getExternalStorageDirectory()
-					.getAbsolutePath()
-					+ "/hQuran";
+					.getAbsolutePath() + "/hQuran";
 			File file = new File(baseDir);
 			if (!file.exists()) {
 				file.mkdirs();
@@ -100,15 +97,17 @@ public class MainActivity extends Activity {
 				file.mkdirs();
 				file = new File(baseDir + "/img/");
 				file.mkdirs();
-				ImageManager.saveToSDCard(BitmapFactory.decodeResource(this
-						.getResources(), R.drawable.img_0), "0");
-				ImageManager.saveToSDCard(BitmapFactory.decodeResource(this
-						.getResources(), R.drawable.img_1), "1");
-				ImageManager.saveToSDCard(BitmapFactory.decodeResource(this
-						.getResources(), R.drawable.img_no), "no");
+				ImageManager.saveToSDCard(BitmapFactory.decodeResource(
+						this.getResources(), R.drawable.img_0), "0");
+				ImageManager.saveToSDCard(BitmapFactory.decodeResource(
+						this.getResources(), R.drawable.img_1), "1");
+				ImageManager.saveToSDCard(BitmapFactory.decodeResource(
+						this.getResources(), R.drawable.img_no), "no");
 				// Open settings to load images directly
 				g.setSelection(604);
-				callOptionsItemSelected(null, R.id.mnu_settings);
+				// callOptionsItemSelected(null, R.id.mnu_settings);
+				Toast.makeText(this, getText(R.string.notexistimage),
+						Toast.LENGTH_LONG).show();
 
 			} else {
 				// if (AC.NeedDownload())
@@ -116,6 +115,7 @@ public class MainActivity extends Activity {
 				g.setSelection(604 - AC.bookmarkUtitliy.arr.get(
 						AC.bookmarkUtitliy.getDefault()).getPage());
 			}
+
 		} catch (Throwable t) {
 			Toast.makeText(this, "Request failed: " + t.toString(),
 					Toast.LENGTH_LONG).show();
@@ -141,11 +141,20 @@ public class MainActivity extends Activity {
 		return callOptionsItemSelected(item, item.getItemId());
 	}
 
+	private void saveBookmarksDefalut() {
+		WriteSettings(AC.bookmarkUtitliy.getBookmarksString());
+	}
+
 	private void saveBookmarks() {
-		AC.bookmarkUtitliy.arr.get(AC.bookmarkUtitliy.getDefault()).setPage(
-				604 - g.getSelectedItemPosition());
-		String strData = AC.bookmarkUtitliy.saveBookmarks();
-		WriteSettings(strData);
+		// check the static value
+		AC.iCurrentPage =604 - g.getSelectedItemPosition();
+		if (AC.bookmarkUtitliy.arr.get(AC.bookmarkUtitliy.getDefault())
+				.getStatic() == 0) {
+			//
+			AC.bookmarkUtitliy.arr.get(AC.bookmarkUtitliy.getDefault())
+					.setPage(604 - g.getSelectedItemPosition());
+			WriteSettings(AC.bookmarkUtitliy.getBookmarksString());
+		}
 	}
 
 	public boolean callOptionsItemSelected(MenuItem item, int iItem) {
@@ -193,6 +202,7 @@ public class MainActivity extends Activity {
 			// Toast.makeText(this,
 			// if (AC.bookmarkUtitliy.getDefault() != i) {
 			AC.bookmarkUtitliy.setDefault(i);
+			saveBookmarksDefalut();
 			//
 			i = AC.bookmarkUtitliy.arr.get(AC.bookmarkUtitliy.getDefault())
 					.getPage();
@@ -242,8 +252,7 @@ public class MainActivity extends Activity {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			ImageView imgView = new ImageView(mContext);
 			String baseDir = Environment.getExternalStorageDirectory()
-					.getAbsolutePath()
-					+ "/hQuran/img/";
+					.getAbsolutePath() + "/hQuran/img/";
 			// imgView.setScaleType(ScaleType.FIT_XY);
 
 			// to let it work like Arabic we will subtract position by 604
@@ -292,16 +301,15 @@ public class MainActivity extends Activity {
 			e.printStackTrace();
 			Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
 		}
-		// Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
-
+		//Toast.makeText(this, data, Toast.LENGTH_SHORT).show();
 	}
 
 	public String ReadSettings() {
 		// SaveBookmark
-		String data = "Al-Wird,0,1#Al-Kahf,293,0";
+		String data = getString(R.string.defaultbookmark);
 		File file = new File(strFileBookmarks);
 		if (!file.exists())
-			WriteSettings(DefBookmarks);
+			WriteSettings(getString(R.string.defaultbookmark));
 		FileReader reader = null;
 		try {
 			reader = new FileReader(file);
@@ -321,6 +329,8 @@ public class MainActivity extends Activity {
 		}
 		// Toast.makeText(this, "Request failed: " + data,
 		// Toast.LENGTH_LONG).show();
+		//Toast.makeText(this, data, Toast.LENGTH_SHORT).show();
+
 		return data.trim();
 
 	}

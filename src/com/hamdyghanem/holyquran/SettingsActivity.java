@@ -17,6 +17,7 @@ import android.view.Window;
 import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class SettingsActivity extends Activity {
 	/** Called when the activity is first created. */
@@ -58,7 +59,9 @@ public class SettingsActivity extends Activity {
 
 		//
 		if (AC.NeedDownload())
-			downloadNow();
+			Toast.makeText(this, getText(R.string.notexistimage),
+					Toast.LENGTH_LONG).show();
+			//downloadNow();
 	}
 
 	public Thread performOnBackgroundThread(final Runnable runnable) {
@@ -119,7 +122,7 @@ public class SettingsActivity extends Activity {
 				}
 				// Finished
 				dialog.cancel();
-				finish();
+				//finish();
 			}
 		});
 
@@ -164,7 +167,6 @@ public class SettingsActivity extends Activity {
 				}
 				// Finished
 				dialog.cancel();
-				finish();
 			}
 		});
 
