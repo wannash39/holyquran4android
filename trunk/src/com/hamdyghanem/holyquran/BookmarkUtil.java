@@ -10,8 +10,6 @@ import android.util.Log;
  */
 
 public class BookmarkUtil {
-
-	public String DefBookmarks = "Al-Wird,0,0,1#Al-Kahf,295,0,0";
 	public ArrayList<Bookmark> arr = new ArrayList<Bookmark>();
 	private Integer iDefault = 0;
 
@@ -27,19 +25,13 @@ public class BookmarkUtil {
 		LoadBookmarks(strBookmarks);
 	}
 
-	protected String saveBookmarks() {
-		String strBookmarks = getBookmarksString();
-		Log.d("Bookmarks", strBookmarks);
-		// editor.putString("Bookmarks", strBookmarks);
-		// editor.commit();
-		return strBookmarks;
-	}
-
+	
 	protected String getBookmarksString() {
 		String strBookmarks = "";
 		for (Bookmark b : arr) {
 			strBookmarks += b.getBookmarkName() + ","
 					+ Integer.toString(b.getPage()) + ","
+					+ Integer.toString(b.getStatic()) + ","
 					+ Integer.toString(b.getDefault()) + "#";
 		}
 		strBookmarks = strBookmarks.substring(0, strBookmarks.length() - 1);
@@ -56,7 +48,6 @@ public class BookmarkUtil {
 			b.setDefault(0);
 		}
 		arr.get(iDefault).setDefault(1);
-		saveBookmarks();
 	}
 
 	// protected void InitiateBookmars() {
@@ -83,7 +74,7 @@ public class BookmarkUtil {
 			String[] row = strBookmarks.split("#");
 			for (int i = 0; i < row.length; i++) {
 				String[] col = row[i].split(",");
-				if (Integer.parseInt(col[2].trim()) == 1)
+				if (Integer.parseInt(col[3].trim()) == 1)
 					iDefault = i;
 				arr.add(new Bookmark(col[0], Integer.parseInt(col[1].trim()),
 						Integer.parseInt(col[2].trim()), Integer

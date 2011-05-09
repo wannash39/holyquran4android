@@ -10,7 +10,9 @@ import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnKeyListener;
 import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -34,24 +36,25 @@ public class GoToActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		try {
 			super.onCreate(savedInstanceState);
-			 final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
-				
-			setContentView(R.layout.navigate);
-	///////////CHANGE THE TITLE BAR///////////////
-			Typeface arabicFont = Typeface.createFromAsset(getAssets(),
-			"fonts/DroidSansArabic.ttf");
+			final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 
-			if ( customTitleSupported ) {
-		        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.mytitle);
-		    }
-		
-		    final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
-		    if ( myTitleText != null ) {
-		    	myTitleText.setTypeface(arabicFont);
-		        myTitleText.setText(R.string.GoToActivity );
-		        //myTitleText.setBackgroundColor(R.color.blackblue);
-		    }
-	////////////////////////
+			setContentView(R.layout.navigate);
+			// /////////CHANGE THE TITLE BAR///////////////
+			Typeface arabicFont = Typeface.createFromAsset(getAssets(),
+					"fonts/DroidSansArabic.ttf");
+
+			if (customTitleSupported) {
+				getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
+						R.layout.mytitle);
+			}
+
+			final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
+			if (myTitleText != null) {
+				myTitleText.setTypeface(arabicFont);
+				myTitleText.setText(R.string.GoToActivity);
+				// myTitleText.setBackgroundColor(R.color.blackblue);
+			}
+			// //////////////////////
 			AC = (ApplicationController) getApplicationContext(); // RadioGroup.VERTICAL
 			//
 			tl = (TableLayout) findViewById(R.id.TableLayoutBody);
@@ -92,8 +95,17 @@ public class GoToActivity extends Activity {
 			((TextView) findViewById(R.id.lblChapter)).setTypeface(arabicFont);
 			((TextView) findViewById(R.id.lblSora)).setTypeface(arabicFont);
 			((TextView) findViewById(R.id.lblPageNum)).setTypeface(arabicFont);
-			((TextView) findViewById(R.id.TextViewHeader)).setTypeface(arabicFont);
-			
+			((TextView) findViewById(R.id.TextViewHeader))
+					.setTypeface(arabicFont);
+			//
+			editPage.setOnKeyListener(new OnKeyListener() {
+
+				public boolean onKey(View v, int keyCode, KeyEvent event) {
+					return true;
+					// ....
+				}
+			});
+
 		} catch (Throwable t) {
 			Toast.makeText(this, "err ->" + t.toString(), Toast.LENGTH_LONG)
 					.show();

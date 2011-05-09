@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -33,6 +34,7 @@ public class BookmarkEditActivity extends Activity {
 	ApplicationController AC;
 	TableLayout tl;
 	int iCurrentDefault = 0;
+	Typeface arabicFont = null;
 
 	// LinearLayout linearScrollView;
 	// TableLayout tablelayout;
@@ -43,30 +45,32 @@ public class BookmarkEditActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		try {
 			super.onCreate(savedInstanceState);
-			 final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
-				
-			setContentView(R.layout.bookmarkedit);
-	///////////CHANGE THE TITLE BAR///////////////
-			Typeface arabicFont = Typeface.createFromAsset(getAssets(),
-			"fonts/DroidSansArabic.ttf");
+			final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 
-			if ( customTitleSupported ) {
-		        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.mytitle);
-		    }
-		
-		    final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
-		    if ( myTitleText != null ) {
-		    	myTitleText.setTypeface(arabicFont);
-		        myTitleText.setText(R.string.BookmarkEdit );
-		        //myTitleText.setBackgroundColor(R.color.blackblue);
-		    }
-	////////////////////////
+			setContentView(R.layout.bookmarkedit);
+			// /////////CHANGE THE TITLE BAR///////////////
+			arabicFont = Typeface.createFromAsset(getAssets(),
+					"fonts/DroidSansArabic.ttf");
+
+			if (customTitleSupported) {
+				getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
+						R.layout.mytitle);
+			}
+
+			final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
+			if (myTitleText != null) {
+				myTitleText.setTypeface(arabicFont);
+				myTitleText.setText(R.string.BookmarkEdit);
+				// myTitleText.setBackgroundColor(R.color.blackblue);
+			}
+			// //////////////////////
 			AC = (ApplicationController) getApplicationContext(); // RadioGroup.VERTICAL
 			int i = 0;
 			tl = (TableLayout) findViewById(R.id.TableLayoutBody);
 			addHeaderRow();
 			for (Bookmark b : AC.bookmarkUtitliy.arr) {
-				addRow(b.getBookmarkName(), b.getPage(),  b.getStatic(),b.getDefault());
+				addRow(b.getBookmarkName(), b.getPage(), b.getStatic(),
+						b.getDefault(), false);
 				if (b.getDefault() == 1)
 					iCurrentDefault = i;
 				// rb.setOnClickListener(radio_listener);
@@ -81,21 +85,37 @@ public class BookmarkEditActivity extends Activity {
 			((Button) findViewById(R.id.ButNew)).setTypeface(arabicFont);
 			((Button) findViewById(R.id.ButOK)).setTypeface(arabicFont);
 			((Button) findViewById(R.id.ButCancel)).setTypeface(arabicFont);
-		
+
 		} catch (Throwable t) {
 			Toast.makeText(this, "err ->" + t.toString(), Toast.LENGTH_LONG)
 					.show();
 		}
 	}
 
-	private void addRow(String strName, Integer iPage, int iSttc, int iDef) {
+	private void addRow(String strName, Integer iPage, int iSttc, int iDef,
+			Boolean bCheck) {
 		TableRow tr = new TableRow(this);
+		// Check duplicate
+		if (bCheck) {
+
+			TableRow row = (TableRow) tl.getChildAt(tl.getChildCount() - 1);
+			EditText editLast = (EditText) row.getChildAt(1);
+			EditText editPageLast = (EditText) row.getChildAt(2);
+			if (editLast.getText().toString().equals(strName)
+					&& Integer.parseInt(editPageLast.getText().toString()) == iPage) {
+				Toast.makeText(this, getString(R.string.alreadyexistbookmark),
+						Toast.LENGTH_LONG).show();
+				return;
+			}
+		}
 		CheckBox chk = new CheckBox(this);
 		CheckBox chkStatic = new CheckBox(this);
 		EditText edit = new EditText(this);
 		EditText editPage = new EditText(this);
 		RadioButton rb = new RadioButton(this);
 		//
+		edit.setTypeface(arabicFont);
+
 		// but.setTextOff("");
 		// but.setTextOn("");
 		edit.setText(strName);
@@ -103,22 +123,24 @@ public class BookmarkEditActivity extends Activity {
 		InputFilter[] FilterArray = new InputFilter[1];
 		FilterArray[0] = new InputFilter.LengthFilter(15);
 		edit.setFilters(FilterArray);
+		edit.setSingleLine(true);
 		// Max Length
 		FilterArray = new InputFilter[1];
 		FilterArray[0] = new InputFilter.LengthFilter(3);
 		editPage.setFilters(FilterArray);
+		editPage.setSingleLine(true);
 		// Only integer
 		editPage.setInputType(InputType.TYPE_CLASS_NUMBER);
 
 		editPage.setText(iPage.toString());
+
 		rb.setChecked(iDef == 1);
 		chkStatic.setChecked(iSttc == 1);
 		rb.setTag(tl.getChildCount() - 1);
 		rb.setOnClickListener(radio_listener);
 		tr.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
 				LayoutParams.WRAP_CONTENT));
-	
-		
+
 		tr.addView(chk);
 		tr.addView(edit);
 		tr.addView(editPage);
@@ -126,7 +148,7 @@ public class BookmarkEditActivity extends Activity {
 		tr.addView(rb);
 		tl.addView(tr, new TableLayout.LayoutParams(LayoutParams.FILL_PARENT,
 				LayoutParams.WRAP_CONTENT));
-
+		edit.requestFocus();
 	}
 
 	private void addHeaderRow() {
@@ -138,8 +160,7 @@ public class BookmarkEditActivity extends Activity {
 		TextView lbl5 = new TextView(this);
 		//
 		// Arabizarion
-		Typeface arabicFont = Typeface.createFromAsset(getAssets(),
-		"fonts/DroidSansArabic.ttf");
+
 		lbl1.setTypeface(arabicFont);
 		lbl2.setTypeface(arabicFont);
 		lbl3.setTypeface(arabicFont);
@@ -208,7 +229,8 @@ public class BookmarkEditActivity extends Activity {
 					if (!chk.isChecked()
 							&& edit.getText().toString().length() != 0) {
 						AC.bookmarkUtitliy.arr.add(new Bookmark(edit.getText()
-								.toString(), iPage,chkStatic.isChecked()?1:0, 0));
+								.toString(), iPage, chkStatic.isChecked() ? 1
+								: 0, 0));
 					} else {
 						if (i <= iCurrentDefault)
 							iCurrentDefault--;
@@ -216,7 +238,7 @@ public class BookmarkEditActivity extends Activity {
 				}
 				if (AC.bookmarkUtitliy.arr.size() == 0)
 					AC.bookmarkUtitliy.arr.add(new Bookmark(
-							getString(R.string.defaultname), 0,0, 0));
+							getString(R.string.defaultname), 0, 0, 0));
 
 				AC.bookmarkUtitliy.setDefault(iCurrentDefault);
 				// Send back to the main
@@ -248,11 +270,11 @@ public class BookmarkEditActivity extends Activity {
 					return;
 				}
 			}
-			addRow("",0, 0, 0);
-
+			addRow(AC.GetSora(AC.iCurrentPage),AC.iCurrentPage, 0, 0, true);
 		}
 
 	};
+
 	private OnClickListener cancel_listener = new OnClickListener() {
 
 		@Override
@@ -261,4 +283,5 @@ public class BookmarkEditActivity extends Activity {
 
 		}
 	};
+
 }

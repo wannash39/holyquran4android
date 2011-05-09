@@ -7,18 +7,28 @@
 	<string name="notexistpage">صفحة غير موجودة</string>
 
 
+	<string name="defaultbookmark">Al-Wird,0,0,1#Al-Kahf,293,1,0</string>
+
 	<string name="GoToActivity">ذهاب إلي</string>
 	<string name="AboutActivity">عن البرنامج</string>
-		<string name="defaultname">افتراضية</string>
+	<string name="defaultname">افتراضية</string>
 
-<string name="notexisttafser">ملف التفسير لهذه الصفحة غير موجود . من فضلك قم
-	بتنزيل التفسير من قائمة اعدادات</string>
+	<string name="notexisttafser">ملف التفسير لهذه الصفحة غير موجود . من فضلك قم
+		بتنزيل التفسير من قائمة اعدادات</string>
 
+	<string name="notexistimage">تحتاج للتنزيل صور صفحات المصحف الكريم . من فضلك قم
+		بتنزيل الصفحات من قائمة اعدادات</string>
+	
 
-<string name="holyquran">القرآن الكريم</string>
+	<string name="alreadyexistbookmark">تم اضافتها بالفعل</string>
+	
+	
+
+	<string name="holyquran">القرآن الكريم</string>
 	<string name="settings">إعدادات</string>
 	<string name="about">عن البرنامج</string>
 	<string name="gotomenu">ذهاب إلي</string>
+	<string name="tafseermenu">التفسير</string>
 
 	<string name="lbl_settings">إعدادات</string>
 	<string name="bookmark">العلامات</string>
@@ -28,14 +38,14 @@
 	<string name="ButtOK">موافق</string>
 	<string name="ButtCancel">إلغاء</string>
 	<string name="ButtNew">جديد</string>
-	
+
 	<string name="Static">ثابتة</string>
 	<string name="Delete">حذف</string>
 	<string name="Name">اسم</string>
 	<string name="Page">صفحة</string>
 	<string name="Default">الحالية</string>
 
-<string name="tafseer">تفسير السعدي</string>
+	<string name="tafseer">تفسير السعدي</string>
 
 	<string name="gotoPageHeader">اختر الذهاب الي ...</string>
 	<string name="gotoPage1">صفحة</string>
