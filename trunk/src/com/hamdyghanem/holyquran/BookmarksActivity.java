@@ -153,7 +153,7 @@ public class BookmarksActivity extends Activity {
 
 //	private OnClickListener ok_listener = new OnClickListener() {
 //
-		@Override
+//		@Override
 //		public void onClick(View v) {
 //			try {
 				/*
