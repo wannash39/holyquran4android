@@ -11,7 +11,7 @@ public class Bookmark {
 	public Bookmark(String strbookmarkName, Integer iPage,int isttc, int idef) {
 		setBookmarkName(strbookmarkName);
 		setPage(iPage);
-		setStatic(idef);
+		setStatic(isttc);
 		setDefault(idef);
 		
 	}
