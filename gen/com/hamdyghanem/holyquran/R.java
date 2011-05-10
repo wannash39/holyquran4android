@@ -62,82 +62,99 @@ containing a value of this type.
         public static final int img_no=0x7f02000a;
     }
     public static final class id {
+        public static final int ButAddNew=0x7f0a000c;
         public static final int ButCancel=0x7f0a0007;
+        public static final int ButEditBookmark=0x7f0a000d;
         public static final int ButNew=0x7f0a0006;
         public static final int ButOK=0x7f0a0008;
-        public static final int Gallery01=0x7f0a000b;
-        public static final int ProgressBar01=0x7f0a000a;
-        public static final int RadioGroup01=0x7f0a0009;
+        public static final int EditText01=0x7f0a0010;
+        public static final int EditText02=0x7f0a0013;
+        public static final int EditText03=0x7f0a0016;
+        public static final int Gallery01=0x7f0a0017;
+        public static final int ProgressBar01=0x7f0a000e;
+        public static final int RadioGroup01=0x7f0a000a;
         public static final int TableLayoutBody=0x7f0a0003;
         public static final int TableLayoutFooter=0x7f0a0004;
         public static final int TableLayoutMain=0x7f0a0002;
         public static final int TableRow01=0x7f0a0005;
-        public static final int TableRow02=0x7f0a0010;
-        public static final int TableRow03=0x7f0a0013;
-        public static final int TableRow11=0x7f0a0016;
+        public static final int TableRow02=0x7f0a0011;
+        public static final int TableRow03=0x7f0a0014;
+        public static final int TableRow11=0x7f0a000b;
         public static final int TextView01=0x7f0a0001;
-        public static final int TextViewHeader=0x7f0a000d;
-        public static final int btnSettDownload=0x7f0a0017;
-        public static final int btnTafserDownload=0x7f0a0018;
-        public static final int lblChapter=0x7f0a0011;
-        public static final int lblPageNum=0x7f0a000e;
-        public static final int lblSora=0x7f0a0014;
-        public static final int mnu_about=0x7f0a001e;
-        public static final int mnu_bookmark=0x7f0a0019;
-        public static final int mnu_goto=0x7f0a001a;
-        public static final int mnu_newbookmark=0x7f0a001c;
-        public static final int mnu_settings=0x7f0a001d;
-        public static final int mnu_tafseer=0x7f0a001b;
-        public static final int myTitle=0x7f0a000c;
-        public static final int spnChapter=0x7f0a0012;
-        public static final int spnSora=0x7f0a0015;
+        public static final int TextView02=0x7f0a0012;
+        public static final int TextView03=0x7f0a0015;
+        public static final int TextViewHeader=0x7f0a000f;
+        public static final int btnSettDownload=0x7f0a0020;
+        public static final int btnTafserDownload=0x7f0a0021;
+        public static final int lblChapter=0x7f0a001b;
+        public static final int lblPageNum=0x7f0a0019;
+        public static final int lblSeprator=0x7f0a001f;
+        public static final int lblSora=0x7f0a001d;
+        public static final int mnu_about=0x7f0a0028;
+        public static final int mnu_bookmark=0x7f0a0023;
+        public static final int mnu_goto=0x7f0a0024;
+        public static final int mnu_newbookmark=0x7f0a0026;
+        public static final int mnu_settings=0x7f0a0027;
+        public static final int mnu_tafseer=0x7f0a0025;
+        public static final int myTitle=0x7f0a0018;
+        public static final int spnBookmarks=0x7f0a0009;
+        public static final int spnChapter=0x7f0a001c;
+        public static final int spnSora=0x7f0a001e;
         public static final int test_image=0x7f0a0000;
-        public static final int txtPageNum=0x7f0a000f;
+        public static final int txtPageNum=0x7f0a001a;
+        public static final int webviewtafseer=0x7f0a0022;
     }
     public static final class layout {
         public static final int about=0x7f030000;
         public static final int bookmarkedit=0x7f030001;
         public static final int bookmarks=0x7f030002;
         public static final int downloading=0x7f030003;
-        public static final int main=0x7f030004;
-        public static final int mytitle=0x7f030005;
-        public static final int navigate=0x7f030006;
-        public static final int settings=0x7f030007;
-        public static final int tafseer=0x7f030008;
+        public static final int gotopage=0x7f030004;
+        public static final int main=0x7f030005;
+        public static final int mytitle=0x7f030006;
+        public static final int navigate=0x7f030007;
+        public static final int settings=0x7f030008;
+        public static final int tafseer=0x7f030009;
     }
     public static final class menu {
         public static final int hq_menu=0x7f090000;
     }
     public static final class string {
-        public static final int AboutActivity=0x7f060006;
-        public static final int BookmarkEdit=0x7f060010;
-        public static final int BookmarksActivity=0x7f06000f;
-        public static final int ButtCancel=0x7f060012;
-        public static final int ButtNew=0x7f060013;
-        public static final int ButtOK=0x7f060011;
-        public static final int Default=0x7f060017;
-        public static final int Delete=0x7f060014;
-        public static final int GoToActivity=0x7f060005;
-        public static final int Name=0x7f060015;
-        public static final int Page=0x7f060016;
-        public static final int about=0x7f06000a;
+        public static final int AboutActivity=0x7f060007;
+        public static final int BookmarkEdit=0x7f060015;
+        public static final int BookmarksActivity=0x7f060014;
+        public static final int ButtCancel=0x7f060017;
+        public static final int ButtNew=0x7f060018;
+        public static final int ButtOK=0x7f060016;
+        public static final int Default=0x7f06001d;
+        public static final int Delete=0x7f06001a;
+        public static final int GoToActivity=0x7f060006;
+        public static final int Name=0x7f06001b;
+        public static final int Page=0x7f06001c;
+        public static final int Static=0x7f060019;
+        public static final int about=0x7f06000e;
+        public static final int alreadyexistbookmark=0x7f06000b;
         public static final int app_name=0x7f060000;
-        public static final int bookmark=0x7f06000d;
+        public static final int bookmark=0x7f060012;
         public static final int btn_download_pages=0x7f060001;
         public static final int btn_download_tafser=0x7f060002;
-        public static final int defaultname=0x7f060007;
+        public static final int defaultbookmark=0x7f060005;
+        public static final int defaultname=0x7f060008;
         public static final int downloading=0x7f060003;
-        public static final int gotoPage1=0x7f06001a;
-        public static final int gotoPage2=0x7f06001b;
-        public static final int gotoPage3=0x7f06001c;
-        public static final int gotoPageHeader=0x7f060019;
-        public static final int gotomenu=0x7f06000b;
-        public static final int holyquran=0x7f060008;
-        public static final int lbl_settings=0x7f06000c;
-        public static final int newbookmark=0x7f06000e;
+        public static final int gotoPage1=0x7f060020;
+        public static final int gotoPage2=0x7f060021;
+        public static final int gotoPage3=0x7f060022;
+        public static final int gotoPageHeader=0x7f06001f;
+        public static final int gotomenu=0x7f06000f;
+        public static final int holyquran=0x7f06000c;
+        public static final int lbl_settings=0x7f060011;
+        public static final int newbookmark=0x7f060013;
+        public static final int notexistimage=0x7f06000a;
         public static final int notexistpage=0x7f060004;
-        public static final int settings=0x7f060009;
-        public static final int tafseer=0x7f060018;
+        public static final int notexisttafser=0x7f060009;
+        public static final int settings=0x7f06000d;
+        public static final int tafseer=0x7f06001e;
+        public static final int tafseermenu=0x7f060010;
     }
     public static final class style {
         public static final int MyDefaultTextAppearance=0x7f080001;
@@ -150,11 +167,11 @@ containing a value of this type.
         /**  These are the attributes that we want to retrieve from the theme
          in view/Gallery1.java 
            <p>Includes the following attributes:</p>
-           <table border="2" width="85%" align="center" frame="hsides" rules="all" cellpadding="5">
+           <table>
            <colgroup align="left" />
            <colgroup align="left" />
-           <tr><th>Attribute<th>Summary</tr>
-           <tr><th><code>{@link #Gallery1_android_galleryItemBackground com.hamdyghanem.holyquran:android_galleryItemBackground}</code><td></tr>
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #Gallery1_android_galleryItemBackground com.hamdyghanem.holyquran:android_galleryItemBackground}</code></td><td></td></tr>
            </table>
            @see #Gallery1_android_galleryItemBackground
          */
@@ -169,13 +186,13 @@ containing a value of this type.
         public static final int Gallery1_android_galleryItemBackground = 0;
         /** Attributes that can be used with a LabelView.
            <p>Includes the following attributes:</p>
-           <table border="2" width="85%" align="center" frame="hsides" rules="all" cellpadding="5">
+           <table>
            <colgroup align="left" />
            <colgroup align="left" />
-           <tr><th>Attribute<th>Summary</tr>
-           <tr><th><code>{@link #LabelView_text com.hamdyghanem.holyquran:text}</code><td></tr>
-           <tr><th><code>{@link #LabelView_textColor com.hamdyghanem.holyquran:textColor}</code><td></tr>
-           <tr><th><code>{@link #LabelView_textSize com.hamdyghanem.holyquran:textSize}</code><td></tr>
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #LabelView_text com.hamdyghanem.holyquran:text}</code></td><td></td></tr>
+           <tr><td><code>{@link #LabelView_textColor com.hamdyghanem.holyquran:textColor}</code></td><td></td></tr>
+           <tr><td><code>{@link #LabelView_textSize com.hamdyghanem.holyquran:textSize}</code></td><td></td></tr>
            </table>
            @see #LabelView_text
            @see #LabelView_textColor
@@ -232,11 +249,11 @@ containing a value of this type.
         /**  These are the attributes that we want to retrieve from the theme
          in app/PreferencesFromCode.java 
            <p>Includes the following attributes:</p>
-           <table border="2" width="85%" align="center" frame="hsides" rules="all" cellpadding="5">
+           <table>
            <colgroup align="left" />
            <colgroup align="left" />
-           <tr><th>Attribute<th>Summary</tr>
-           <tr><th><code>{@link #TogglePrefAttrs_android_preferenceLayoutChild com.hamdyghanem.holyquran:android_preferenceLayoutChild}</code><td></tr>
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #TogglePrefAttrs_android_preferenceLayoutChild com.hamdyghanem.holyquran:android_preferenceLayoutChild}</code></td><td></td></tr>
            </table>
            @see #TogglePrefAttrs_android_preferenceLayoutChild
          */
