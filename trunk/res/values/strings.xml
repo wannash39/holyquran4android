@@ -2,22 +2,38 @@
 <resources>
 	<string name="app_name">Holy Quran</string>
 	<string name="btn_download_pages">تنزيل الصفحات</string>
+	<string name="btn_download_database">تنزيل قاعدة البيانات للبحث</string>
 	<string name="btn_download_tafser">تنزيل التفسير</string>
-	<string name="downloading"> ... تنزيل الصفحات</string>
+	<string name="btn_download_tareef">تنزيل التعريف</string>
+	<string name="btn_download_dictionary">تنزيل المعجم</string>
+	
+	<string name="downloadingpages"> ... تنزيل الصفحات</string>
+	<string name="downloadingtareef"> ... تنزيل كتاب التعريف</string>
+	<string name="downloadingdictionary"> ... تنزيل المعجم</string>
+	<string name="downloadingdatabase"> ... تنزيل قاعدة البيانات للبحث</string>
+	<string name="downloadingtafseer"> ... تنزيل التفسير</string>
 	<string name="notexistpage">صفحة غير موجودة</string>
 
+<string name="Searching"> ... جاري البحث</string>
+<string name="Search"> البحث</string>
 
-	<string name="defaultbookmark">Al-Wird,0,0,1#Al-Kahf,293,1,0</string>
+	<string name="defaultbookmark">الورد اليومي,0,0,1#الكهف,293,1,0</string>
 
 	<string name="GoToActivity">ذهاب إلي</string>
 	<string name="AboutActivity">عن البرنامج</string>
 	<string name="defaultname">افتراضية</string>
 
+ 
 	<string name="notexisttafser">ملف التفسير لهذه الصفحة غير موجود . من فضلك قم
 		بتنزيل التفسير من قائمة اعدادات</string>
 
+<string name="notexistdb">ملف قاعدة البيانات غير موجود . من فضلك قم
+		بتنزيله من قائمة اعدادات</string>
+
+
 	<string name="notexistimage">تحتاج للتنزيل صور صفحات المصحف الكريم . من فضلك قم
 		بتنزيل الصفحات من قائمة اعدادات</string>
+	<string name="notexistdictionary">لا يوجد معجم لهذه الصفحة </string>
 	
 
 	<string name="alreadyexistbookmark">تم اضافتها بالفعل</string>
@@ -29,19 +45,31 @@
 	<string name="about">عن البرنامج</string>
 	<string name="gotomenu">ذهاب إلي</string>
 	<string name="tafseermenu">التفسير</string>
+	
+	
+	<string name="mnuTafseer">تفسير السعدي</string>
+	<string name="mnuTaareef">تعريف السورة</string>
+	<string name="mnuDictionary">المعجم</string>
+	<string name="mnuZoom">تكبير</string>
 
 	<string name="lbl_settings">إعدادات</string>
 	<string name="bookmark">العلامات</string>
 	<string name="newbookmark">إعدادات العلامات</string>
 	<string name="BookmarksActivity">العلامات</string>
+	
+	<string name="detailsmenu">أخرى</string>
+	
+	
 	<string name="BookmarkEdit">اعدادت العلامات</string>
 	<string name="ButtOK">موافق</string>
 	<string name="ButtCancel">إلغاء</string>
 	<string name="ButtNew">جديد</string>
+	<string name="ButtNewCurrent">اضافة الحالية</string>
+	
 
 	<string name="Static">ثابتة</string>
 	<string name="Delete">حذف</string>
-	<string name="Name">اسم</string>
+	<string name="Name">اسم العلامة </string>
 	<string name="Page">صفحة</string>
 	<string name="Default">الحالية</string>
 

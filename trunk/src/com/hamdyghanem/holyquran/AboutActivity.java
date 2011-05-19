@@ -51,9 +51,9 @@ public class AboutActivity extends Activity {
 		strAbout += " الإصدار الأول V 1.0 <br />";
 		
 		strAbout += "</H1>";
-		strAbout += "محاولة لدعم البرامج الاسلامية في سوق الاندرويد <br />";
+		strAbout += "محاولة لدعم البرامج الاسلامية على سوق الاندرويد <br />";
 		strAbout += "البرنامج مفتوح المصدر و يمكنك الذهاب الي موقع المصدر حيث يمكنكم الدعم او النسخ من  <br />";
-		strAbout += "<a href=\'http://code.google.com/p/holyquran4android/'>هنا</a> <br />";
+		strAbout += "<a href=\'https://www.facebook.com/HolyQuran4Android'>هنا</a> <br />";
 
 		strAbout += " للمساعدة و الشرح يمكنك التصفح من  ";
 		strAbout += "<a href=\'http://knol.google.com/k/hamdy-ghanem/holyquran4android/3n0yrj5rx5x7a/29?hd=ns# '>هنا </a> <br />";
