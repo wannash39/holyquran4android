@@ -7,8 +7,10 @@ import android.content.Intent;
 import android.graphics.Typeface;
 
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -17,7 +19,6 @@ import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -31,7 +32,11 @@ public class GoToActivity extends Activity {
 	TableLayout tl;
 	EditText editPage;
 	Integer iPage = -1;
+	Spinner snpChapter = null;
+	Spinner snpSora = null;
+	Boolean bDontFire = true;
 
+	//
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		try {
@@ -57,10 +62,11 @@ public class GoToActivity extends Activity {
 			// //////////////////////
 			AC = (ApplicationController) getApplicationContext(); // RadioGroup.VERTICAL
 			//
+			bDontFire = true;
 			tl = (TableLayout) findViewById(R.id.TableLayoutBody);
 			editPage = (EditText) findViewById(R.id.txtPageNum);
-			Spinner snpChapter = (Spinner) findViewById(R.id.spnChapter);
-			Spinner snpSora = (Spinner) findViewById(R.id.spnSora);
+			snpChapter = (Spinner) findViewById(R.id.spnChapter);
+			snpSora = (Spinner) findViewById(R.id.spnSora);
 
 			// CHAPTER
 			// ArrayAdapter.createFromResource(context, textArrayResId,
@@ -97,15 +103,57 @@ public class GoToActivity extends Activity {
 			((TextView) findViewById(R.id.lblPageNum)).setTypeface(arabicFont);
 			((TextView) findViewById(R.id.TextViewHeader))
 					.setTypeface(arabicFont);
-			//
-			editPage.setOnKeyListener(new OnKeyListener() {
+			// *
+			/*editPage.addTextChangedListener(new TextWatcher() {
+				String oldText = "";
 
-				public boolean onKey(View v, int keyCode, KeyEvent event) {
-					return true;
-					// ....
+				public void beforeTextChanged(CharSequence arg0, int arg1,
+						int arg2, int arg3) {
+
+				}
+
+				public void onTextChanged(CharSequence arg0, int arg1,
+						int arg2, int arg3) {
+				}
+
+				public void afterTextChanged(Editable arg0) {
+					try {
+						if (bDontFire) {
+							bDontFire = false;
+							return;
+						}
+						bDontFire = true;
+						//
+						if (editPage.getText().toString().length() == 0)
+							iPage = 0;
+						else
+							iPage = Integer.parseInt(editPage.getText()
+									.toString());
+						if (iPage > 604)
+							iPage = 604;
+						// if (arg0==null || arg0.toString() == "" ||
+						// arg0.toString() == null)
+						// iPage = 0;
+						// else
+						// iPage = Integer.parseInt(arg0.toString());
+
+						Integer iChapter = Math.round(iPage / 22);
+						snpChapter.setSelection(iChapter);
+						bDontFire = true;
+						snpSora.setSelection(AC.GetSoraIndex(iPage));
+
+						bDontFire = false;
+
+					} catch (NumberFormatException ex) {
+						arg0.clear();
+						arg0.append(oldText);
+						Toast.makeText(GoToActivity.this,
+								"err ->" + ex.toString(), Toast.LENGTH_LONG)
+								.show();
+					}
 				}
 			});
-
+*/
 		} catch (Throwable t) {
 			Toast.makeText(this, "err ->" + t.toString(), Toast.LENGTH_LONG)
 					.show();
@@ -113,19 +161,21 @@ public class GoToActivity extends Activity {
 	}
 
 	public class OnChapterSelectedListener implements OnItemSelectedListener {
-
 		public void onItemSelected(AdapterView<?> parent, View view, int pos,
 				long id) {
+			if (bDontFire) {
+				bDontFire = false;
+				return;
+			}
+			bDontFire = true;
+
 			Integer iChapter = pos;
 			iPage = ((iChapter) * 20) + 2;
 			// exception of the forumula
 			if (iChapter == 0)
 				iPage = 1;
-			editPage.setText(Integer.toString(iPage));
-			// Toast.makeText(
-			// parent.getContext(),
-			// "The planet is " + parent.getItemAtPosition(pos).toString(),
-			// Toast.LENGTH_LONG).show();
+			 editPage.setText(Integer.toString(iPage));
+			snpSora.setSelection(AC.GetSoraIndex(iPage));
 		}
 
 		public void onNothingSelected(AdapterView parent) {
@@ -137,13 +187,22 @@ public class GoToActivity extends Activity {
 
 		public void onItemSelected(AdapterView<?> parent, View view, int pos,
 				long id) {
+			if (bDontFire) {
+				bDontFire = false;
+				return;
+			}
+			if (pos == 0)
+				return;
+			bDontFire = true;
+
 			String[] sorapages = getResources().getStringArray(
 					R.array.SoraValue_array);
-			editPage.setText(sorapages[pos]);
-			// Toast.makeText(
-			// parent.getContext(),
-			// "The planet is " + parent.getItemAtPosition(pos).toString(),
-			// Toast.LENGTH_LONG).show();
+			iPage = Integer.parseInt(sorapages[pos]);
+			 editPage.setText(Integer.toString(iPage));
+
+			Integer iChapter = Math.round(iPage / 22);
+			snpChapter.setSelection(iChapter);
+
 		}
 
 		public void onNothingSelected(AdapterView parent) {
@@ -156,7 +215,10 @@ public class GoToActivity extends Activity {
 		@Override
 		public void onClick(View v) {
 			try {
-				iPage = Integer.parseInt(editPage.getText().toString());
+				if (editPage.getText().toString().length() == 0)
+					iPage = 0;
+				else
+					iPage = Integer.parseInt(editPage.getText().toString());
 				if (iPage > 604)
 					iPage = 604;
 				if (iPage < 1)
@@ -171,7 +233,8 @@ public class GoToActivity extends Activity {
 				finish();
 
 			} catch (Throwable t) {
-				Log.d("err ->", t.toString());
+				Toast.makeText(GoToActivity.this, "err ->" + t.toString(),
+						Toast.LENGTH_LONG).show();
 			}
 		}
 	};

@@ -3,8 +3,6 @@ package com.hamdyghanem.holyquran;
 import java.util.ArrayList;
 
 import com.hamdyghanem.holyquran.R;
-import com.hamdyghanem.holyquran.GoToActivity.OnChapterSelectedListener;
-import com.hamdyghanem.holyquran.GoToActivity.OnSoraSelectedListener;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -31,10 +29,13 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Toast;
 
 public class BookmarksActivity extends Activity {
 	/** Called when the activity is first created. */
 	ApplicationController AC;
+	Typeface arabicFont = null;
+	RadioGroup radioGroup = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -43,7 +44,7 @@ public class BookmarksActivity extends Activity {
 
 		setContentView(R.layout.bookmarks);
 		// /////////CHANGE THE TITLE BAR///////////////
-		Typeface arabicFont = Typeface.createFromAsset(getAssets(),
+		arabicFont = Typeface.createFromAsset(getAssets(),
 				"fonts/DroidSansArabic.ttf");
 
 		if (customTitleSupported) {
@@ -58,65 +59,37 @@ public class BookmarksActivity extends Activity {
 			// myTitleText.setBackgroundColor(R.color.blackblue);
 		}
 		// //////////////////////
-
 		getWindow().setLayout(LayoutParams.FILL_PARENT,
-				LayoutParams.WRAP_CONTENT);
+				LayoutParams.FILL_PARENT);
 		// Add Radio buttons for bookmarks
-		RadioGroup radioGroup = (RadioGroup) findViewById(R.id.RadioGroup01);
-		radioGroup.setOrientation(RadioGroup.VERTICAL);// or
-		AC = (ApplicationController) getApplicationContext(); // RadioGroup.VERTICAL
+		AC = (ApplicationController) getApplicationContext();
+		radioGroup = (RadioGroup) findViewById(R.id.RadioGroup01);
 		//
-		Spinner spnBookmarks = (Spinner) findViewById(R.id.spnBookmarks);
-
-		// CHAPTER
-		// ArrayList<String> strings = new ArrayList<String>();
-		String[] strings = new String[AC.bookmarkUtitliy.arr.size() ];
-		// //RadioGroup.HORIZONTAL
-		int i = 0;
-		for (Bookmark b : AC.bookmarkUtitliy.arr) {
-			RadioButton rb = new RadioButton(this);
-			radioGroup.addView(rb); // the RadioButtons are added to the
-			// radioGroup instead of the layout
-			String strBookmarkName = b.getBookmarkName();
-			strBookmarkName += "  :   " + Integer.toString(b.getPage());
-			//
-			rb.setText(strBookmarkName);
-			strings[i] = strBookmarkName;
-
-			rb.setTag(i);
-			rb.setChecked(b.getDefault() == 1);
-			// rb.setOnClickListener(radio_listener);
-
-			rb.setWidth(getWallpaperDesiredMinimumWidth());
-			rb.setGravity(Gravity.CENTER);
-
-			i++;
-		}
-		spinneradapter adapter = new spinneradapter(this,
-				android.R.layout.simple_spinner_item, strings, arabicFont);
-		spnBookmarks.setAdapter(adapter);
-		spnBookmarks
-				.setOnItemSelectedListener(new OnBookmarkSelectedListener());
-		//
-		//((Button) findViewById(R.id.ButOK)).setTypeface(arabicFont);
-		//((Button) findViewById(R.id.ButCancel)).setTypeface(arabicFont);
+		LoadSpinner();
+		// ((Button) findViewById(R.id.ButOK)).setTypeface(arabicFont);
+		// ((Button) findViewById(R.id.ButCancel)).setTypeface(arabicFont);
 		((Button) findViewById(R.id.ButAddNew)).setTypeface(arabicFont);
 		((Button) findViewById(R.id.ButEditBookmark)).setTypeface(arabicFont);
 		//
-		findViewById(R.id.ButAddNew).setOnClickListener(new_listener);
-		findViewById(R.id.ButEditBookmark).setOnClickListener(setting_listener );
-
 	}
-
+	@Override
+	public void onStop() {
+		AC.saveBookmarksDefalut();
+		super.onStop();
+	}
+	/*
+	 * @Override protected void onStop() { Intent intent = new Intent();
+	 * intent.putExtra("returnKey", 1); setResult(RESULT_OK, intent); finish();
+	 * };
+	 */
 	public class OnBookmarkSelectedListener implements OnItemSelectedListener {
 
 		public void onItemSelected(AdapterView<?> parent, View view, int pos,
 				long id) {
-			// editPage.setText(sorapages[pos]);
-			// Toast.makeText(
-			// parent.getContext(),
-			// "The planet is " + parent.getItemAtPosition(pos).toString(),
-			// Toast.LENGTH_LONG).show();
+			Intent intent = new Intent();
+			intent.putExtra("returnKey", pos);
+			setResult(RESULT_OK, intent);
+			finish();
 		}
 
 		public void onNothingSelected(AdapterView parent) {
@@ -124,55 +97,87 @@ public class BookmarksActivity extends Activity {
 		}
 	}
 
-	/*
-	 * private OnClickListener radio_listener = new OnClickListener() { public
-	 * void onClick(View v) { // Perform action on clicks RadioButton rb =
-	 * (RadioButton) v; Intent intent = new Intent(); Integer i = (Integer)
-	 * rb.getTag(); intent.putExtra("returnKey", i); setResult(RESULT_OK,
-	 * intent); finish(); } }
-	 */;
-		private OnClickListener new_listener = new OnClickListener() {
+	public void NewBookmarkClick(View v) {
 
-			@Override
-			public void onClick(View v) {
+		// Check Already exist
+		String strName = AC.GetSora(AC.iCurrentPage);
+		if (!CheckBookmarkName(strName)) {
+			AC.bookmarkUtitliy.arr.add(new Bookmark(strName, AC.iCurrentPage,
+					0, 0));
+			LoadSpinner();
+			AC.bookmarkUtitliy.setDefault(AC.bookmarkUtitliy.arr.size() - 1);
+			((Button) findViewById(R.id.ButAddNew)).setEnabled(false);
+		}
+	}
 
-				// addRow(AC.GetSora(AC.iCurrentPage),AC.iCurrentPage, 0, 0, true);
+	private Boolean CheckBookmarkName(String strName) {
+
+		// Check Already exist
+		for (int i = 0; i < AC.bookmarkUtitliy.arr.size(); i++) {
+			if (AC.bookmarkUtitliy.arr.get(i).getBookmarkName().equals(strName)) {
+				Toast.makeText(this, getString(R.string.alreadyexistbookmark),
+						Toast.LENGTH_LONG).show();
+
+				return true;
 			}
+		}
+		return false;
+	}
 
-		};
+	public void EditBookmarkClick(View v) {
+		startActivityForResult(new Intent(this, BookmarkEditActivity.class), 1);
+	}
 
-		private OnClickListener setting_listener = new OnClickListener() {
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == 1) {
+			if (data == null || data.getExtras() == null)
+				return;
+			Bundle extras = data.getExtras();
+			Integer i = extras.getInt("returnKey");
+			LoadSpinner();
+			super.onActivityResult(requestCode, resultCode, data);
+			AC.bookmarkUtitliy.setDefault(i);
+			AC.saveBookmarksDefalut();
+			//Toast.makeText(this, Integer.toString(i), Toast.LENGTH_LONG).show();
+			// radioGroup .getChildAt(i).setSelected(true);
 
-			@Override
-			public void onClick(View v) {
+		}
+	}
 
-				// addRow(AC.GetSora(AC.iCurrentPage),AC.iCurrentPage, 0, 0, true);
-			}
+	private void LoadSpinner() {
+		radioGroup.setOrientation(RadioGroup.VERTICAL);// or
+		radioGroup.removeAllViews();
+		Display display = getWindowManager().getDefaultDisplay();
+		for (int i = 0; i < AC.bookmarkUtitliy.arr.size(); i++) {
+			Bookmark b = AC.bookmarkUtitliy.arr.get(i);
+			String strBookmarkName = b.getBookmarkName();
+			//strBookmarkName += "  " + Integer.toString(b.getPage()) + "";
+			//
+			RadioButton rb = new RadioButton(this);
+			radioGroup.addView(rb); // the RadioButtons are added to the
+			//
+			rb.setText(strBookmarkName);
+			rb.setTag(i);
+			rb.setChecked(b.getDefault() == 1);
+			rb.setOnClickListener(radio_listener);
 
-		};
+			// rb.setWidth(getWallpaperDesiredMinimumWidth());
+			rb.setWidth(display.getWidth());
+			rb.setGravity(Gravity.CENTER);
+		}
+	}
 
-//	private OnClickListener ok_listener = new OnClickListener() {
-//
-//		@Override
-//		public void onClick(View v) {
-//			try {
-				/*
-				 * (RadioButton) v; Intent intent = new Intent(); Integer i =
-				 * (Integer) rb.getTag(); intent.putExtra("returnKey", i);
-				 * setResult(RESULT_OK, intent); finish(); } }
-				 */
-//			} catch (Throwable t) {
-//				Log.d("err ->", t.toString());
-//			}
-//		}
-//	};
-
-//	private OnClickListener cancel_listener = new OnClickListener() {
-//
-//		@Override
-//		public void onClick(View v) {
-//			finish();
-//		}
-//	};
-
+	private OnClickListener radio_listener = new OnClickListener() {
+		public void onClick(View v) {
+			// Perform action on clicks
+			RadioButton rb = (RadioButton) v;
+			Intent intent = new Intent();
+			Integer i = (Integer) rb.getTag();
+			intent.putExtra("returnKey", i);
+			setResult(RESULT_OK, intent);
+			finish();
+		}
+	};
 }

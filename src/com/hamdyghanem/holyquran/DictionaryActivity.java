@@ -27,7 +27,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class TafseerActivity extends Activity {
+public class DictionaryActivity extends Activity {
 	/** Called when the activity is first created. */
 	ApplicationController AC;
 
@@ -49,30 +49,32 @@ public class TafseerActivity extends Activity {
 		final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
 		if (myTitleText != null) {
 			myTitleText.setTypeface(arabicFont);
-			myTitleText.setText(R.string.tafseer);
+			myTitleText.setText(R.string.mnuDictionary);
 			// myTitleText.setBackgroundColor(R.color.blackblue);
 		}
 		// //////////////////////
-		getWindow().setLayout(LayoutParams.FILL_PARENT,
-				LayoutParams.FILL_PARENT);
 		// TextView lbl = (TextView) findViewById(R.id.TextView01);
 		AC = (ApplicationController) getApplicationContext(); // RadioGroup.VERTICAL
+		getWindow().setLayout(LayoutParams.FILL_PARENT,
+				LayoutParams.FILL_PARENT);
 		try {
+			// String baseDir = Environment.getExternalStorageDirectory()
+			// .getAbsolutePath()
+			// + "/hQuran/tafseer/" + Integer.toString(i) + ".txt";
 			WebView myWebView = (WebView) findViewById(R.id.webviewtafseer);
 			// myWebView.loadUrl("http://dl.dropbox.com/u/27675084/tafseer_html/1.html");
 			String strFile = Environment.getExternalStorageDirectory()
 					.getAbsolutePath()
-					+ "/hQuran/tafseer/"
+					+ "/hQuran/dictionary/"
 					+ Integer.toString(AC.iCurrentPage) + ".html";
 			File f = new File(strFile);
 			if (!f.exists()) {
-				Toast.makeText(this, getString(R.string.notexisttafser),
+				Toast.makeText(this, getString(R.string.notexistdictionary),
 						Toast.LENGTH_LONG).show();
 				finish();
 
 			}
-
-			myWebView.loadUrl("file:///sdcard/hQuran/tafseer/"
+			myWebView.loadUrl("file:///sdcard/hQuran/dictionary/"
 					+ Integer.toString(AC.iCurrentPage) + ".html");
 			myWebView.getSettings().setBuiltInZoomControls(true);
 			// wv.getSettings().setUseWideViewPort(true);
@@ -80,7 +82,7 @@ public class TafseerActivity extends Activity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			// lbl.setText(R.string.notexisttafser);
-			Toast.makeText(this, getString(R.string.notexisttafser),
+			Toast.makeText(this, getString(R.string.notexistdictionary),
 					Toast.LENGTH_LONG).show();
 			finish();
 

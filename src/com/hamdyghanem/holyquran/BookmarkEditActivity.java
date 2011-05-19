@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -46,7 +47,6 @@ public class BookmarkEditActivity extends Activity {
 		try {
 			super.onCreate(savedInstanceState);
 			final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
-
 			setContentView(R.layout.bookmarkedit);
 			// /////////CHANGE THE TITLE BAR///////////////
 			arabicFont = Typeface.createFromAsset(getAssets(),
@@ -96,17 +96,11 @@ public class BookmarkEditActivity extends Activity {
 			Boolean bCheck) {
 		TableRow tr = new TableRow(this);
 		// Check duplicate
-		if (bCheck) {
 
-			TableRow row = (TableRow) tl.getChildAt(tl.getChildCount() - 1);
-			EditText editLast = (EditText) row.getChildAt(1);
-			EditText editPageLast = (EditText) row.getChildAt(2);
-			if (editLast.getText().toString().equals(strName)
-					&& Integer.parseInt(editPageLast.getText().toString()) == iPage) {
-				Toast.makeText(this, getString(R.string.alreadyexistbookmark),
-						Toast.LENGTH_LONG).show();
-				return;
-			}
+		if (bCheck) {
+			if (CheckBookmarkName(strName))
+				strName = "";
+
 		}
 		CheckBox chk = new CheckBox(this);
 		CheckBox chkStatic = new CheckBox(this);
@@ -148,7 +142,23 @@ public class BookmarkEditActivity extends Activity {
 		tr.addView(rb);
 		tl.addView(tr, new TableLayout.LayoutParams(LayoutParams.FILL_PARENT,
 				LayoutParams.WRAP_CONTENT));
+		if (bCheck)
 		edit.requestFocus();
+	}
+
+	private Boolean CheckBookmarkName(String strName) {
+		// Check Already exist
+		for (int i = 1; i < tl.getChildCount(); i++) {
+			TableRow row = (TableRow) tl.getChildAt(i);
+			EditText edit = (EditText) row.getChildAt(1);
+			if (edit.getText().toString().equals(strName)) {
+				Toast.makeText(this, getString(R.string.alreadyexistbookmark),
+						Toast.LENGTH_LONG).show();
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	private void addHeaderRow() {
@@ -169,6 +179,10 @@ public class BookmarkEditActivity extends Activity {
 		//
 		lbl1.setText(R.string.Delete);
 		lbl2.setText(R.string.Name);
+		Display display = getWindowManager().getDefaultDisplay();
+		int width = display.getWidth();
+		width = width - (4 * 48);
+		lbl2.setWidth(width);
 		lbl3.setText(R.string.Page);
 		lbl4.setText(R.string.Static);
 		lbl5.setText(R.string.Default);
@@ -193,14 +207,15 @@ public class BookmarkEditActivity extends Activity {
 				Integer i = (Integer) rb.getTag();
 				// Remove the old radio checked
 				TableRow row = (TableRow) tl.getChildAt(iCurrentDefault + 1);
-				RadioButton rdo = (RadioButton) row.getChildAt(3);
+				RadioButton rdo = (RadioButton) row.getChildAt(4);
 				if (i != iCurrentDefault)
 					rdo.setChecked(false);
 				iCurrentDefault = i;
 				// Log.d("err ->", Integer.toString(iCurrentDefault));
-
 			} catch (Throwable t) {
-				Log.d("err ->", t.toString());
+				Toast.makeText(BookmarkEditActivity.this,
+						"Request failed:" + t.toString(), Toast.LENGTH_LONG)
+						.show();
 			}
 		}
 	};
@@ -239,6 +254,11 @@ public class BookmarkEditActivity extends Activity {
 				if (AC.bookmarkUtitliy.arr.size() == 0)
 					AC.bookmarkUtitliy.arr.add(new Bookmark(
 							getString(R.string.defaultname), 0, 0, 0));
+				if (iCurrentDefault >= AC.bookmarkUtitliy.arr.size())
+					iCurrentDefault = AC.bookmarkUtitliy.arr.size() - 1;
+				// Toast.makeText(BookmarkEditActivity.this,
+				// Integer.toString(iCurrentDefault), Toast.LENGTH_LONG)
+				// .show();
 
 				AC.bookmarkUtitliy.setDefault(iCurrentDefault);
 				// Send back to the main
@@ -248,7 +268,10 @@ public class BookmarkEditActivity extends Activity {
 				finish();
 
 			} catch (Throwable t) {
-				Log.d("err ->", t.toString());
+				Toast.makeText(BookmarkEditActivity.this,
+						"Request failed:" + t.toString(), Toast.LENGTH_LONG)
+						.show();
+
 			}
 		}
 	};
@@ -270,7 +293,7 @@ public class BookmarkEditActivity extends Activity {
 					return;
 				}
 			}
-			addRow(AC.GetSora(AC.iCurrentPage),AC.iCurrentPage, 0, 0, true);
+			addRow(AC.GetSora(AC.iCurrentPage), AC.iCurrentPage, 0, 0, true);
 		}
 
 	};

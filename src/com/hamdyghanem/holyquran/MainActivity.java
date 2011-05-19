@@ -11,6 +11,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
@@ -18,6 +19,10 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,6 +32,7 @@ import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ImageView.ScaleType;
@@ -35,39 +41,39 @@ public class MainActivity extends Activity {
 	public static final String MYPREFS = "mySharedPreferences";
 	int mode = Activity.MODE_PRIVATE;
 	int duration = Toast.LENGTH_SHORT;
-	String strFileBookmarks = "";
 	ApplicationController AC;
 	Gallery g;
+	Typeface arabicFont = null;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		try {
 			super.onCreate(savedInstanceState);
-			final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+			//final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+			 requestWindowFeature(Window.FEATURE_NO_TITLE);
+			// android:theme="@android:style/Theme.NoTitleBar"
 			setContentView(R.layout.main);
-			// Create Folder
-			strFileBookmarks = Environment.getExternalStorageDirectory()
-					.getAbsolutePath()
-					+ File.separator
-					+ "hQuran"
-					+ File.separator + "bookmarks.dat";
-			// /////////CHANGE THE TITLE BAR///////////////
-			Typeface arabicFont = Typeface.createFromAsset(getAssets(),
-					"fonts/DroidSansArabic.ttf");
 
-			if (customTitleSupported) {
-				getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
-						R.layout.mytitle);
-			}
+			// /////////CHANGE THE TITLE BAR/////////////// Typeface
+			//arabicFont = Typeface.createFromAsset(getAssets(),
+			//		"fonts/DroidSansArabic.ttf");
 
-			final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
-			if (myTitleText != null) {
-				myTitleText.setTypeface(arabicFont);
-				myTitleText.setText(R.string.holyquran);
-				// myTitleText.setBackgroundColor(R.color.blackblue);
-			}
-			// //////////////////////
+			//if (customTitleSupported) {
+			//	getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
+			//			R.layout.mytitle);
+			//}
+
+			///final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
+			//if (myTitleText != null) {
+			//	myTitleText.setTypeface(arabicFont);
+			//	myTitleText.setText(R.string.holyquran); //
+			//	myTitleText.setBackgroundColor(R.color.blackblue);
+			//} //
+			// ////////////////////
+
+			//
+
 			AC = (ApplicationController) getApplicationContext();
 			// SharedPreferences mySharedPreferences = getSharedPreferences(
 			// MYPREFS, mode);
@@ -76,6 +82,11 @@ public class MainActivity extends Activity {
 			// Reference the Gallery view
 			g = (Gallery) findViewById(R.id.Gallery01);
 			g.setAdapter(new ImageAdapter(this));
+			registerForContextMenu(g);
+			LayoutInflater inflater = (LayoutInflater) this
+					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			inflater.inflate(R.layout.main, g, false);
+
 			// Set the adapter to our custom adapter (below)
 			//
 			Boolean bFirstTime = false;
@@ -87,7 +98,7 @@ public class MainActivity extends Activity {
 				bFirstTime = true;
 			}
 			// Check first time
-			AC.bookmarkUtitliy = new BookmarkUtil(ReadSettings());
+			AC.bookmarkUtitliy = new BookmarkUtil(AC.ReadSettings());
 
 			if (bFirstTime) {
 				// Toast.makeText(this, "not exist",
@@ -97,6 +108,11 @@ public class MainActivity extends Activity {
 				file.mkdirs();
 				file = new File(baseDir + "/img/");
 				file.mkdirs();
+				file = new File(baseDir + "/dictionary/");
+				file.mkdirs();
+				file = new File(baseDir + "/tareef/");
+				file.mkdirs();
+
 				ImageManager.saveToSDCard(BitmapFactory.decodeResource(
 						this.getResources(), R.drawable.img_0), "0");
 				ImageManager.saveToSDCard(BitmapFactory.decodeResource(
@@ -115,7 +131,6 @@ public class MainActivity extends Activity {
 				g.setSelection(604 - AC.bookmarkUtitliy.arr.get(
 						AC.bookmarkUtitliy.getDefault()).getPage());
 			}
-
 		} catch (Throwable t) {
 			Toast.makeText(this, "Request failed: " + t.toString(),
 					Toast.LENGTH_LONG).show();
@@ -124,7 +139,7 @@ public class MainActivity extends Activity {
 
 	@Override
 	public void onStop() {
-		saveBookmarks();
+		AC.saveBookmarks(g.getSelectedItemPosition());
 		super.onStop();
 	}
 
@@ -141,43 +156,34 @@ public class MainActivity extends Activity {
 		return callOptionsItemSelected(item, item.getItemId());
 	}
 
-	private void saveBookmarksDefalut() {
-		WriteSettings(AC.bookmarkUtitliy.getBookmarksString());
-	}
-
-	private void saveBookmarks() {
-		// check the static value
-		AC.iCurrentPage =604 - g.getSelectedItemPosition();
-		if (AC.bookmarkUtitliy.arr.get(AC.bookmarkUtitliy.getDefault())
-				.getStatic() == 0) {
-			//
-			AC.bookmarkUtitliy.arr.get(AC.bookmarkUtitliy.getDefault())
-					.setPage(604 - g.getSelectedItemPosition());
-			WriteSettings(AC.bookmarkUtitliy.getBookmarksString());
-		}
-	}
-
 	public boolean callOptionsItemSelected(MenuItem item, int iItem) {
 		// Save Now
-		saveBookmarks();
+		AC.saveBookmarks(g.getSelectedItemPosition());
 
 		// Handle item selection
 		switch (iItem) {
 		case R.id.mnu_settings:
 			startActivity(new Intent(this, SettingsActivity.class));
 			return true;
-		case R.id.mnu_tafseer:
-			startActivity(new Intent(this, TafseerActivity.class));
+			// case R.id.mnu_tafseer:
+		case R.id.mnu_details:
+			startActivity(new Intent(this, DetailsMenuActivity.class));
+			// registerForContextMenu( t );
+			// openContextMenu(g);
 			return true;
-
+		case R.id.mnu_search:
+			startActivityForResult(new Intent(this, SearchActivity.class), 1);
+			// registerForContextMenu( t );
+			// openContextMenu(g);
+			return true;
 		case R.id.mnu_bookmark:
 			// startActivity(new Intent(this, BookmarksActivity.class));
 			startActivityForResult(new Intent(this, BookmarksActivity.class), 1);
 			return true;
-		case R.id.mnu_newbookmark:
-			startActivityForResult(
-					new Intent(this, BookmarkEditActivity.class), 1);
-			return true;
+			// case R.id.mnu_newbookmark:
+			// startActivityForResult(
+			// new Intent(this, BookmarkEditActivity.class), 1);
+			// return true;
 		case R.id.mnu_goto:
 			startActivityForResult(new Intent(this, GoToActivity.class), 1);
 
@@ -194,18 +200,20 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
+		// Toast.makeText(this, "aaaaaaaaaaa", Toast.LENGTH_LONG).show();
+		// Toast.makeText(this, Integer.toString(requestCode),
+		// Toast.LENGTH_LONG).show();
+
 		if (requestCode == 1) {
-			if (data == null || data.getExtras() == null)
-				return;
-			Bundle extras = data.getExtras();
-			Integer i = extras.getInt("returnKey");
-			// Toast.makeText(this,
-			// if (AC.bookmarkUtitliy.getDefault() != i) {
-			AC.bookmarkUtitliy.setDefault(i);
-			saveBookmarksDefalut();
-			//
-			i = AC.bookmarkUtitliy.arr.get(AC.bookmarkUtitliy.getDefault())
-					.getPage();
+			if (!(data == null || data.getExtras() == null)) {
+
+				Bundle extras = data.getExtras();
+				Integer i = extras.getInt("returnKey");
+				AC.bookmarkUtitliy.setDefault(i);
+				// Toast.makeText(this, Integer.toString(i), Toast.LENGTH_LONG)
+				// .show();
+				AC.saveBookmarksDefalut();
+			}
 			// Toast.makeText(this, "Request failed: " + Integer.toString(i),
 			// Toast.LENGTH_LONG).show();
 			//
@@ -213,6 +221,21 @@ public class MainActivity extends Activity {
 					AC.bookmarkUtitliy.getDefault()).getPage());
 			// }
 		}
+	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		menu.setHeaderTitle(R.string.holyquran);
+		menu.add(0, R.id.mnu_bookmark, 0, R.string.bookmark);
+		menu.add(0, R.id.mnu_goto, 0, R.string.GoToActivity);
+	}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		callOptionsItemSelected(null, item.getItemId());
+		return true;
 	}
 
 	public class ImageAdapter extends BaseAdapter {
@@ -230,10 +253,10 @@ public class MainActivity extends Activity {
 
 			// See res/values/attrs.xml for the <declare-styleable> that defines
 			// Gallery1.
-			TypedArray a = obtainStyledAttributes(R.styleable.Gallery1);
-			mGalleryItemBackground = a.getResourceId(
-					R.styleable.Gallery1_android_galleryItemBackground, 0);
-			a.recycle();
+			// TypedArray a = obtainStyledAttributes(R.styleable.Gallery01);
+			// mGalleryItemBackground = a.getResourceId(
+			// R.styleable.Gallery01_android_galleryItemBackground, 0);
+			// a.recycle();
 		}
 
 		public int getCount() {
@@ -251,6 +274,7 @@ public class MainActivity extends Activity {
 
 		public View getView(int position, View convertView, ViewGroup parent) {
 			ImageView imgView = new ImageView(mContext);
+
 			String baseDir = Environment.getExternalStorageDirectory()
 					.getAbsolutePath() + "/hQuran/img/";
 			// imgView.setScaleType(ScaleType.FIT_XY);
@@ -272,10 +296,27 @@ public class MainActivity extends Activity {
 				Drawable d = Drawable.createFromPath(strFile);
 				imgView.setImageDrawable(d);
 			}
-			// i.setScaleType(ImageView.ScaleType.FIT_XY);
-			// i.setLayoutParams(new Gallery.LayoutParams(136, 88));
-			// The preferred Gallery item background
-			imgView.setBackgroundResource(mGalleryItemBackground);
+
+			Display display = getWindowManager().getDefaultDisplay();
+			int width = display.getWidth();
+			int height = display.getHeight();
+			// matrix.setScale(scale, scale);
+			// imgView.setPadding(1, 1, 1, 1);
+			/*
+			 * if (getResources().getConfiguration().orientation ==
+			 * Configuration.ORIENTATION_LANDSCAPE) { float myFlo = (float)
+			 * (width * 2.2); height = (int) myFlo; imgView.setLayoutParams(new
+			 * Gallery.LayoutParams(width, height));
+			 * imgView.setScaleType(ImageView.ScaleType.FIT_XY); } else { //
+			 * imgView.setLayoutParams(new Gallery.LayoutParams(width-5, //
+			 * height)); imgView.setScaleType(ImageView.ScaleType.FIT_CENTER); }
+			 */
+			imgView.setScaleType(ImageView.ScaleType.FIT_XY);
+			imgView.setAdjustViewBounds(true);
+			imgView.setBackgroundColor(getTitleColor());
+
+			// imgView.setBackgroundResource(mGalleryItemBackground);
+
 			// imgView. setOnLongClickListener(new OnLongClickListener() {
 			// @Override
 			// public boolean onLongClick(View v) {
@@ -286,53 +327,6 @@ public class MainActivity extends Activity {
 
 			return imgView;
 		}
-	}
-
-	public void WriteSettings(String data) {
-		File file = new File(strFileBookmarks);
-		FileWriter writer;
-		try {
-			writer = new FileWriter(file);
-			writer.write(data);
-			writer.flush();
-			writer.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
-		}
-		//Toast.makeText(this, data, Toast.LENGTH_SHORT).show();
-	}
-
-	public String ReadSettings() {
-		// SaveBookmark
-		String data = getString(R.string.defaultbookmark);
-		File file = new File(strFileBookmarks);
-		if (!file.exists())
-			WriteSettings(getString(R.string.defaultbookmark));
-		FileReader reader = null;
-		try {
-			reader = new FileReader(file);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		BufferedReader br = new BufferedReader(reader);
-		String thisLine = null;
-		try {
-			while ((thisLine = br.readLine()) != null) {
-				data = thisLine;
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// Toast.makeText(this, "Request failed: " + data,
-		// Toast.LENGTH_LONG).show();
-		//Toast.makeText(this, data, Toast.LENGTH_SHORT).show();
-
-		return data.trim();
-
 	}
 
 }

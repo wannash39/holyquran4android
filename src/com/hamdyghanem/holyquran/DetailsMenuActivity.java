@@ -1,0 +1,103 @@
+package com.hamdyghanem.holyquran;
+
+import java.util.ArrayList;
+
+import com.hamdyghanem.holyquran.R;
+
+import android.app.Activity;
+import android.app.ListActivity;
+import android.content.Intent;
+import android.graphics.Typeface;
+
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
+import android.view.View;
+import android.view.Window;
+import android.view.View.OnClickListener;
+import android.view.WindowManager;
+import android.view.WindowManager.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Toast;
+
+public class DetailsMenuActivity extends ListActivity {
+	/** Called when the activity is first created. */
+	ApplicationController AC;
+	Typeface arabicFont = null;
+	RadioGroup radioGroup = null;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+
+		// setContentView(R.layout.detailsmenu);
+		// /////////CHANGE THE TITLE BAR///////////////
+		arabicFont = Typeface.createFromAsset(getAssets(),
+				"fonts/DroidSansArabic.ttf");
+
+		if (customTitleSupported) {
+			getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
+					R.layout.mytitle);
+		}
+		final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
+		if (myTitleText != null) {
+			myTitleText.setTypeface(arabicFont);
+			myTitleText.setText(R.string.detailsmenu);
+			// myTitleText.setBackgroundColor(R.color.blackblue);
+		}
+		// //////////////////////
+		getWindow().setLayout(LayoutParams.FILL_PARENT,
+				LayoutParams.FILL_PARENT);
+		String[] names = new String[4];
+		names[0] = getString(R.string.mnuTafseer);
+		names[1] = getString(R.string.mnuTaareef);
+		names[2] = getString(R.string.mnuDictionary);
+		names[3] = getString(R.string.mnuZoom);
+
+		// Add Radio buttons for bookmarks
+		AC = (ApplicationController) getApplicationContext();
+		//
+		this.setListAdapter(new ArrayAdapter<String>(this,
+				android.R.layout.simple_list_item_1, names));
+		//
+	}
+
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		super.onListItemClick(l, v, position, id);
+		// Get the item that was clicked
+		//Object o = this.getListAdapter().getItem(position);
+		// String keyword = o.toString();
+		// Toast.makeText(this, "You selected: " + keyword, Toast.LENGTH_LONG)
+		// .show();
+		switch (position) {
+		case 0:
+			startActivity(new Intent(this, TafseerActivity.class));
+			return;
+		case 1:
+			startActivity(new Intent(this, TaareefActivity.class));
+			return;
+		case 2:
+			startActivity(new Intent(this, DictionaryActivity.class));
+			return;
+		case 3:
+			startActivity(new Intent(this, ZoomActivity.class));
+			return;
+		}
+	}
+
+}

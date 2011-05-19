@@ -5,7 +5,10 @@
     android:layout_height="fill_parent"
     >
 
-<Button android:text="@string/btn_download_pages"   android:onClick="downloadPages"  android:id="@+id/btnSettDownload" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
-<Button android:text="@string/btn_download_tafser"   android:onClick="downloadTafser"  android:id="@+id/btnTafserDownload" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
+<Button android:text="@string/btn_download_pages"   android:onClick="downloadPages"  android:id="@+id/btnSettDownload" android:layout_width="fill_parent" android:layout_height="wrap_content"></Button>
+<Button android:text="@string/btn_download_database"   android:onClick="downloadDatabase"  android:id="@+id/btnDatabaseDownload" android:layout_width="fill_parent" android:layout_height="wrap_content"></Button>
+<Button android:text="@string/btn_download_tafser"   android:onClick="downloadTafser"  android:id="@+id/btnTafserDownload" android:layout_width="fill_parent" android:layout_height="wrap_content"></Button>
+<Button android:text="@string/btn_download_tareef"   android:onClick="downloadTareef"  android:id="@+id/btnTaareefDownload" android:layout_width="fill_parent" android:layout_height="wrap_content"></Button>
+<Button android:text="@string/btn_download_dictionary"   android:onClick="downloadDicttonary"  android:id="@+id/btnDictionayDownload" android:layout_width="fill_parent" android:layout_height="wrap_content"></Button>
 
 </LinearLayout>
