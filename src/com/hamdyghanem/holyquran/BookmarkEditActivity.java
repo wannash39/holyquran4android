@@ -181,7 +181,7 @@ public class BookmarkEditActivity extends Activity {
 		lbl2.setText(R.string.Name);
 		Display display = getWindowManager().getDefaultDisplay();
 		int width = display.getWidth();
-		width = width - (4 * 48);
+		width = width - (4 * 70);
 		lbl2.setWidth(width);
 		lbl3.setText(R.string.Page);
 		lbl4.setText(R.string.Static);

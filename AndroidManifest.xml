@@ -3,7 +3,7 @@
 	android:versionCode="2" android:versionName="1.1" package="com.hamdyghanem.holyquran">
 	<application android:icon="@drawable/ic_launcher_hq"
 		android:label="@string/app_name" android:name=".ApplicationController">
-		<activity android:name=".MainActivity" android:label="@string/app_name"  >
+		<activity android:name=".MainActivity" android:label="@string/app_name">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
@@ -17,9 +17,9 @@
 
 		<activity android:name=".BookmarkEditActivity" android:label="@string/BookmarkEdit">
 		</activity>
-			<activity android:name=".SearchActivity" android:label="@string/Search">
+		<activity android:name=".SearchActivity" android:label="@string/Search">
 		</activity>
-		
+
 		<activity android:name=".TafseerActivity" android:theme="@android:style/Theme.Dialog">
 		</activity>
 		<activity android:name=".TafseerActivity" android:theme="@android:style/Theme.Dialog">
@@ -34,7 +34,7 @@
 		<activity android:name=".DictionaryActivity" android:theme="@android:style/Theme.Dialog">
 		</activity>
 
-		<activity android:name=".DetailsMenuActivity" >
+		<activity android:name=".DetailsMenuActivity">
 		</activity>
 
 		<activity android:name=".AboutActivity" android:label="@string/AboutActivity"
@@ -44,7 +44,7 @@
 		<activity android:name=".GoToActivity" android:label="@string/GoToActivity">
 		</activity>
 	</application>
-	<uses-sdk android:minSdkVersion="2" />
+	<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="4" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
 	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
 
