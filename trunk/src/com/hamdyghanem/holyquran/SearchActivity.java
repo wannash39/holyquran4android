@@ -1,11 +1,15 @@
 package com.hamdyghanem.holyquran;
 
+import java.io.UnsupportedEncodingException;
 import java.util.concurrent.ExecutionException;
+
+import org.apache.http.util.EncodingUtils;
 
 import com.hamdyghanem.holyquran.R;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
@@ -13,6 +17,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.util.Log;
+import android.util.Xml.Encoding;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -69,7 +74,6 @@ public class SearchActivity extends Activity {
 			AC = (ApplicationController) getApplicationContext(); // RadioGroup.VERTICAL
 			tl = (TableLayout) findViewById(R.id.searchTableLayoutResult);
 
-			
 			//
 			edit = (EditText) findViewById(R.id.editSearch);
 			InputFilter[] FilterArray = new InputFilter[1];
@@ -91,7 +95,6 @@ public class SearchActivity extends Activity {
 			if (!objdb.databaseFileExists()) {
 				Toast.makeText(this, R.string.notexistdb, Toast.LENGTH_LONG)
 						.show();
-
 				finish();
 			}
 
@@ -100,6 +103,7 @@ public class SearchActivity extends Activity {
 					.show();
 		}
 	}
+
 	private void addHeaderRow() {
 
 		TableRow tr = new TableRow(this);
@@ -120,27 +124,33 @@ public class SearchActivity extends Activity {
 		Display display = getWindowManager().getDefaultDisplay();
 		int width = display.getWidth();
 		width = width - (3 * 70);
-lbl4.setWidth(width);
+		lbl4.setWidth(width);
 		lbl3.setText(R.string.searchAya);
 		lbl4.setText(R.string.searchContent);
 		tr.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
 				LayoutParams.WRAP_CONTENT));
-
+		//
+		lbl4.setGravity(Gravity.CENTER); // attempt at justifying text
+		//
 		tr.addView(lbl1);
 		tr.addView(lbl2);
 		tr.addView(lbl3);
 		tr.addView(lbl4);
+
 		tl.addView(tr, new TableLayout.LayoutParams(LayoutParams.FILL_PARENT,
 				LayoutParams.WRAP_CONTENT));
 
 	}
+
 	private void addSepratorRow() {
 		TableRow tr = new TableRow(this);
-		tl. addView(tr, new TableLayout.LayoutParams(LayoutParams.FILL_PARENT,
+		tl.addView(tr, new TableLayout.LayoutParams(LayoutParams.FILL_PARENT,
 				LayoutParams.WRAP_CONTENT));
 
 	}
-	private void addRow(String strSuraName, String iPage,String strAya, String strContent) {
+
+	private void addRow(String strSuraName, String iPage, String strAya,
+			String strContent) {
 		TableRow tr = new TableRow(this);
 		//
 		Button vPage = new Button(this);
@@ -152,12 +162,12 @@ lbl4.setWidth(width);
 		vSuraName.setTypeface(arabicFont);
 		vAya.setTypeface(arabicFont);
 		vContenet.setTypeface(arabicFont);
-		
+
 		Display display = getWindowManager().getDefaultDisplay();
 		int width = display.getWidth();
 		width = width - (3 * 70);
 		vContenet.setWidth(width);
-		
+
 		// but.setTextOff("");
 		// but.setTextOn("");
 		vPage.setText(iPage);
@@ -165,14 +175,14 @@ lbl4.setWidth(width);
 		vAya.setText(strAya);
 		vContenet.setText(strContent);
 		//
-		vAya.setGravity(Gravity.CENTER); // attempt at justifying text 
-		vContenet.setGravity(Gravity.CENTER); // attempt at justifying text 
-		vSuraName.setGravity(Gravity.CENTER); // attempt at justifying text 
-		
+		vAya.setGravity(Gravity.CENTER); // attempt at justifying text
+		vContenet.setGravity(Gravity.CENTER); // attempt at justifying text
+		vSuraName.setGravity(Gravity.CENTER); // attempt at justifying text
+
 		//
 		tr.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
 				LayoutParams.WRAP_CONTENT));
-//
+		//
 		vPage.setOnClickListener(pagebtn_listener);
 
 		//
@@ -180,22 +190,25 @@ lbl4.setWidth(width);
 		tr.addView(vSuraName);
 		tr.addView(vAya);
 		tr.addView(vContenet);
-		tl. addView(tr, new TableLayout.LayoutParams(LayoutParams.FILL_PARENT,
+		tl.addView(tr, new TableLayout.LayoutParams(LayoutParams.FILL_PARENT,
 				LayoutParams.WRAP_CONTENT));
 
 	}
+
 	private OnClickListener pagebtn_listener = new OnClickListener() {
 		public void onClick(View v) {
 			try {
 				// Perform action on clicks
 				Button btn = (Button) v;
-				Integer i = Integer.parseInt( btn.getText().toString());
-				
-				Toast.makeText(SearchActivity.this,
-						"Request failed:" + btn.getText().toString(), Toast.LENGTH_LONG)
-						.show();
-			
-				// Log.d("err ->", Integer.toString(iCurrentDefault));
+				Integer pos = Integer.parseInt(btn.getText().toString());
+				// Toast.makeText(SearchActivity.this,
+				// "Request failed:" + btn.getText().toString(),
+				// Toast.LENGTH_LONG)
+				// .show();
+				Intent intent = new Intent();
+				intent.putExtra("returnKey", pos);
+				setResult(RESULT_OK, intent);
+				finish();
 			} catch (Throwable t) {
 				Toast.makeText(SearchActivity.this,
 						"Request failed:" + t.toString(), Toast.LENGTH_LONG)
@@ -203,17 +216,17 @@ lbl4.setWidth(width);
 			}
 		}
 	};
-
 	private OnClickListener search_listener = new OnClickListener() {
-
 		@Override
 		public void onClick(View v) {
 			if (edit.getText() != null
 					&& edit.getText().toString().length() > 0) {
 				SelectDataTask task = new SelectDataTask();
-				String strResult = "";
-				task.execute(edit.getText().toString(), "", "");
-				
+				String strResult = edit.getText().toString();
+				// tell how much u found it
+
+				task.execute(strResult);
+
 				try {
 					strResult = task.get();
 				} catch (InterruptedException e) {
@@ -223,7 +236,6 @@ lbl4.setWidth(width);
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
 			}
 		}
 	};
@@ -235,46 +247,56 @@ lbl4.setWidth(width);
 		// can use UI thread here
 		@Override
 		protected void onPreExecute() {
-			this.dialog.setMessage("Selecting data...");
+			this.dialog.setMessage(getText(R.string.Searching));
 			this.dialog.show();
+		}
+
+		private String GetRightChar(String str) {
+	String strValue = new String ();
+			for (char ch : str.toCharArray()) {
+				if (ch == 'ï» ' | ch == 'ï»Ÿ' | ch == 'Ù„')
+					strValue += "Ù„";
+				else if (ch == 'ï»ª')
+					strValue += "Ù‡";
+				else if (ch == 'Ø§')
+					strValue += "Ø§";
+					
+
+			}
+			return strValue;
 		}
 
 		// automatically done on worker thread (separate from UI thread)
 		@Override
 		protected String doInBackground(String... whereClause) {
 			db = objdb.getReadableDatabase();
-			Cursor mcursor = objdb.getQuery("ÇáÌäÉ", db);
+			// Cursor mcursor = objdb.getQuery(whereClause[0], db);
+			String strParam = edit.getText().toString();
+			strParam = strParam.trim();
+
+			// strParam= "\u3403";
+			// strParam="Ø§Ù„Ø¬Ù†Ø©";
+			String strParam3 = new String(strParam.toCharArray());
+			strParam3 = GetRightChar(strParam3);
+			String strParam2 = "Ø§Ù„Ù„Ù‡";
+
+			Cursor mcursor = objdb.getQuery(strParam3, db);
 			StringBuilder sb = new StringBuilder();
-			 mcursor.moveToFirst();
-				 Log.d("tetst>>>>>>>>>>>>>>>>>>>>>>>>>",tl.toString());
-
-			while (mcursor.isAfterLast() == false) {
-				for (int i = 0; i < mcursor.getColumnCount(); i++) {
-					// view.append("n" + mcursor.getString(i));
-					// data = mcursor.getString(i);
-					// addRow(mcursor.getString(i), mcursor.getString(i),
-					// mcursor.getString(i));
-					// page", "surah","verse", "content"
-					sb.append(mcursor.getString(i) + ";");
+			if (mcursor != null) {
+				mcursor.moveToFirst();
+				// Log.d("tetst>>>>>>>>>>>>>>>>>>>>>>>>>", tl.toString());
+				while (mcursor.isAfterLast() == false) {
+					for (int i = 0; i < mcursor.getColumnCount(); i++) {
+						// page", "surah","verse", "content"
+						sb.append(mcursor.getString(i) + ";");
+					}
+					sb.append("\n");
+					mcursor.moveToNext();
 				}
-			
-				//addRow("ÇáÝÇÊÍÉ", mcursor.getString(0), mcursor.getString(3));
-				sb.append("\n");
-
-				mcursor.moveToNext();
+				mcursor.close();
 			}
-			mcursor.close();
 			objdb.close();
-			// StringBuilder sb = new StringBuilder();
-			// for (String name : names) {
-			// sb.append(name + "\n");
-			// }
-			//
-			//if (this.dialog.isShowing()) {
-			//	this.dialog.dismiss();
-			//}
 			return sb.toString();
-
 		}
 
 		@Override
@@ -284,14 +306,19 @@ lbl4.setWidth(width);
 			addHeaderRow();
 			String[] soranames = getResources().getStringArray(
 					R.array.SoraName_array);
-			
+
 			String[] rows = result.split("\n");
 			for (int i = 0; i < rows.length - 1; i++) {
 				String[] cols = rows[i].split(";");
-					//addRow("ÇáÝÇÊÍÉ", cols[0], cols[3]);
-				addRow(soranames [Integer.parseInt(cols[1])], cols[0],cols[2], cols[3] + "\r\n");
+				addRow(soranames[Integer.parseInt(cols[1])], cols[0], cols[2],
+						cols[3] + "\r\n");
 				addSepratorRow();
 			}
+			Toast.makeText(
+					SearchActivity.this,
+					getText(R.string.found) + " : "
+							+ Integer.toString((tl.getChildCount() - 1) / 2),
+					Toast.LENGTH_LONG).show();
 			this.dialog.dismiss();
 		}
 
