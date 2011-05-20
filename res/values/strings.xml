@@ -13,6 +13,8 @@
 	<string name="downloadingdatabase"> ... تنزيل قاعدة البيانات للبحث</string>
 	<string name="downloadingtafseer"> ... تنزيل التفسير</string>
 	<string name="notexistpage">صفحة غير موجودة</string>
+	<string name="found">نتيجية البحث </string>
+	
 
 <string name="Searching"> ... جاري البحث</string>
 <string name="Search"> البحث</string>

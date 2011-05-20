@@ -176,7 +176,7 @@ public class MainActivity extends Activity {
 			// openContextMenu(g);
 			return true;
 		case R.id.mnu_search:
-			startActivityForResult(new Intent(this, SearchActivity.class), 1);
+			startActivityForResult(new Intent(this, SearchActivity.class), 3);
 			// registerForContextMenu( t );
 			// openContextMenu(g);
 			return true;
@@ -224,6 +224,14 @@ public class MainActivity extends Activity {
 			g.setSelection(604 - AC.bookmarkUtitliy.arr.get(
 					AC.bookmarkUtitliy.getDefault()).getPage());
 			// }
+		} else if (requestCode == 3) {
+			if (!(data == null || data.getExtras() == null)) {
+				Bundle extras = data.getExtras();
+				Integer i = extras.getInt("returnKey");
+				
+				 
+				g.setSelection(604 - i);
+			}
 		}
 	}
 
@@ -310,15 +318,17 @@ public class MainActivity extends Activity {
 			if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
 				float myFlo = (float) (width * 1.5);
 				height = (int) myFlo;
-				imgView.setLayoutParams(new Gallery.LayoutParams(width, height-50));
+				imgView.setLayoutParams(new Gallery.LayoutParams(width,
+						height - 50));
 				imgView.setScaleType(ImageView.ScaleType.FIT_XY);
 			} else { //
-				imgView.setLayoutParams(new Gallery.LayoutParams(width , //
-						height-50));
+				imgView.setLayoutParams(new Gallery.LayoutParams(width, //
+						height - 50));
 				imgView.setScaleType(ImageView.ScaleType.FIT_XY);
 			}
 
-			//imgView.setLayoutParams(new Gallery.LayoutParams(width, height - 50));
+			// imgView.setLayoutParams(new Gallery.LayoutParams(width, height -
+			// 50));
 
 			imgView.setScaleType(ImageView.ScaleType.FIT_XY);
 			// imgView.setScaleType(ScaleType.MATRIX);

@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.concurrent.ExecutionException;
 
 import android.app.Application;
 import android.content.Context;
@@ -94,27 +95,32 @@ public class ExternalStorageReadOnlyOpenHelper extends Application {
 	}
 
 	public Cursor getQuery(String pqr, SQLiteDatabase db) {
-		// String data = "";
-		// String count = "SELECT count(*) FROM quran";
+		try {
+			// String data = "";
+			// String count = "SELECT count(*) FROM quran";
 
-		// Cursor cursor= db.query(TABLE_IMAGES, new String[]{"_id"}, "name"
-		// +" = ?", new String[]{compareToThis}, null, null, null);
+			// Cursor cursor= db.query(TABLE_IMAGES, new String[]{"_id"}, "name"
+			// +" = ?", new String[]{compareToThis}, null, null, null);
+			String strWhere = "content like " + "'%" + pqr + "%'";
+			Cursor mcursor = db.query("quran", new String[] { "page", "surah",
+					"verse", "content" }, strWhere, null, null, null, null);
 
-		Cursor mcursor = db.query("quran", new String[] { "page", "surah",
-				"verse", "content" }, "content like " + "'%" + pqr + "%'",
-				null, null, null, null);
+			// Cursor mcursor = db.rawQuery(count, null);
+			mcursor.moveToFirst();
 
-		// Cursor mcursor = db.rawQuery(count, null);
-		mcursor.moveToFirst();
+			/*
+			 * if (mCursor != null) { mCursor.moveToFirst(); if
+			 * (mCursor.moveToFirst()) { do { data = mCursor.getString(1); // do
+			 * what ever you want here } while (mCursor.moveToNext()); }
+			 */
+			// mcursor.close();
 
-		/*
-		 * if (mCursor != null) { mCursor.moveToFirst(); if
-		 * (mCursor.moveToFirst()) { do { data = mCursor.getString(1); // do
-		 * what ever you want here } while (mCursor.moveToNext()); }
-		 */
-		// mcursor.close();
-
-		return mcursor;
+			return mcursor;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**
