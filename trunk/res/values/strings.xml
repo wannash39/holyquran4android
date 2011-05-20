@@ -38,7 +38,12 @@
 
 	<string name="alreadyexistbookmark">تم اضافتها بالفعل</string>
 	
-	
+
+	<string name="searchPage">الصفحه</string>
+	<string name="searchSura">السورة</string>
+	<string name="searchAya">رقم</string>
+	<string name="searchContent">الآية</string>
+
 
 	<string name="holyquran">القرآن الكريم</string>
 	<string name="settings">إعدادات</string>

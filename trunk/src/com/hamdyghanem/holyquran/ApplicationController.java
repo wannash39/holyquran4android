@@ -25,7 +25,7 @@ public class ApplicationController extends Application {
 
 	public Boolean NeedDownload() {
 		String baseDir = Environment.getExternalStorageDirectory()
-				.getAbsolutePath() + "//hQuran//img//";
+				.getAbsolutePath() + "/hQuran/img/";
 		File file = new File(baseDir);
 		return file.listFiles().length < 604;
 	}

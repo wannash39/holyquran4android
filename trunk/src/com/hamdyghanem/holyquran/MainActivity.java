@@ -14,6 +14,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.Gallery;
@@ -50,26 +52,28 @@ public class MainActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		try {
 			super.onCreate(savedInstanceState);
-			//final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
-			 requestWindowFeature(Window.FEATURE_NO_TITLE);
+			// final boolean customTitleSupported =
+			// requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+			requestWindowFeature(Window.FEATURE_NO_TITLE);
 			// android:theme="@android:style/Theme.NoTitleBar"
 			setContentView(R.layout.main);
 
 			// /////////CHANGE THE TITLE BAR/////////////// Typeface
-			//arabicFont = Typeface.createFromAsset(getAssets(),
-			//		"fonts/DroidSansArabic.ttf");
+			// arabicFont = Typeface.createFromAsset(getAssets(),
+			// "fonts/DroidSansArabic.ttf");
 
-			//if (customTitleSupported) {
-			//	getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
-			//			R.layout.mytitle);
-			//}
+			// if (customTitleSupported) {
+			// getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
+			// R.layout.mytitle);
+			// }
 
-			///final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
-			//if (myTitleText != null) {
-			//	myTitleText.setTypeface(arabicFont);
-			//	myTitleText.setText(R.string.holyquran); //
-			//	myTitleText.setBackgroundColor(R.color.blackblue);
-			//} //
+			// /final TextView myTitleText = (TextView)
+			// findViewById(R.id.myTitle);
+			// if (myTitleText != null) {
+			// myTitleText.setTypeface(arabicFont);
+			// myTitleText.setText(R.string.holyquran); //
+			// myTitleText.setBackgroundColor(R.color.blackblue);
+			// } //
 			// ////////////////////
 
 			//
@@ -301,17 +305,30 @@ public class MainActivity extends Activity {
 			int width = display.getWidth();
 			int height = display.getHeight();
 			// matrix.setScale(scale, scale);
-			// imgView.setPadding(1, 1, 1, 1);
-			/*
-			 * if (getResources().getConfiguration().orientation ==
-			 * Configuration.ORIENTATION_LANDSCAPE) { float myFlo = (float)
-			 * (width * 2.2); height = (int) myFlo; imgView.setLayoutParams(new
-			 * Gallery.LayoutParams(width, height));
-			 * imgView.setScaleType(ImageView.ScaleType.FIT_XY); } else { //
-			 * imgView.setLayoutParams(new Gallery.LayoutParams(width-5, //
-			 * height)); imgView.setScaleType(ImageView.ScaleType.FIT_CENTER); }
-			 */
+			imgView.setPadding(1, 1, 1, 1);
+
+			if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+				float myFlo = (float) (width * 1.5);
+				height = (int) myFlo;
+				imgView.setLayoutParams(new Gallery.LayoutParams(width, height-50));
+				imgView.setScaleType(ImageView.ScaleType.FIT_XY);
+			} else { //
+				imgView.setLayoutParams(new Gallery.LayoutParams(width , //
+						height-50));
+				imgView.setScaleType(ImageView.ScaleType.FIT_XY);
+			}
+
+			//imgView.setLayoutParams(new Gallery.LayoutParams(width, height - 50));
+
 			imgView.setScaleType(ImageView.ScaleType.FIT_XY);
+			// imgView.setScaleType(ScaleType.MATRIX);
+			// Matrix matrix=new Matrix();
+			// imgView.setMinimumWidth(width);
+			// imgView.setMinimumHeight(height);
+
+			// imgView.setMaxWidth(width);
+			// imgView.setMaxHeight(height);
+
 			imgView.setAdjustViewBounds(true);
 			imgView.setBackgroundColor(getTitleColor());
 
