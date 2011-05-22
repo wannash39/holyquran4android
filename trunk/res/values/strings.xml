@@ -14,6 +14,7 @@
 	<string name="downloadingtafseer"> ... تنزيل التفسير</string>
 	<string name="notexistpage">صفحة غير موجودة</string>
 	<string name="found">نتيجية البحث </string>
+		<string name="SearchNoData">قيمة غير صالحة للبحث اقل قيمة أربعة أحرف</string>
 	
 
 <string name="Searching"> ... جاري البحث</string>
