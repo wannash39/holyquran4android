@@ -48,7 +48,7 @@ public class AboutActivity extends Activity {
 		strAbout += "<font color='black'>";
 		strAbout += " القرآن الكريم <br />";
 		strAbout += "مصحف المدينة <br />";
-		strAbout += " الإصدار الأول V 1.0 <br />";
+		strAbout += " الإصدار الأول V 1.2 <br />";
 		
 		strAbout += "</H1>";
 		strAbout += "محاولة لدعم البرامج الاسلامية على سوق الاندرويد <br />";
