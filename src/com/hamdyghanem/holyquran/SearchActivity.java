@@ -19,15 +19,18 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.text.method.KeyListener;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -43,7 +46,9 @@ public class SearchActivity extends Activity {
 	public SQLiteDatabase db;
 	public ExternalStorageReadOnlyOpenHelper objdb;
 	String[] soranames = null;
-	int iSearchLanguage=0;//0 is Arabic , 1 is English
+
+	int iSearchLanguage = 0;// 0 is Arabic , 1 is English
+
 	// LinearLayout linearScrollView;
 	// TableLayout tablelayout;
 	// TableRow tablerow;
@@ -55,6 +60,7 @@ public class SearchActivity extends Activity {
 			super.onCreate(savedInstanceState);
 			final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 			setContentView(R.layout.search);
+			AC = (ApplicationController) getApplicationContext(); // RadioGroup.VERTICAL
 			// /////////CHANGE THE TITLE BAR///////////////
 			arabicFont = Typeface.createFromAsset(getAssets(),
 					"fonts/DroidSansArabic.ttf");
@@ -67,11 +73,9 @@ public class SearchActivity extends Activity {
 			final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
 			if (myTitleText != null) {
 				myTitleText.setTypeface(arabicFont);
-				myTitleText.setText(R.string.Search);
-				// myTitleText.setBackgroundColor(R.color.blackblue);
+				myTitleText.setText(AC.getTextbyLanguage(R.string.Search));
 			}
 			// //////////////////////
-			AC = (ApplicationController) getApplicationContext(); // RadioGroup.VERTICAL
 			tl = (TableLayout) findViewById(R.id.searchTableLayoutResult);
 
 			//
@@ -84,42 +88,56 @@ public class SearchActivity extends Activity {
 			int width = display.getWidth();
 			width = width - (100);
 			edit.setWidth(width);
-//
-			soranames = getResources().getStringArray(
-					R.array.SoraName_array);
 			//
+			if (AC.iLanguage == 0)
+				soranames = getResources().getStringArray(
+						R.array.SoraName_array);
+			else
+				soranames = getResources().getStringArray(
+						R.array.SoraNameEn_array);
+			//
+
 			// Arabizarion
 			((Button) findViewById(R.id.ButtSearch)).setTypeface(arabicFont);
+			((Button) findViewById(R.id.ButtSearch)).setText(AC
+					.getTextbyLanguage(R.string.Search));
 
+			RadioButton rb = ((RadioButton) findViewById(R.id.optAtabic));
+			rb.setTypeface(arabicFont);
+			rb.setText(R.string.LangArabic);
+			rb.setChecked(AC.iLanguage == 0);
+			rb = ((RadioButton) findViewById(R.id.optEnglish));
+			rb.setTypeface(arabicFont);
+			rb.setText(R.string.LangEnglish);
+			rb.setChecked(AC.iLanguage == 1);
 			objdb = new ExternalStorageReadOnlyOpenHelper(this);
 			//
 			if (!objdb.databaseFileExists()) {
-				Toast.makeText(this, R.string.notexistdb, Toast.LENGTH_LONG)
-						.show();
+				Toast.makeText(this, AC.getTextbyLanguage(R.string.notexistdb),
+						Toast.LENGTH_LONG).show();
 				finish();
 			}
-//			edit.addTextChangedListener(new TextWatcher() {
-//				public void afterTextChanged(Editable s) {
-//					//Log.d("seachScreen", "afterTextChanged");
-//				}
-//
-//				public void beforeTextChanged(CharSequence s, int start, int count,
-//						int after) {
-//					//Log.d("seachScreen", "beforeTextChanged");
-//				}
-//
-//				public void onTextChanged(CharSequence s, int start, int before,
-//						int count) {
-//					//Log.d("seachScreen", s.toString());
-//					//if(s.charAt(start))
-//					//{
-//					//	iSearchLanguage=1;
-//					//}
-//
-//				}
-//			});
-
-
+			// edit.addTextChangedListener(new TextWatcher() {
+			// public void afterTextChanged(Editable s) {
+			// //Log.d("seachScreen", "afterTextChanged");
+			// }
+			//
+			// public void beforeTextChanged(CharSequence s, int start, int
+			// count,
+			// int after) {
+			// //Log.d("seachScreen", "beforeTextChanged");
+			// }
+			//
+			// public void onTextChanged(CharSequence s, int start, int before,
+			// int count) {
+			// //Log.d("seachScreen", s.toString());
+			// //if(s.charAt(start))
+			// //{
+			// // iSearchLanguage=1;
+			// //}
+			//
+			// }
+			// });
 		} catch (Throwable t) {
 			Toast.makeText(this, "err ->" + t.toString(), Toast.LENGTH_LONG)
 					.show();
@@ -141,14 +159,19 @@ public class SearchActivity extends Activity {
 		lbl3.setTypeface(arabicFont);
 		lbl4.setTypeface(arabicFont);
 		//
-		lbl1.setText(R.string.searchPage);
-		lbl2.setText(R.string.searchSura);
+		lbl1.setText(AC.getTextbyLanguage(R.string.searchPage));
+		lbl2.setText(AC.getTextbyLanguage(R.string.searchSura));
 		Display display = getWindowManager().getDefaultDisplay();
 		int width = display.getWidth();
-		width = width - (3 * 80);
+		
+		if(AC.iLanguage==0)
+			width = width - (3 * 80);
+		else
+			width = width - (3 * 100);
+		
 		lbl4.setWidth(width);
-		lbl3.setText(R.string.searchAya);
-		lbl4.setText(R.string.searchContent);
+		lbl3.setText(AC.getTextbyLanguage(R.string.searchAya));
+		lbl4.setText(AC.getTextbyLanguage(R.string.searchContent));
 		tr.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
 				LayoutParams.WRAP_CONTENT));
 		//
@@ -180,7 +203,12 @@ public class SearchActivity extends Activity {
 
 		Display display = getWindowManager().getDefaultDisplay();
 		int width = display.getWidth();
-		width = width - (3 * 70);
+		
+		if(AC.iLanguage==0)
+			width = width - (3 * 70);
+		else
+			width = width - (3 * 85);
+
 		vContenet.setWidth(width);
 
 		// but.setTextOff("");
@@ -216,10 +244,6 @@ public class SearchActivity extends Activity {
 				// Perform action on clicks
 				Button btn = (Button) v;
 				Integer pos = Integer.parseInt(btn.getText().toString());
-				// Toast.makeText(SearchActivity.this,
-				// "Request failed:" + btn.getText().toString(),
-				// Toast.LENGTH_LONG)
-				// .show();
 				Intent intent = new Intent();
 				intent.putExtra("returnKey", pos);
 				setResult(RESULT_OK, intent);
@@ -231,35 +255,41 @@ public class SearchActivity extends Activity {
 			}
 		}
 	};
+
 	public void DoSearch(View view) {
-		if (edit.getText() != null
-				&& edit.getText().toString().length() > 3) {
-			
-			SelectDataTask task = new SelectDataTask( this);
+		if (edit.getText() != null && edit.getText().toString().length() > 2) {
+
+			SelectDataTask task = new SelectDataTask(this);
 			String strResult = edit.getText().toString();
+			RadioButton rb = ((RadioButton) findViewById(R.id.optEnglish));
+			String strlang = "";
+			if (rb.isChecked())
+				strlang = "en";
 			// tell how much u found it
-			task.execute(strResult);
+			task.execute(strResult, strlang);
+		} else {
+			Toast.makeText(this, AC.getTextbyLanguage(R.string.SearchNoData),
+					Toast.LENGTH_LONG).show();
 		}
-		else
-		{	Toast.makeText(this, getText(R.string.SearchNoData), Toast.LENGTH_LONG)
-			.show();}
 	}
 
 	private class SelectDataTask extends AsyncTask<String, Void, String> {
 
-		 private Context context;
-		    ProgressDialog dialog;
+		private Context context;
+		ProgressDialog dialog;
 
-			 public SelectDataTask(Context cxt) {
-		            context = cxt;
-		            dialog = new ProgressDialog(context);
-		        }
+		public SelectDataTask(Context cxt) {
+			context = cxt;
+			dialog = new ProgressDialog(context);
+		}
+
 		// can use UI thread here
 		@Override
 		protected void onPreExecute() {
-			this.dialog.setMessage(getText(R.string.Searching));
+			this.dialog.setMessage(AC.getTextbyLanguage(R.string.Searching));
 			this.dialog.show();
 		}
+
 		// automatically done on worker thread (separate from UI thread)
 		@Override
 		protected String doInBackground(String... whereClause) {
@@ -269,9 +299,10 @@ public class SearchActivity extends Activity {
 				db = objdb.getReadableDatabase();
 
 				String strwhereClause = whereClause[0];
-				//String strwhereClause = "الله";
-
-				Cursor mcursor = objdb.getQuery(strwhereClause, db);
+				String strTableName = "quran" + whereClause[1] ;
+				// String strwhereClause = "الله";
+				Cursor mcursor = objdb.getQuery(strwhereClause, db,
+						strTableName);
 				StringBuilder sb = new StringBuilder();
 				if (mcursor != null) {
 					mcursor.moveToFirst();
@@ -284,7 +315,7 @@ public class SearchActivity extends Activity {
 						sb.append("\n");
 						mcursor.moveToNext();
 					}
-				
+
 					mcursor.close();
 				}
 				objdb.close();
@@ -303,16 +334,16 @@ public class SearchActivity extends Activity {
 			addHeaderRow();
 			String[] rows = result.split("\n");
 			if (rows.length > 0)
-				
-			for (int i = 0; i < rows.length - 1; i++) {
-				String[] cols = rows[i].split(";");
-				addRow(soranames[Integer.parseInt(cols[1])], cols[0], cols[2],
-						cols[3] + "\r\n");
-			}
+
+				for (int i = 0; i < rows.length; i++) {
+					String[] cols = rows[i].split(";");
+					addRow(soranames[Integer.parseInt(cols[1]) - 1], cols[0],
+							cols[2], cols[3] + "\r\n");
+				}
 			Toast.makeText(
 					SearchActivity.this,
-					getText(R.string.found) + " : "
-							+ Integer.toString((tl.getChildCount() - 1) ),
+					AC.getTextbyLanguage(R.string.found) + " : "
+							+ Integer.toString((tl.getChildCount() - 1)),
 					Toast.LENGTH_LONG).show();
 			dialog.dismiss();
 		}

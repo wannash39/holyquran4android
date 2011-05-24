@@ -94,7 +94,7 @@ public class ExternalStorageReadOnlyOpenHelper extends Application {
 		return Integer.toString(icount);
 	}
 
-	public Cursor getQuery(String pqr, SQLiteDatabase db) {
+	public Cursor getQuery(String pqr, SQLiteDatabase db, String strTableName) {
 		try {
 			// String data = "";
 			// String count = "SELECT count(*) FROM quran";
@@ -102,19 +102,32 @@ public class ExternalStorageReadOnlyOpenHelper extends Application {
 			// Cursor cursor= db.query(TABLE_IMAGES, new String[]{"_id"}, "name"
 			// +" = ?", new String[]{compareToThis}, null, null, null);
 			String strWhere = "content like " + "'%" + pqr + "%'";
-			Cursor mcursor = db.query("quran", new String[] { "page", "surah",
-					"verse", "content" }, strWhere, null, null, null, null);
+			Cursor mcursor = db.query(strTableName, new String[] { "page",
+					"surah", "verse", "content" }, strWhere, null, null, null,
+					null);
+			return mcursor;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 
-			// Cursor mcursor = db.rawQuery(count, null);
-			mcursor.moveToFirst();
+	public Cursor getQuerybyPageID(String pageid, SQLiteDatabase db) {
+		try {
+			// String data = "";
+			// String count = "SELECT count(*) FROM quran";
 
-			/*
-			 * if (mCursor != null) { mCursor.moveToFirst(); if
-			 * (mCursor.moveToFirst()) { do { data = mCursor.getString(1); // do
-			 * what ever you want here } while (mCursor.moveToNext()); }
-			 */
-			// mcursor.close();
+			// Cursor cursor= db.query(TABLE_IMAGES, new String[]{"_id"}, "name"
+			// +" = ?", new String[]{compareToThis}, null, null, null);
+			// String strWhere = "content like " + "'%" + pageid + "%'";
+			// Cursor mcursor = db.query("quran", new String[] { "page",
+			// "surah",
+			// "verse", "content" }, strWhere, null, null, null, null);
+			String strquery = "select    quran.verse,   quran.page ,  quran.surah  , quran.content  , quranen.content as contenten  from quran INNER JOIN  quranen on quran.docid = quranen.docid where quran.page=?";
 
+			Cursor mcursor = db.rawQuery(strquery,
+					new String[] { String.valueOf(pageid) });
 			return mcursor;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

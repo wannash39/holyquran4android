@@ -23,7 +23,6 @@ public class ImageManager {
 		// downloader
 		// method
 		try {
-			// http://dl.dropbox.com/u/27675084/img240/0.gif
 			URL url = new URL("http://dl.dropbox.com/u/27675084/img/" + imgName
 					+ ".gif");
 			File file = new File(fileName);
@@ -73,33 +72,39 @@ public class ImageManager {
 					"http://dl.dropbox.com/u/27675084/database/hquran.dat");
 			File file = new File(Environment.getExternalStorageDirectory()
 					.getAbsolutePath() + "/hQuran/hquran.dat");
-
+			file.deleteOnExit();
 			long startTime = System.currentTimeMillis();
 			// Log.d("ImageManager", "download begining");
 			// Log.d("ImageManager", "download url:" + url);
 			Log.d("ImageManager", "downloaded file name:" + "hquran.dat");
 			/* Open a connection to that URL. */
 			URLConnection ucon = url.openConnection();
+			int lenghtOfFile = ucon.getContentLength();
 
 			/*
 			 * Define InputStreams to read from the URLConnection.
 			 */
+			FileOutputStream fos = new FileOutputStream(file);
 			InputStream is = ucon.getInputStream();
-			BufferedInputStream bis = new BufferedInputStream(is, 1118192);
+			byte data[] = new byte[1024];
 
-			/*
-			 * Read bytes to the Buffer until there is nothing more to read(-1).
-			 */
-			ByteArrayBuffer baf = new ByteArrayBuffer(50);
-			int current = 0;
-			while ((current = bis.read()) != -1) {
-				baf.append((byte) current);
+			int count = 0;
+			long total = 0;
+			int progress = 0;
+
+			while ((count = is.read(data)) != -1) {
+				total += count;
+				int progress_temp = (int) total * 100 / lenghtOfFile;
+				if (progress_temp % 10 == 0 && progress != progress_temp) {
+					progress = progress_temp;
+					Log.v("Downloading", "total = " + progress);
+				}
+				fos.write(data, 0, count);
 			}
 
-			/* Convert the Bytes read to a String. */
-			FileOutputStream fos = new FileOutputStream(file);
-			fos.write(baf.toByteArray());
+			is.close();
 			fos.close();
+
 			Log.d("ImageManager",
 					"download ready in"
 							+ ((System.currentTimeMillis() - startTime) / 1000)

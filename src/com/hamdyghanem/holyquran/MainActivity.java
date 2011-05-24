@@ -79,6 +79,7 @@ public class MainActivity extends Activity {
 			//
 
 			AC = (ApplicationController) getApplicationContext();
+			AC.ReadSettings();
 			// SharedPreferences mySharedPreferences = getSharedPreferences(
 			// MYPREFS, mode);
 			// Begin
@@ -102,7 +103,8 @@ public class MainActivity extends Activity {
 				bFirstTime = true;
 			}
 			// Check first time
-			AC.bookmarkUtitliy = new BookmarkUtil(AC.ReadSettings());
+			AC.bookmarkUtitliy = new BookmarkUtil(AC.ReadBookmarks());
+			AC.ReadBookmarks();
 
 			if (bFirstTime) {
 				// Toast.makeText(this, "not exist",
@@ -126,7 +128,8 @@ public class MainActivity extends Activity {
 				// Open settings to load images directly
 				g.setSelection(604);
 				// callOptionsItemSelected(null, R.id.mnu_settings);
-				Toast.makeText(this, getText(R.string.notexistimage),
+				Toast.makeText(this,
+						AC.getTextbyLanguage(R.string.notexistimage),
 						Toast.LENGTH_LONG).show();
 
 			} else {
@@ -135,6 +138,9 @@ public class MainActivity extends Activity {
 				g.setSelection(604 - AC.bookmarkUtitliy.arr.get(
 						AC.bookmarkUtitliy.getDefault()).getPage());
 			}
+			file = new File(baseDir + "/English/");
+			file.mkdirs();
+
 		} catch (Throwable t) {
 			Toast.makeText(this, "Request failed: " + t.toString(),
 					Toast.LENGTH_LONG).show();
@@ -152,6 +158,13 @@ public class MainActivity extends Activity {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.hq_menu, menu);
 		//
+		menu.getItem(0).setTitle(AC.getTextbyLanguage(R.string.bookmark));
+		menu.getItem(1).setTitle(AC.getTextbyLanguage(R.string.gotomenu));
+		menu.getItem(2).setTitle(AC.getTextbyLanguage(R.string.Search));
+		menu.getItem(3).setTitle(AC.getTextbyLanguage(R.string.detailsmenu));
+		menu.getItem(4).setTitle(AC.getTextbyLanguage(R.string.settings));
+		menu.getItem(5).setTitle(AC.getTextbyLanguage(R.string.about));
+
 		return true;
 	}
 
@@ -166,6 +179,13 @@ public class MainActivity extends Activity {
 
 		// Handle item selection
 		switch (iItem) {
+		case -100:
+			if (AC.iLanguage==0)
+				startActivity(new Intent(this, TafseerActivity.class));
+			else
+				startActivity(new Intent(this, EnglishActivity.class));
+			return true;
+
 		case R.id.mnu_settings:
 			startActivity(new Intent(this, SettingsActivity.class));
 			return true;
@@ -228,8 +248,7 @@ public class MainActivity extends Activity {
 			if (!(data == null || data.getExtras() == null)) {
 				Bundle extras = data.getExtras();
 				Integer i = extras.getInt("returnKey");
-				
-				 
+
 				g.setSelection(604 - i);
 			}
 		}
@@ -239,9 +258,13 @@ public class MainActivity extends Activity {
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
-		menu.setHeaderTitle(R.string.holyquran);
-		menu.add(0, R.id.mnu_bookmark, 0, R.string.bookmark);
-		menu.add(0, R.id.mnu_goto, 0, R.string.GoToActivity);
+		menu.setHeaderTitle(AC.getTextbyLanguage(R.string.holyquran));
+		menu.add(0, R.id.mnu_bookmark, 0,
+				AC.getTextbyLanguage(R.string.bookmark));
+		menu.add(0, R.id.mnu_goto, 0,
+				AC.getTextbyLanguage(R.string.GoToActivity));
+		menu.add(0, R.id.mnu_search, 0, AC.getTextbyLanguage(R.string.Search));
+		menu.add(0, -100, 0, AC.getTextbyLanguage(R.string.tafseer));
 	}
 
 	@Override

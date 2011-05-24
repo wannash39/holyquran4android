@@ -44,6 +44,7 @@ public class GoToActivity extends Activity {
 			final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 
 			setContentView(R.layout.navigate);
+			AC = (ApplicationController) getApplicationContext(); // RadioGroup.VERTICAL
 			// /////////CHANGE THE TITLE BAR///////////////
 			Typeface arabicFont = Typeface.createFromAsset(getAssets(),
 					"fonts/DroidSansArabic.ttf");
@@ -56,11 +57,11 @@ public class GoToActivity extends Activity {
 			final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
 			if (myTitleText != null) {
 				myTitleText.setTypeface(arabicFont);
-				myTitleText.setText(R.string.GoToActivity);
+				myTitleText
+						.setText(AC.getTextbyLanguage(R.string.GoToActivity));
 				// myTitleText.setBackgroundColor(R.color.blackblue);
 			}
 			// //////////////////////
-			AC = (ApplicationController) getApplicationContext(); // RadioGroup.VERTICAL
 			//
 			bDontFire = true;
 			tl = (TableLayout) findViewById(R.id.TableLayoutBody);
@@ -71,18 +72,29 @@ public class GoToActivity extends Activity {
 			// CHAPTER
 			// ArrayAdapter.createFromResource(context, textArrayResId,
 			// textViewResId)
-			spinneradapter adapter = spinneradapter.createFromResource(this,
-					R.array.Chapter_array,
-					android.R.layout.simple_spinner_item, arabicFont);
+			spinneradapter adapter = null;
+			if (AC.iLanguage == 0)
+				adapter = spinneradapter.createFromResource(this,
+						R.array.Chapter_array,
+						android.R.layout.simple_spinner_item, arabicFont);
+			else
+				adapter = spinneradapter.createFromResource(this,
+						R.array.Chapter_array_en,
+						android.R.layout.simple_spinner_item, arabicFont);
 
 			// adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			snpChapter.setAdapter(adapter);
 			snpChapter
 					.setOnItemSelectedListener(new OnChapterSelectedListener());
 			// SORA
+			if (AC.iLanguage == 0)
 			adapter = spinneradapter.createFromResource(this,
 					R.array.SoraName_array,
 					android.R.layout.simple_spinner_item, arabicFont);
+			else
+				adapter = spinneradapter.createFromResource(this,
+						R.array.SoraNameEn_array,
+						android.R.layout.simple_spinner_item, arabicFont);
 
 			// adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			snpSora.setAdapter(adapter);
@@ -94,66 +106,32 @@ public class GoToActivity extends Activity {
 			editPage.setInputType(InputType.TYPE_CLASS_NUMBER);
 			//
 			findViewById(R.id.ButOK).setOnClickListener(ok_listener);
+			((Button) findViewById(R.id.ButOK)).setText(AC
+					.getTextbyLanguage(R.string.ButtOK));
+
 			findViewById(R.id.ButCancel).setOnClickListener(cancel_listener);
+			((Button) findViewById(R.id.ButCancel)).setText(AC
+					.getTextbyLanguage(R.string.ButtCancel));
 			// Arabizarion
 			((Button) findViewById(R.id.ButOK)).setTypeface(arabicFont);
 			((Button) findViewById(R.id.ButCancel)).setTypeface(arabicFont);
-			((TextView) findViewById(R.id.lblChapter)).setTypeface(arabicFont);
-			((TextView) findViewById(R.id.lblSora)).setTypeface(arabicFont);
+			//
 			((TextView) findViewById(R.id.lblPageNum)).setTypeface(arabicFont);
+			((TextView) findViewById(R.id.lblPageNum)).setText(AC
+					.getTextbyLanguage(R.string.gotoPage1));
+
+			((TextView) findViewById(R.id.lblChapter)).setTypeface(arabicFont);
+			((TextView) findViewById(R.id.lblChapter)).setText(AC
+					.getTextbyLanguage(R.string.gotoPage2));
+			((TextView) findViewById(R.id.lblSora)).setTypeface(arabicFont);
+			((TextView) findViewById(R.id.lblSora)).setText(AC
+					.getTextbyLanguage(R.string.gotoPage3));
+			//
 			((TextView) findViewById(R.id.TextViewHeader))
 					.setTypeface(arabicFont);
-			// *
-			/*editPage.addTextChangedListener(new TextWatcher() {
-				String oldText = "";
+			((TextView) findViewById(R.id.TextViewHeader)).setText(AC
+					.getTextbyLanguage(R.string.gotoPageHeader));
 
-				public void beforeTextChanged(CharSequence arg0, int arg1,
-						int arg2, int arg3) {
-
-				}
-
-				public void onTextChanged(CharSequence arg0, int arg1,
-						int arg2, int arg3) {
-				}
-
-				public void afterTextChanged(Editable arg0) {
-					try {
-						if (bDontFire) {
-							bDontFire = false;
-							return;
-						}
-						bDontFire = true;
-						//
-						if (editPage.getText().toString().length() == 0)
-							iPage = 0;
-						else
-							iPage = Integer.parseInt(editPage.getText()
-									.toString());
-						if (iPage > 604)
-							iPage = 604;
-						// if (arg0==null || arg0.toString() == "" ||
-						// arg0.toString() == null)
-						// iPage = 0;
-						// else
-						// iPage = Integer.parseInt(arg0.toString());
-
-						Integer iChapter = Math.round(iPage / 22);
-						snpChapter.setSelection(iChapter);
-						bDontFire = true;
-						snpSora.setSelection(AC.GetSoraIndex(iPage));
-
-						bDontFire = false;
-
-					} catch (NumberFormatException ex) {
-						arg0.clear();
-						arg0.append(oldText);
-						Toast.makeText(GoToActivity.this,
-								"err ->" + ex.toString(), Toast.LENGTH_LONG)
-								.show();
-					}
-				}
-			});
-*/
 		} catch (Throwable t) {
 			Toast.makeText(this, "err ->" + t.toString(), Toast.LENGTH_LONG)
 					.show();
@@ -174,7 +152,7 @@ public class GoToActivity extends Activity {
 			// exception of the forumula
 			if (iChapter == 0)
 				iPage = 1;
-			 editPage.setText(Integer.toString(iPage));
+			editPage.setText(Integer.toString(iPage));
 			snpSora.setSelection(AC.GetSoraIndex(iPage));
 		}
 
@@ -197,8 +175,9 @@ public class GoToActivity extends Activity {
 
 			String[] sorapages = getResources().getStringArray(
 					R.array.SoraValue_array);
+
 			iPage = Integer.parseInt(sorapages[pos]);
-			 editPage.setText(Integer.toString(iPage));
+			editPage.setText(Integer.toString(iPage));
 
 			Integer iChapter = Math.round(iPage / 22);
 			snpChapter.setSelection(iChapter);

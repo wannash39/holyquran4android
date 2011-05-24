@@ -48,6 +48,8 @@ public class BookmarkEditActivity extends Activity {
 			super.onCreate(savedInstanceState);
 			final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 			setContentView(R.layout.bookmarkedit);
+			AC = (ApplicationController) getApplicationContext(); // RadioGroup.VERTICAL
+
 			// /////////CHANGE THE TITLE BAR///////////////
 			arabicFont = Typeface.createFromAsset(getAssets(),
 					"fonts/DroidSansArabic.ttf");
@@ -60,11 +62,11 @@ public class BookmarkEditActivity extends Activity {
 			final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
 			if (myTitleText != null) {
 				myTitleText.setTypeface(arabicFont);
-				myTitleText.setText(R.string.BookmarkEdit);
+				myTitleText.setText(AC
+						.getTextbyLanguage(R.string.BookmarkEdit));
 				// myTitleText.setBackgroundColor(R.color.blackblue);
 			}
 			// //////////////////////
-			AC = (ApplicationController) getApplicationContext(); // RadioGroup.VERTICAL
 			int i = 0;
 			tl = (TableLayout) findViewById(R.id.TableLayoutBody);
 			addHeaderRow();
@@ -177,15 +179,15 @@ public class BookmarkEditActivity extends Activity {
 		lbl4.setTypeface(arabicFont);
 		lbl5.setTypeface(arabicFont);
 		//
-		lbl1.setText(R.string.Delete);
-		lbl2.setText(R.string.Name);
+		lbl1.setText(AC.getTextbyLanguage(R.string.Delete));
+		lbl2.setText(AC.getTextbyLanguage(R.string.Name));
 		Display display = getWindowManager().getDefaultDisplay();
 		int width = display.getWidth();
 		width = width - (4 * 70);
 		lbl2.setWidth(width);
-		lbl3.setText(R.string.Page);
-		lbl4.setText(R.string.Static);
-		lbl5.setText(R.string.Default);
+		lbl3.setText(AC.getTextbyLanguage(R.string.Page));
+		lbl4.setText(AC.getTextbyLanguage(R.string.Static));
+		lbl5.setText(AC.getTextbyLanguage(R.string.Default));
 		tr.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
 				LayoutParams.WRAP_CONTENT));
 
@@ -285,7 +287,7 @@ public class BookmarkEditActivity extends Activity {
 				// for instance...
 				TableRow row = (TableRow) tl.getChildAt(i);
 				EditText edit = (EditText) row.getChildAt(1);
-				// Toast.makeText(this, edit.getText().toString(),
+				// Toast.makeText(this, edit.AC.getTextbyLanguage().toString(),
 				// Toast.LENGTH_LONG).show();
 				if (edit.getText().toString().length() == 0) {
 					edit.requestFocus();

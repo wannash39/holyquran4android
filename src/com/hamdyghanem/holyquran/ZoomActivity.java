@@ -37,6 +37,8 @@ public class ZoomActivity extends Activity {
 		final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 
 		setContentView(R.layout.tafseer);
+		AC = (ApplicationController) getApplicationContext(); // RadioGroup.VERTICAL
+
 		// /////////CHANGE THE TITLE BAR///////////////
 		Typeface arabicFont = Typeface.createFromAsset(getAssets(),
 				"fonts/DroidSansArabic.ttf");
@@ -49,12 +51,11 @@ public class ZoomActivity extends Activity {
 		final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
 		if (myTitleText != null) {
 			myTitleText.setTypeface(arabicFont);
-			myTitleText.setText(R.string.tafseer);
+			myTitleText.setText(AC.getTextbyLanguage(R.string.tafseer));
 			// myTitleText.setBackgroundColor(R.color.blackblue);
 		}
 		// //////////////////////
 		// TextView lbl = (TextView) findViewById(R.id.TextView01);
-		AC = (ApplicationController) getApplicationContext(); // RadioGroup.VERTICAL
 		getWindow().setLayout(LayoutParams.FILL_PARENT,
 				LayoutParams.FILL_PARENT);
 		try {

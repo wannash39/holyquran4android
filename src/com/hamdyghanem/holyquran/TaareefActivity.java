@@ -37,7 +37,8 @@ public class TaareefActivity extends Activity {
 		final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 
 		setContentView(R.layout.tafseer);
-		// /////////CHANGE THE TITLE BAR///////////////
+		AC = (ApplicationController) getApplicationContext(); // RadioGroup.VERTICAL
+// /////////CHANGE THE TITLE BAR///////////////
 		Typeface arabicFont = Typeface.createFromAsset(getAssets(),
 				"fonts/DroidSansArabic.ttf");
 
@@ -49,7 +50,7 @@ public class TaareefActivity extends Activity {
 		final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
 		if (myTitleText != null) {
 			myTitleText.setTypeface(arabicFont);
-			myTitleText.setText(R.string.mnuTaareef);
+			myTitleText.setText(AC.getTextbyLanguage(R.string.mnuTaareef));
 			// myTitleText.setBackgroundColor(R.color.blackblue);
 		}
 		// //////////////////////
