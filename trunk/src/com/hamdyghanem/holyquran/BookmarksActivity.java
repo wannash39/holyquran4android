@@ -43,6 +43,8 @@ public class BookmarksActivity extends Activity {
 		final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 
 		setContentView(R.layout.bookmarks);
+		AC = (ApplicationController) getApplicationContext();
+
 		// /////////CHANGE THE TITLE BAR///////////////
 		arabicFont = Typeface.createFromAsset(getAssets(),
 				"fonts/DroidSansArabic.ttf");
@@ -55,28 +57,35 @@ public class BookmarksActivity extends Activity {
 		final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
 		if (myTitleText != null) {
 			myTitleText.setTypeface(arabicFont);
-			myTitleText.setText(R.string.BookmarksActivity);
+			myTitleText.setText(AC
+					.getTextbyLanguage(R.string.BookmarksActivity));
 			// myTitleText.setBackgroundColor(R.color.blackblue);
 		}
 		// //////////////////////
 		getWindow().setLayout(LayoutParams.FILL_PARENT,
 				LayoutParams.FILL_PARENT);
 		// Add Radio buttons for bookmarks
-		AC = (ApplicationController) getApplicationContext();
 		radioGroup = (RadioGroup) findViewById(R.id.RadioGroup01);
 		//
 		LoadSpinner();
 		// ((Button) findViewById(R.id.ButOK)).setTypeface(arabicFont);
 		// ((Button) findViewById(R.id.ButCancel)).setTypeface(arabicFont);
 		((Button) findViewById(R.id.ButAddNew)).setTypeface(arabicFont);
+		((Button) findViewById(R.id.ButAddNew)).setText(AC
+				.getTextbyLanguage(R.string.ButtNewCurrent));
+
 		((Button) findViewById(R.id.ButEditBookmark)).setTypeface(arabicFont);
+		((Button) findViewById(R.id.ButEditBookmark)).setText(AC
+				.getTextbyLanguage(R.string.BookmarkEdit));
 		//
 	}
+
 	@Override
 	public void onStop() {
 		AC.saveBookmarksDefalut();
 		super.onStop();
 	}
+
 	/*
 	 * @Override protected void onStop() { Intent intent = new Intent();
 	 * intent.putExtra("returnKey", 1); setResult(RESULT_OK, intent); finish();
@@ -140,7 +149,8 @@ public class BookmarksActivity extends Activity {
 			super.onActivityResult(requestCode, resultCode, data);
 			AC.bookmarkUtitliy.setDefault(i);
 			AC.saveBookmarksDefalut();
-			//Toast.makeText(this, Integer.toString(i), Toast.LENGTH_LONG).show();
+			// Toast.makeText(this, Integer.toString(i),
+			// Toast.LENGTH_LONG).show();
 			// radioGroup .getChildAt(i).setSelected(true);
 
 		}
@@ -153,7 +163,7 @@ public class BookmarksActivity extends Activity {
 		for (int i = 0; i < AC.bookmarkUtitliy.arr.size(); i++) {
 			Bookmark b = AC.bookmarkUtitliy.arr.get(i);
 			String strBookmarkName = b.getBookmarkName();
-			//strBookmarkName += "  " + Integer.toString(b.getPage()) + "";
+			// strBookmarkName += "  " + Integer.toString(b.getPage()) + "";
 			//
 			RadioButton rb = new RadioButton(this);
 			radioGroup.addView(rb); // the RadioButtons are added to the

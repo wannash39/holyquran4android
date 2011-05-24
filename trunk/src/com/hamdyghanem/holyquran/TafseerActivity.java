@@ -37,7 +37,8 @@ public class TafseerActivity extends Activity {
 		final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 
 		setContentView(R.layout.tafseer);
-		// /////////CHANGE THE TITLE BAR///////////////
+		AC = (ApplicationController) getApplicationContext(); // RadioGroup.VERTICAL
+// /////////CHANGE THE TITLE BAR///////////////
 		Typeface arabicFont = Typeface.createFromAsset(getAssets(),
 				"fonts/DroidSansArabic.ttf");
 
@@ -49,14 +50,13 @@ public class TafseerActivity extends Activity {
 		final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
 		if (myTitleText != null) {
 			myTitleText.setTypeface(arabicFont);
-			myTitleText.setText(R.string.tafseer);
+			myTitleText.setText(AC.getTextbyLanguage(R.string.tafseer));
 			// myTitleText.setBackgroundColor(R.color.blackblue);
 		}
 		// //////////////////////
 		getWindow().setLayout(LayoutParams.FILL_PARENT,
 				LayoutParams.FILL_PARENT);
 		// TextView lbl = (TextView) findViewById(R.id.TextView01);
-		AC = (ApplicationController) getApplicationContext(); // RadioGroup.VERTICAL
 		try {
 			WebView myWebView = (WebView) findViewById(R.id.webviewtafseer);
 			// myWebView.loadUrl("http://dl.dropbox.com/u/27675084/tafseer_html/1.html");

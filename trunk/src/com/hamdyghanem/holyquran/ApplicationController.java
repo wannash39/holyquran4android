@@ -14,7 +14,8 @@ import android.widget.Toast;
 public class ApplicationController extends Application {
 	public BookmarkUtil bookmarkUtitliy;
 	public Integer iCurrentPage = 0;
-	public Integer	iLanguage= 0;
+	public Integer iLanguage = 0;
+
 	@Override
 	public void onCreate() {
 
@@ -31,27 +32,28 @@ public class ApplicationController extends Application {
 	}
 
 	public void saveBookmarksDefalut() {
-		WriteSettings(bookmarkUtitliy.getBookmarksString());
+		WriteBookmarks(bookmarkUtitliy.getBookmarksString());
 	}
 
 	public void saveBookmarks(Integer iPos) {
 		// check the static value
 		iCurrentPage = 604 - iPos;
-		if (bookmarkUtitliy.arr.get(bookmarkUtitliy.getDefault())
-				.getStatic() == 0) {
+		if (bookmarkUtitliy.arr.get(bookmarkUtitliy.getDefault()).getStatic() == 0) {
 			//
-			bookmarkUtitliy.arr.get(bookmarkUtitliy.getDefault())
-					.setPage(604 - iPos);
-			WriteSettings(bookmarkUtitliy.getBookmarksString());
+			bookmarkUtitliy.arr.get(bookmarkUtitliy.getDefault()).setPage(
+					604 - iPos);
+			WriteBookmarks(bookmarkUtitliy.getBookmarksString());
 		}
 	}
-	public void WriteSettings(String data) {
+
+	public void WriteBookmarks(String data) {
 		String strFileBookmarks = Environment.getExternalStorageDirectory()
-		.getAbsolutePath()
-		+ File.separator
-		+ "hQuran"
-		+ File.separator + "bookmarks.dat";
-		
+				.getAbsolutePath()
+				+ File.separator
+				+ "hQuran"
+				+ File.separator
+				+ "bookmarks.dat";
+
 		File file = new File(strFileBookmarks);
 		FileWriter writer;
 		try {
@@ -67,17 +69,18 @@ public class ApplicationController extends Application {
 		// Toast.makeText(this, data, Toast.LENGTH_SHORT).show();
 	}
 
-	public String ReadSettings() {
+	public String ReadBookmarks() {
 		String strFileBookmarks = Environment.getExternalStorageDirectory()
-		.getAbsolutePath()
-		+ File.separator
-		+ "hQuran"
-		+ File.separator + "bookmarks.dat";
+				.getAbsolutePath()
+				+ File.separator
+				+ "hQuran"
+				+ File.separator
+				+ "bookmarks.dat";
 		// SaveBookmark
 		String data = getString(R.string.defaultbookmark);
 		File file = new File(strFileBookmarks);
 		if (!file.exists())
-			WriteSettings(getString(R.string.defaultbookmark));
+			WriteBookmarks(getString(R.string.defaultbookmark));
 		FileReader reader = null;
 		try {
 			reader = new FileReader(file);
@@ -102,6 +105,65 @@ public class ApplicationController extends Application {
 		return data.trim();
 
 	}
+
+	public void WriteSettings() {
+		String data = "";
+		String strFileSettings = Environment.getExternalStorageDirectory()
+				.getAbsolutePath()
+				+ File.separator
+				+ "hQuran"
+				+ File.separator
+				+ "Settings.dat";
+		data = Integer.toString(iLanguage) + "\n";
+		File file = new File(strFileSettings);
+		FileWriter writer;
+		try {
+			writer = new FileWriter(file);
+			writer.write(data);
+			writer.flush();
+			writer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
+		}
+		// Toast.makeText(this, data, Toast.LENGTH_SHORT).show();
+	}
+
+	public void ReadSettings() {
+		String strFileSettings = Environment.getExternalStorageDirectory()
+				.getAbsolutePath()
+				+ File.separator
+				+ "hQuran"
+				+ File.separator
+				+ "Settings.dat";
+		String data = "";
+		File file = new File(strFileSettings);
+		if (!file.exists())
+			WriteSettings();
+		FileReader reader = null;
+		try {
+			reader = new FileReader(file);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		BufferedReader br = new BufferedReader(reader);
+		String thisLine = null;
+		try {
+			while ((thisLine = br.readLine()) != null) {
+				data = thisLine;
+			}
+
+			String[] separated = data.split("\n");
+			iLanguage = Integer.parseInt(separated[0]);
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	public String GetSora(Integer iPage) {
 		String[] soranames = getResources().getStringArray(
 				R.array.SoraName_array);
@@ -153,10 +215,11 @@ public class ApplicationController extends Application {
 		return 0;
 
 	}
+
 	public CharSequence getTextbyLanguage(int i) {
-		//Button but = (Button) findViewById(R.id.Button01);
-		//but.setText(getTextbyLanguage(R.string.hello));
-		if (iLanguage == 1)
+		// Button but = (Button) findViewById(R.id.Button01);
+		// but.setText(AC.getTextbyLanguage(R.string.hello));
+		if (iLanguage == 0)
 			return getText(i);
 		else
 			return getText(i + 1);

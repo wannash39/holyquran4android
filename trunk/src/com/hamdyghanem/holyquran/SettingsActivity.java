@@ -6,16 +6,23 @@ import com.hamdyghanem.holyquran.R;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.Window;
+import android.view.View.OnClickListener;
 import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +39,8 @@ public class SettingsActivity extends Activity {
 		final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 
 		setContentView(R.layout.settings);
+		AC = (ApplicationController) getApplicationContext();
+
 		// /////////CHANGE THE TITLE BAR///////////////
 		Typeface arabicFont = Typeface.createFromAsset(getAssets(),
 				"fonts/DroidSansArabic.ttf");
@@ -44,26 +53,68 @@ public class SettingsActivity extends Activity {
 		final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
 		if (myTitleText != null) {
 			myTitleText.setTypeface(arabicFont);
-			myTitleText.setText(R.string.settings);
+			myTitleText.setText(AC.getTextbyLanguage(R.string.settings));
 			// myTitleText.setBackgroundColor(R.color.blackblue);
 		}
 		// //////////////////////
 
 		getWindow().setLayout(LayoutParams.FILL_PARENT,
-				LayoutParams.WRAP_CONTENT);
-		AC = (ApplicationController) getApplicationContext();
+				LayoutParams.FILL_PARENT);
 		// Arabizarion
 		((Button) findViewById(R.id.btnSettDownload)).setTypeface(arabicFont);
+		((Button) findViewById(R.id.btnSettDownload)).setText(AC
+				.getTextbyLanguage(R.string.btn_download_pages));
+
 		((Button) findViewById(R.id.btnTafserDownload)).setTypeface(arabicFont);
+		((Button) findViewById(R.id.btnTafserDownload)).setText(AC
+				.getTextbyLanguage(R.string.btn_download_tafser));
+
+		((Button) findViewById(R.id.ButCancel)).setTypeface(arabicFont);
+		((Button) findViewById(R.id.ButCancel)).setText(AC
+				.getTextbyLanguage(R.string.ButtCancel));
+
+		((Button) findViewById(R.id.ButOK)).setTypeface(arabicFont);
+		((Button) findViewById(R.id.ButOK)).setText(AC
+				.getTextbyLanguage(R.string.ButtOK));
+
 		((Button) findViewById(R.id.btnTaareefDownload))
 				.setTypeface(arabicFont);
+		((Button) findViewById(R.id.btnTaareefDownload)).setText(AC
+				.getTextbyLanguage(R.string.btn_download_tareef));
+
 		((Button) findViewById(R.id.btnDictionayDownload))
 				.setTypeface(arabicFont);
-		//
+		((Button) findViewById(R.id.btnDictionayDownload)).setText(AC
+				.getTextbyLanguage(R.string.btn_download_dictionary));
+
+		((Button) findViewById(R.id.btnDatabaseDownload))
+				.setTypeface(arabicFont);
+		((Button) findViewById(R.id.btnDatabaseDownload)).setText(AC
+				.getTextbyLanguage(R.string.btn_download_database));
+//
+		Display display = getWindowManager().getDefaultDisplay();
+		((Button) findViewById(R.id.btnDatabaseDownload)).setWidth(display.getWidth());
 
 		//
+		RadioButton rb = ((RadioButton) findViewById(R.id.optAtabic));
+		rb.setTypeface(arabicFont);
+		rb.setText(R.string.LangArabic);
+		rb.setChecked(AC.iLanguage == 0);
+		rb = ((RadioButton) findViewById(R.id.optEnglish));
+		rb.setTypeface(arabicFont);
+		rb.setText(R.string.LangEnglish);
+		rb.setChecked(AC.iLanguage == 1);
+
+		//
+		((TextView) findViewById(R.id.vwLanguage)).setTypeface(arabicFont);
+		((TextView) findViewById(R.id.vwLanguage)).setText(AC
+				.getTextbyLanguage(R.string.Language));
+		//
+		findViewById(R.id.ButOK).setOnClickListener(ok_listener);
+		findViewById(R.id.ButCancel).setOnClickListener(cancel_listener);
+	//
 		if (AC.NeedDownload())
-			Toast.makeText(this, getText(R.string.notexistimage),
+			Toast.makeText(this, AC.getTextbyLanguage(R.string.notexistimage),
 					Toast.LENGTH_LONG).show();
 		// downloadNow();
 	}
@@ -110,7 +161,7 @@ public class SettingsActivity extends Activity {
 
 		dialog = new ProgressDialog(this);
 		dialog.setCancelable(true);
-		dialog.setMessage(this.getString(R.string.downloadingpages));
+		dialog.setMessage(AC.getTextbyLanguage(R.string.downloadingpages));
 		// set the progress to be horizontal
 		dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		// reset the bar to the default value of 0
@@ -151,7 +202,7 @@ public class SettingsActivity extends Activity {
 	public void downloadDatabaseNow() {
 		dialog = new ProgressDialog(this);
 		dialog.setCancelable(true);
-		dialog.setMessage(this.getString(R.string.downloadingdatabase));
+		dialog.setMessage(AC.getTextbyLanguage( R.string.downloadingdatabase));
 		// set the progress to be horizontal
 		dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 		// reset the bar to the default value of 0
@@ -183,7 +234,7 @@ public class SettingsActivity extends Activity {
 
 		dialog = new ProgressDialog(this);
 		dialog.setCancelable(true);
-		dialog.setMessage(this.getString(R.string.downloadingtafseer));
+		dialog.setMessage(AC.getTextbyLanguage(R.string.downloadingtafseer));
 		// set the progress to be horizontal
 		dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		// reset the bar to the default value of 0
@@ -228,7 +279,7 @@ public class SettingsActivity extends Activity {
 
 		dialog = new ProgressDialog(this);
 		dialog.setCancelable(true);
-		dialog.setMessage(this.getString(R.string.downloadingtareef));
+		dialog.setMessage(AC.getTextbyLanguage(R.string.downloadingtareef));
 		// set the progress to be horizontal
 		dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		// reset the bar to the default value of 0
@@ -273,7 +324,7 @@ public class SettingsActivity extends Activity {
 
 		dialog = new ProgressDialog(this);
 		dialog.setCancelable(true);
-		dialog.setMessage(this.getString(R.string.downloadingdictionary));
+		dialog.setMessage(AC.getTextbyLanguage(R.string.downloadingdictionary));
 		// set the progress to be horizontal
 		dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		// reset the bar to the default value of 0
@@ -316,5 +367,26 @@ public class SettingsActivity extends Activity {
 			dialog.setProgress(increment);
 		}
 	};
+	private OnClickListener ok_listener = new OnClickListener() {
 
+		@Override
+		public void onClick(View v) {
+			AC.iLanguage = 0;
+			RadioButton rb = ((RadioButton) findViewById(R.id.optEnglish));
+			if (rb.isChecked())
+				AC.iLanguage = 1;
+			//
+			AC.WriteSettings();
+			finish();
+		}
+	};
+
+	private OnClickListener cancel_listener = new OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			finish();
+
+		}
+	};
 }

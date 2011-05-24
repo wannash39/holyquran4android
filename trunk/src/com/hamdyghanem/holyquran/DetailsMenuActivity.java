@@ -60,16 +60,17 @@ public class DetailsMenuActivity extends ListActivity {
 			// myTitleText.setBackgroundColor(R.color.blackblue);
 		}
 		// //////////////////////
+		AC = (ApplicationController) getApplicationContext(); // RadioGroup.VERTICAL
+
 		getWindow().setLayout(LayoutParams.FILL_PARENT,
 				LayoutParams.FILL_PARENT);
-		String[] names = new String[4];
-		names[0] = getString(R.string.mnuTafseer);
-		names[1] = getString(R.string.mnuTaareef);
-		names[2] = getString(R.string.mnuDictionary);
-		names[3] = getString(R.string.mnuZoom);
+		String[] names = new String[5];
+		names[0] = (String) AC.getTextbyLanguage(R.string.mnuTafseer);
+		names[1] = (String) AC.getTextbyLanguage(R.string.English);
+		names[2] = (String) AC.getTextbyLanguage(R.string.mnuTaareef);
+		names[3] = (String) AC.getTextbyLanguage(R.string.mnuDictionary);
+		names[4] = (String) AC.getTextbyLanguage(R.string.mnuZoom);
 
-		// Add Radio buttons for bookmarks
-		AC = (ApplicationController) getApplicationContext();
 		//
 		this.setListAdapter(new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, names));
@@ -80,7 +81,7 @@ public class DetailsMenuActivity extends ListActivity {
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 		// Get the item that was clicked
-		//Object o = this.getListAdapter().getItem(position);
+		// Object o = this.getListAdapter().getItem(position);
 		// String keyword = o.toString();
 		// Toast.makeText(this, "You selected: " + keyword, Toast.LENGTH_LONG)
 		// .show();
@@ -89,12 +90,15 @@ public class DetailsMenuActivity extends ListActivity {
 			startActivity(new Intent(this, TafseerActivity.class));
 			return;
 		case 1:
-			startActivity(new Intent(this, TaareefActivity.class));
+			startActivity(new Intent(this, EnglishActivity.class));
 			return;
 		case 2:
-			startActivity(new Intent(this, DictionaryActivity.class));
+			startActivity(new Intent(this, TaareefActivity.class));
 			return;
 		case 3:
+			startActivity(new Intent(this, DictionaryActivity.class));
+			return;
+		case 4:
 			startActivity(new Intent(this, ZoomActivity.class));
 			return;
 		}

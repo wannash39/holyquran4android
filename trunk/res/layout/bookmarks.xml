@@ -16,10 +16,10 @@
 				android:layout_gravity="bottom" >
 				<TableRow android:id="@+id/TableRow11"
 					android:layout_width="wrap_content" android:layout_height="wrap_content">
-					<Button android:text="@string/ButtNewCurrent" android:id="@+id/ButAddNew"
+					<Button  android:id="@+id/ButAddNew"
 						android:onClick="NewBookmarkClick" android:layout_height="wrap_content"
 						android:layout_weight="1" android:layout_width="0dip"></Button>
-					<Button android:text="@string/BookmarkEdit" android:id="@+id/ButEditBookmark"
+					<Button  android:id="@+id/ButEditBookmark"
 	android:onClick="EditBookmarkClick" android:layout_height="wrap_content"
 	android:layout_width="0dip" android:layout_weight="1"></Button>
 				</TableRow>

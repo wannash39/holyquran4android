@@ -24,41 +24,58 @@ public class AboutActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		 final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
-			
-		setContentView(R.layout.about);
-		//
-///////////CHANGE THE TITLE BAR///////////////
-		Typeface arabicFont = Typeface.createFromAsset(getAssets(),
-		"fonts/DroidSansArabic.ttf");
+		final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 
-		if ( customTitleSupported ) {
-	        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.mytitle);
-	    }
-	
-	    final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
-	    if ( myTitleText != null ) {
-	    	myTitleText.setTypeface(arabicFont);
-	        myTitleText.setText(R.string.AboutActivity );
-	        //myTitleText.setBackgroundColor(R.color.blackblue);
-	    }
-////////////////////////
-	    
+		setContentView(R.layout.about);
+		AC = (ApplicationController) getApplicationContext(); // RadioGroup.VERTICAL
+//
+		// /////////CHANGE THE TITLE BAR///////////////
+		Typeface arabicFont = Typeface.createFromAsset(getAssets(),
+				"fonts/DroidSansArabic.ttf");
+
+		if (customTitleSupported) {
+			getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
+					R.layout.mytitle);
+		}
+
+		final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
+		if (myTitleText != null) {
+			myTitleText.setTypeface(arabicFont);
+			myTitleText.setText(AC.getTextbyLanguage( R.string.AboutActivity));
+			// myTitleText.setBackgroundColor(R.color.blackblue);
+		}
+		// //////////////////////
 		String strAbout = "<center><H1>";
 		strAbout += "<font color='black'>";
-		strAbout += " القرآن الكريم <br />";
-		strAbout += "مصحف المدينة <br />";
-		strAbout += " الإصدار الأول V 1.2 <br />";
-		
-		strAbout += "</H1>";
-		strAbout += "محاولة لدعم البرامج الاسلامية على سوق الاندرويد <br />";
-		strAbout += "البرنامج مفتوح المصدر و يمكنك الذهاب الي موقع المصدر حيث يمكنكم الدعم او النسخ من  <br />";
-		strAbout += "<a href=\'https://www.facebook.com/HolyQuran4Android'>هنا</a> <br />";
+		if (AC.iLanguage == 0) {
+			strAbout += " القرآن الكريم <br />";
+			strAbout += "مصحف المدينة <br />";
+			strAbout += " الإصدار الأول V 1.2 <br />";
 
-		strAbout += " للمساعدة و الشرح يمكنك التصفح من  ";
-		strAbout += "<a href=\'http://knol.google.com/k/hamdy-ghanem/holyquran4android/3n0yrj5rx5x7a/29?hd=ns# '>هنا </a> <br />";
-		strAbout += "<br />";
-		strAbout += "للتواصل";
+			strAbout += "</H1>";
+			strAbout += "محاولة لدعم البرامج الاسلامية على سوق الاندرويد <br />";
+			strAbout += "البرنامج مفتوح المصدر و يمكنك الذهاب الي موقع المصدر حيث يمكنكم الدعم او النسخ من  <br />";
+			strAbout += "<a href=\'http://code.google.com/p/holyquran4android/'>هنا</a> <br />";
+
+			strAbout += " للمساعدة و الشرح يمكنك التصفح من  ";
+			strAbout += "<a href=\'http://code.google.com/p/holyquran4android/ '>هنا </a> <br />";
+			strAbout += "<br />";
+			strAbout += "للتواصل";
+		} else {
+			strAbout += " Holy Quran <br />";
+			strAbout += "Mushaf Al Madina <br />";
+			strAbout += " V 1.2 <br />";
+
+			strAbout += "</H1>";
+			strAbout += "Attempt to support the islamic  software on Android market <br />";
+			strAbout += "The program is open source and you can go to the source site where you can support us or copy <br />";
+			strAbout += "<a href=\'http://code.google.com/p/holyquran4android/'>here</a> <br />";
+
+			strAbout += " For more details you can browse ";
+			strAbout += "<a href=\'http://code.google.com/p/holyquran4android/ '>here </a> <br />";
+			strAbout += "<br />";
+			strAbout += "Contact us";
+		}
 		strAbout += "<a href='mailto:Hamdy.ghanem@gmail.com'>Hamdy.ghanem@gmail.com</a> ";
 		strAbout += "<br />";
 		strAbout += "</font>";
@@ -72,6 +89,6 @@ public class AboutActivity extends Activity {
 		lbl.setTextColor(getResources().getColor(R.color.blackblue));
 
 		lbl.setTypeface(arabicFont);
-		
+
 	}
 }
