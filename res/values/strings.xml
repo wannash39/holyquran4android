@@ -116,6 +116,14 @@
 	<string name="detailsmenu_en">Others</string>
 
 
+	<string name="ScreenOn">اناره مستمرة عند الاستخدام</string>
+	<string name="ScreenOn_en">Screen On </string>
+	
+	<string name="ScreenOnAlert">كن حذرا ً في استخدام هذا الخيار حيث يأثر علي البطارية</string>
+	<string name="ScreenOnAlert_en">Be careful about your battery</string>
+<string name="LanguageAlert">لا بد من اعادة تشغيل البرنامج</string>
+	<string name="LanguageAlert_en">You have to restart the application</string>
+
 	<string name="BookmarkEdit">اعدادت العلامات</string>
 	<string name="BookmarkEdit_en">Bookmark settings</string>
 	<string name="ButtOK">موافق</string>

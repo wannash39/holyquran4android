@@ -15,6 +15,7 @@ public class ApplicationController extends Application {
 	public BookmarkUtil bookmarkUtitliy;
 	public Integer iCurrentPage = 0;
 	public Integer iLanguage = 0;
+	//public Boolean bScreenOn = false;
 
 	@Override
 	public void onCreate() {
@@ -114,7 +115,7 @@ public class ApplicationController extends Application {
 				+ "hQuran"
 				+ File.separator
 				+ "Settings.dat";
-		data = Integer.toString(iLanguage) + "\n";
+		data = Integer.toString(iLanguage) + "#" ;
 		File file = new File(strFileSettings);
 		FileWriter writer;
 		try {
@@ -152,15 +153,29 @@ public class ApplicationController extends Application {
 		String thisLine = null;
 		try {
 			while ((thisLine = br.readLine()) != null) {
-				data = thisLine;
+				data += thisLine;
 			}
-
-			String[] separated = data.split("\n");
-			iLanguage = Integer.parseInt(separated[0]);
-
+			String[] separated = data.split("#");
+			if (separated.length > 0)
+				if (separated[0] != "1" | separated[0] != "0")
+				{
+					file.delete();
+					WriteSettings();
+				}
+				else
+					iLanguage = Integer.parseInt(separated[0]);
+			//if (separated.length > 1)
+			//	bScreenOn = Boolean.parseBoolean(separated[1]);
+			// meanse there is new settings
+			if (separated.length <= 1) {
+				file.delete();
+				WriteSettings();
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			file.delete();
+			WriteSettings();
 		}
 	}
 

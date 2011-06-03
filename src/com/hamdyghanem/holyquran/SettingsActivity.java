@@ -32,106 +32,110 @@ public class SettingsActivity extends Activity {
 	int increment = 0;
 	String baseDir = "";
 	ApplicationController AC;
+	//CheckBox chkScreenOn;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+		try {
+			final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 
-		setContentView(R.layout.settings);
-		AC = (ApplicationController) getApplicationContext();
+			setContentView(R.layout.settings);
+			AC = (ApplicationController) getApplicationContext();
 
-		// /////////CHANGE THE TITLE BAR///////////////
-		Typeface arabicFont = Typeface.createFromAsset(getAssets(),
-				"fonts/DroidSansArabic.ttf");
+			// /////////CHANGE THE TITLE BAR///////////////
+			Typeface arabicFont = Typeface.createFromAsset(getAssets(),
+					"fonts/DroidSansArabic.ttf");
 
-		if (customTitleSupported) {
-			getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
-					R.layout.mytitle);
-		}
-
-		final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
-		if (myTitleText != null) {
-			myTitleText.setTypeface(arabicFont);
-			myTitleText.setText(AC.getTextbyLanguage(R.string.settings));
-			// myTitleText.setBackgroundColor(R.color.blackblue);
-		}
-		// //////////////////////
-
-		getWindow().setLayout(LayoutParams.FILL_PARENT,
-				LayoutParams.FILL_PARENT);
-		// Arabizarion
-		((Button) findViewById(R.id.btnSettDownload)).setTypeface(arabicFont);
-		((Button) findViewById(R.id.btnSettDownload)).setText(AC
-				.getTextbyLanguage(R.string.btn_download_pages));
-
-		((Button) findViewById(R.id.btnTafserDownload)).setTypeface(arabicFont);
-		((Button) findViewById(R.id.btnTafserDownload)).setText(AC
-				.getTextbyLanguage(R.string.btn_download_tafser));
-
-		((Button) findViewById(R.id.ButCancel)).setTypeface(arabicFont);
-		((Button) findViewById(R.id.ButCancel)).setText(AC
-				.getTextbyLanguage(R.string.ButtCancel));
-
-		((Button) findViewById(R.id.ButOK)).setTypeface(arabicFont);
-		((Button) findViewById(R.id.ButOK)).setText(AC
-				.getTextbyLanguage(R.string.ButtOK));
-
-		((Button) findViewById(R.id.btnTaareefDownload))
-				.setTypeface(arabicFont);
-		((Button) findViewById(R.id.btnTaareefDownload)).setText(AC
-				.getTextbyLanguage(R.string.btn_download_tareef));
-
-		((Button) findViewById(R.id.btnDictionayDownload))
-				.setTypeface(arabicFont);
-		((Button) findViewById(R.id.btnDictionayDownload)).setText(AC
-				.getTextbyLanguage(R.string.btn_download_dictionary));
-
-		((Button) findViewById(R.id.btnDatabaseDownload))
-				.setTypeface(arabicFont);
-		((Button) findViewById(R.id.btnDatabaseDownload)).setText(AC
-				.getTextbyLanguage(R.string.btn_download_database));
-//
-		Display display = getWindowManager().getDefaultDisplay();
-		((Button) findViewById(R.id.btnDatabaseDownload)).setWidth(display.getWidth());
-
-		//
-		RadioButton rb = ((RadioButton) findViewById(R.id.optAtabic));
-		rb.setTypeface(arabicFont);
-		rb.setText(R.string.LangArabic);
-		rb.setChecked(AC.iLanguage == 0);
-		rb = ((RadioButton) findViewById(R.id.optEnglish));
-		rb.setTypeface(arabicFont);
-		rb.setText(R.string.LangEnglish);
-		rb.setChecked(AC.iLanguage == 1);
-
-		//
-		((TextView) findViewById(R.id.vwLanguage)).setTypeface(arabicFont);
-		((TextView) findViewById(R.id.vwLanguage)).setText(AC
-				.getTextbyLanguage(R.string.Language));
-		//
-		findViewById(R.id.ButOK).setOnClickListener(ok_listener);
-		findViewById(R.id.ButCancel).setOnClickListener(cancel_listener);
-	//
-		if (AC.NeedDownload())
-			Toast.makeText(this, AC.getTextbyLanguage(R.string.notexistimage),
-					Toast.LENGTH_LONG).show();
-		// downloadNow();
-	}
-
-	public Thread performOnBackgroundThread(final Runnable runnable) {
-		final Thread t = new Thread() {
-			@Override
-			public void run() {
-				try {
-					runnable.run();
-				} finally {
-
-				}
+			if (customTitleSupported) {
+				getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
+						R.layout.mytitle);
 			}
-		};
-		t.start();
-		return t;
+
+			final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
+			if (myTitleText != null) {
+				myTitleText.setTypeface(arabicFont);
+				myTitleText.setText(AC.getTextbyLanguage(R.string.settings));
+				// myTitleText.setBackgroundColor(R.color.blackblue);
+			}
+			// //////////////////////
+
+			getWindow().setLayout(LayoutParams.FILL_PARENT,
+					LayoutParams.FILL_PARENT);
+			// Arabizarion
+			((Button) findViewById(R.id.btnSettDownload))
+					.setTypeface(arabicFont);
+			((Button) findViewById(R.id.btnSettDownload)).setText(AC
+					.getTextbyLanguage(R.string.btn_download_pages));
+
+			((Button) findViewById(R.id.btnTafserDownload))
+					.setTypeface(arabicFont);
+			((Button) findViewById(R.id.btnTafserDownload)).setText(AC
+					.getTextbyLanguage(R.string.btn_download_tafser));
+
+			((Button) findViewById(R.id.ButCancel)).setTypeface(arabicFont);
+			((Button) findViewById(R.id.ButCancel)).setText(AC
+					.getTextbyLanguage(R.string.ButtCancel));
+
+			((Button) findViewById(R.id.ButOK)).setTypeface(arabicFont);
+			((Button) findViewById(R.id.ButOK)).setText(AC
+					.getTextbyLanguage(R.string.ButtOK));
+
+			((Button) findViewById(R.id.btnTaareefDownload))
+					.setTypeface(arabicFont);
+			((Button) findViewById(R.id.btnTaareefDownload)).setText(AC
+					.getTextbyLanguage(R.string.btn_download_tareef));
+
+			((Button) findViewById(R.id.btnDictionayDownload))
+					.setTypeface(arabicFont);
+			((Button) findViewById(R.id.btnDictionayDownload)).setText(AC
+					.getTextbyLanguage(R.string.btn_download_dictionary));
+
+			((Button) findViewById(R.id.btnDatabaseDownload))
+					.setTypeface(arabicFont);
+			((Button) findViewById(R.id.btnDatabaseDownload)).setText(AC
+					.getTextbyLanguage(R.string.btn_download_database));
+
+			/*chkScreenOn = ((CheckBox) findViewById(R.id.chkScreenOn));
+			chkScreenOn.setTypeface(arabicFont);
+			chkScreenOn.setText(AC.getTextbyLanguage(R.string.ScreenOn));
+*/
+			//
+			Display display = getWindowManager().getDefaultDisplay();
+			((Button) findViewById(R.id.btnDatabaseDownload)).setWidth(display
+					.getWidth());
+
+			//
+			RadioButton rb = ((RadioButton) findViewById(R.id.optAtabic));
+			rb.setTypeface(arabicFont);
+			rb.setText(R.string.LangArabic);
+			rb.setChecked(AC.iLanguage == 0);
+			rb = ((RadioButton) findViewById(R.id.optEnglish));
+			rb.setTypeface(arabicFont);
+			rb.setText(R.string.LangEnglish);
+			rb.setChecked(AC.iLanguage == 1);
+
+			rb.setChecked(AC.iLanguage == 1);
+
+			//chkScreenOn.setChecked(AC.bScreenOn);
+			//chkScreenOn.setWidth(300);
+			//
+			((TextView) findViewById(R.id.vwLanguage)).setTypeface(arabicFont);
+			((TextView) findViewById(R.id.vwLanguage)).setText(AC
+					.getTextbyLanguage(R.string.Language));
+			//
+			findViewById(R.id.ButOK).setOnClickListener(ok_listener);
+			findViewById(R.id.ButCancel).setOnClickListener(cancel_listener);
+			//
+			if (AC.NeedDownload())
+				Toast.makeText(this,
+						AC.getTextbyLanguage(R.string.notexistimage),
+						Toast.LENGTH_LONG).show();
+			// downloadNow();
+		} catch (Throwable t) {
+			Toast.makeText(this, "Request failed: " + t.toString(),
+					Toast.LENGTH_LONG).show();
+		}
 	}
 
 	public void downloadPages(View view) {
@@ -202,7 +206,7 @@ public class SettingsActivity extends Activity {
 	public void downloadDatabaseNow() {
 		dialog = new ProgressDialog(this);
 		dialog.setCancelable(true);
-		dialog.setMessage(AC.getTextbyLanguage( R.string.downloadingdatabase));
+		dialog.setMessage(AC.getTextbyLanguage(R.string.downloadingdatabase));
 		// set the progress to be horizontal
 		dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 		// reset the bar to the default value of 0
@@ -376,7 +380,16 @@ public class SettingsActivity extends Activity {
 			if (rb.isChecked())
 				AC.iLanguage = 1;
 			//
+			//AC.bScreenOn = chkScreenOn.isChecked();
+			/*if (AC.bScreenOn) {
+				Toast.makeText(SettingsActivity.this, AC.getTextbyLanguage(R.string.ScreenOnAlert),
+						Toast.LENGTH_LONG).show();
+			}*/
 			AC.WriteSettings();
+			Intent intent = new Intent();
+			intent.putExtra("returnKey", 1);
+			setResult(RESULT_OK, intent);
+			//
 			finish();
 		}
 	};
