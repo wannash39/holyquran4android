@@ -116,6 +116,7 @@ public class SearchActivity extends Activity {
 				Toast.makeText(this, AC.getTextbyLanguage(R.string.notexistdb),
 						Toast.LENGTH_LONG).show();
 				finish();
+
 			}
 			// edit.addTextChangedListener(new TextWatcher() {
 			// public void afterTextChanged(Editable s) {
@@ -163,12 +164,12 @@ public class SearchActivity extends Activity {
 		lbl2.setText(AC.getTextbyLanguage(R.string.searchSura));
 		Display display = getWindowManager().getDefaultDisplay();
 		int width = display.getWidth();
-		
-		if(AC.iLanguage==0)
+
+		if (AC.iLanguage == 0)
 			width = width - (3 * 80);
 		else
 			width = width - (3 * 100);
-		
+
 		lbl4.setWidth(width);
 		lbl3.setText(AC.getTextbyLanguage(R.string.searchAya));
 		lbl4.setText(AC.getTextbyLanguage(R.string.searchContent));
@@ -203,8 +204,8 @@ public class SearchActivity extends Activity {
 
 		Display display = getWindowManager().getDefaultDisplay();
 		int width = display.getWidth();
-		
-		if(AC.iLanguage==0)
+
+		if (AC.iLanguage == 0)
 			width = width - (3 * 70);
 		else
 			width = width - (3 * 85);
@@ -299,7 +300,7 @@ public class SearchActivity extends Activity {
 				db = objdb.getReadableDatabase();
 
 				String strwhereClause = whereClause[0];
-				String strTableName = "quran" + whereClause[1] ;
+				String strTableName = "quran" + whereClause[1];
 				// String strwhereClause = "الله";
 				Cursor mcursor = objdb.getQuery(strwhereClause, db,
 						strTableName);
@@ -329,25 +330,34 @@ public class SearchActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(String result) {
-			//
-			tl.removeAllViews();
-			addHeaderRow();
-			String[] rows = result.split("\n");
-			if (rows.length > 0)
+			try {
+				//
+				tl.removeAllViews();
+				addHeaderRow();
+				String[] rows = result.split("\n");
 
-				for (int i = 0; i < rows.length; i++) {
-					String[] cols = rows[i].split(";");
-					addRow(soranames[Integer.parseInt(cols[1]) - 1], cols[0],
-							cols[2], cols[3] + "\r\n");
+				if (result.trim().length() > 0) {
+					if (rows.length > 0)
+						for (int i = 0; i < rows.length; i++) {
+							String[] cols = rows[i].split(";");
+							addRow(soranames[Integer.parseInt(cols[1]) - 1],
+									cols[0], cols[2], cols[3] + "\r\n");
+						}
 				}
-			Toast.makeText(
-					SearchActivity.this,
-					AC.getTextbyLanguage(R.string.found) + " : "
-							+ Integer.toString((tl.getChildCount() - 1)),
-					Toast.LENGTH_LONG).show();
-			dialog.dismiss();
+				Toast.makeText(
+						SearchActivity.this,
+						AC.getTextbyLanguage(R.string.found) + " : "
+								+ Integer.toString((tl.getChildCount() - 1)),
+						Toast.LENGTH_LONG).show();
+				dialog.dismiss();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				Toast.makeText(SearchActivity.this, e.toString(),
+						Toast.LENGTH_LONG).show();
+
+			}
+
 		}
-
 	}
-
 }

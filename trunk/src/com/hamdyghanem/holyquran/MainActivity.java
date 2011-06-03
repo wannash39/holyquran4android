@@ -19,6 +19,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.PowerManager;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -46,7 +47,10 @@ public class MainActivity extends Activity {
 	ApplicationController AC;
 	Gallery g;
 	Typeface arabicFont = null;
-
+	//
+	/*protected PowerManager pm;
+	protected PowerManager.WakeLock mWakeLock;
+*/
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -57,7 +61,10 @@ public class MainActivity extends Activity {
 			requestWindowFeature(Window.FEATURE_NO_TITLE);
 			// android:theme="@android:style/Theme.NoTitleBar"
 			setContentView(R.layout.main);
-
+		/*	pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+			this.mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK,
+					"My Tag");
+					*/
 			// /////////CHANGE THE TITLE BAR/////////////// Typeface
 			// arabicFont = Typeface.createFromAsset(getAssets(),
 			// "fonts/DroidSansArabic.ttf");
@@ -79,7 +86,6 @@ public class MainActivity extends Activity {
 			//
 
 			AC = (ApplicationController) getApplicationContext();
-			AC.ReadSettings();
 			// SharedPreferences mySharedPreferences = getSharedPreferences(
 			// MYPREFS, mode);
 			// Begin
@@ -102,6 +108,10 @@ public class MainActivity extends Activity {
 				file.mkdirs();
 				bFirstTime = true;
 			}
+			AC.ReadSettings();
+			/*if (AC.bScreenOn) {
+				this.mWakeLock.acquire();
+			}*/
 			// Check first time
 			AC.bookmarkUtitliy = new BookmarkUtil(AC.ReadBookmarks());
 			AC.ReadBookmarks();
@@ -150,8 +160,22 @@ public class MainActivity extends Activity {
 	@Override
 	public void onStop() {
 		AC.saveBookmarks(g.getSelectedItemPosition());
+		AC.WriteSettings();
+		/*if (AC.bScreenOn) {
+
+			this.mWakeLock.release();
+		}*/
 		super.onStop();
 	}
+
+	/*@Override
+	public void onDestroy() {
+		if (AC.bScreenOn) {
+
+			this.mWakeLock.release();
+		}
+		super.onDestroy();
+	}*/
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -180,14 +204,17 @@ public class MainActivity extends Activity {
 		// Handle item selection
 		switch (iItem) {
 		case -100:
-			if (AC.iLanguage==0)
+			if (AC.iLanguage == 0)
 				startActivity(new Intent(this, TafseerActivity.class));
 			else
 				startActivity(new Intent(this, EnglishActivity.class));
 			return true;
 
 		case R.id.mnu_settings:
-			startActivity(new Intent(this, SettingsActivity.class));
+			 startActivityForResult(new Intent(this, SettingsActivity.class),
+			 4);
+			//startActivity(new Intent(this, SettingsActivity.class));
+
 			return true;
 			// case R.id.mnu_tafseer:
 		case R.id.mnu_details:
@@ -251,7 +278,14 @@ public class MainActivity extends Activity {
 
 				g.setSelection(604 - i);
 			}
-		}
+		}/* else if (requestCode == 4) {
+			this.mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK,
+					"My Tag");
+			if (AC.bScreenOn) {
+				this.mWakeLock.acquire();
+			} else
+				this.mWakeLock.release();
+		}*/
 	}
 
 	@Override
