@@ -24,7 +24,7 @@ public class ImageManager {
 		// method
 		try {
 			URL url = new URL("http://dl.dropbox.com/u/27675084/img/" + imgName
-					+ ".gif");
+					+ ".img");
 			File file = new File(fileName);
 
 			long startTime = System.currentTimeMillis();
@@ -120,7 +120,7 @@ public class ImageManager {
 		StringBuffer createdFile = new StringBuffer();
 
 		finalName = Environment.getExternalStorageDirectory().getAbsolutePath()
-				+ "/hQuran/img/" + finalName + ".gif";
+				+ "/hQuran/img/" + finalName + ".img";
 		File externalStorageFile = new File(finalName);
 
 		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
