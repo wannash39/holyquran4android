@@ -6,11 +6,16 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+
+import org.apache.http.util.LangUtils;
+
 import com.hamdyghanem.holyquran.R;
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.BitmapFactory;
@@ -20,6 +25,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.PowerManager;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -42,15 +48,18 @@ import android.widget.ImageView.ScaleType;
 
 public class MainActivity extends Activity {
 	public static final String MYPREFS = "mySharedPreferences";
-	int mode = Activity.MODE_PRIVATE;
+	int mode = Activity.MODE_WORLD_WRITEABLE;
 	int duration = Toast.LENGTH_SHORT;
 	ApplicationController AC;
 	Gallery g;
 	Typeface arabicFont = null;
+	SharedPreferences mySharedPreferences;
+	SharedPreferences.Editor editor;
+
 	//
-	/*protected PowerManager pm;
-	protected PowerManager.WakeLock mWakeLock;
-*/
+	/*
+	 * protected PowerManager pm; protected PowerManager.WakeLock mWakeLock;
+	 */
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -61,10 +70,11 @@ public class MainActivity extends Activity {
 			requestWindowFeature(Window.FEATURE_NO_TITLE);
 			// android:theme="@android:style/Theme.NoTitleBar"
 			setContentView(R.layout.main);
-		/*	pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-			this.mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK,
-					"My Tag");
-					*/
+			/*
+			 * pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+			 * this.mWakeLock =
+			 * pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
+			 */
 			// /////////CHANGE THE TITLE BAR/////////////// Typeface
 			// arabicFont = Typeface.createFromAsset(getAssets(),
 			// "fonts/DroidSansArabic.ttf");
@@ -81,13 +91,12 @@ public class MainActivity extends Activity {
 			// myTitleText.setText(R.string.holyquran); //
 			// myTitleText.setBackgroundColor(R.color.blackblue);
 			// } //
-			// ////////////////////
 
 			//
-
 			AC = (ApplicationController) getApplicationContext();
-			// SharedPreferences mySharedPreferences = getSharedPreferences(
+			// mySharedPreferences = getSharedPreferences(
 			// MYPREFS, mode);
+
 			// Begin
 
 			// Reference the Gallery view
@@ -108,27 +117,28 @@ public class MainActivity extends Activity {
 				file.mkdirs();
 				bFirstTime = true;
 			}
-			AC.ReadSettings();
-			/*if (AC.bScreenOn) {
-				this.mWakeLock.acquire();
-			}*/
-			// Check first time
-			AC.bookmarkUtitliy = new BookmarkUtil(AC.ReadBookmarks());
-			AC.ReadBookmarks();
 
+			AC.bookmarkUtitliy = new BookmarkUtil(AC.ReadBookmarks());
+
+			mySharedPreferences = PreferenceManager
+					.getDefaultSharedPreferences(this);
+			ReadSettings();
+			//
+			String versionName = this.getPackageManager().getPackageInfo(
+					this.getPackageName(), 0).versionName;
+			if (!versionName.equals(AC.LastVersion)) {
+				Toast.makeText(this, "New version", Toast.LENGTH_LONG).show();
+
+			}
+			/*
+			 * if (AC.bScreenOn) { this.mWakeLock.acquire(); }
+			 */
+			// Check first time
+			AC.ReadBookmarks();
 			if (bFirstTime) {
 				// Toast.makeText(this, "not exist",
 				// Toast.LENGTH_LONG).show();
-				file.mkdirs();
-				file = new File(baseDir + "/tafseer/");
-				file.mkdirs();
-				file = new File(baseDir + "/img/");
-				file.mkdirs();
-				file = new File(baseDir + "/dictionary/");
-				file.mkdirs();
-				file = new File(baseDir + "/tareef/");
-				file.mkdirs();
-
+				CreateFolders(baseDir);
 				ImageManager.saveToSDCard(BitmapFactory.decodeResource(
 						this.getResources(), R.drawable.img_0), "0");
 				ImageManager.saveToSDCard(BitmapFactory.decodeResource(
@@ -142,14 +152,16 @@ public class MainActivity extends Activity {
 						AC.getTextbyLanguage(R.string.notexistimage),
 						Toast.LENGTH_LONG).show();
 
+				startActivityForResult(new Intent(this,
+						SelectLanguageActivity.class), 5);
+
 			} else {
 				// if (AC.NeedDownload())
 				// callOptionsItemSelected(null, R.id.mnu_settings);
 				g.setSelection(604 - AC.bookmarkUtitliy.arr.get(
 						AC.bookmarkUtitliy.getDefault()).getPage());
 			}
-			file = new File(baseDir + "/English/");
-			file.mkdirs();
+			CreateFolders(baseDir);
 
 		} catch (Throwable t) {
 			Toast.makeText(this, "Request failed: " + t.toString(),
@@ -157,25 +169,75 @@ public class MainActivity extends Activity {
 		}
 	}
 
+	public void ReadSettings() {
+
+		String strLanguage = mySharedPreferences.getString(
+				"language_preference", "0");
+		AC.iLanguage = Integer.parseInt(strLanguage);
+		AC.LastVersion = mySharedPreferences.getString(
+				"LastVersion_preference", "0");
+		// Toast.makeText(this,
+		// "Request failed: " + Integer.toString(AC.iLanguage),
+		// Toast.LENGTH_LONG).show();
+
+	}
+
+	public void WriteSettings() {
+		SharedPreferences.Editor editor = mySharedPreferences.edit();
+		String versionName = "";
+		try {
+			versionName = this.getPackageManager().getPackageInfo(
+					this.getPackageName(), 0).versionName;
+		} catch (NameNotFoundException e) {
+			Toast.makeText(this, "Request failed: " + e.toString(),
+					Toast.LENGTH_LONG).show();
+			e.printStackTrace();
+		}
+		//
+		editor.putString("LastVersion_preference", versionName);
+		editor.putString("language_preference", Integer.toString(AC.iLanguage));
+		//
+		editor.commit();
+
+	}
+
+	private void CreateFolders(String baseDir) {
+		File file = new File(baseDir);
+		file.mkdirs();
+		file = new File(baseDir + "/tafseer/");
+		file.mkdirs();
+		file = new File(baseDir + "/img/");
+		file.mkdirs();
+		file = new File(baseDir + "/dictionary/");
+		file.mkdirs();
+		file = new File(baseDir + "/taareef/");
+		file.mkdirs();
+		file = new File(baseDir + "/English/");
+		file.mkdirs();
+		file = new File(baseDir + "/Audio/");
+		file.mkdirs();
+		file = new File(baseDir + "/Audio/Mashary");
+		file.mkdirs();
+
+	}
+
 	@Override
 	public void onStop() {
 		AC.saveBookmarks(g.getSelectedItemPosition());
-		AC.WriteSettings();
-		/*if (AC.bScreenOn) {
-
-			this.mWakeLock.release();
-		}*/
+		WriteSettings();
+		/*
+		 * if (AC.bScreenOn) {
+		 * 
+		 * this.mWakeLock.release(); }
+		 */
 		super.onStop();
 	}
 
-	/*@Override
-	public void onDestroy() {
-		if (AC.bScreenOn) {
-
-			this.mWakeLock.release();
-		}
-		super.onDestroy();
-	}*/
+	/*
+	 * @Override public void onDestroy() { if (AC.bScreenOn) {
+	 * 
+	 * this.mWakeLock.release(); } super.onDestroy(); }
+	 */
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -211,9 +273,8 @@ public class MainActivity extends Activity {
 			return true;
 
 		case R.id.mnu_settings:
-			 startActivityForResult(new Intent(this, SettingsActivity.class),
-			 4);
-			//startActivity(new Intent(this, SettingsActivity.class));
+			startActivityForResult(new Intent(this, SettingsActivity.class), 4);
+			// startActivity(new Intent(this, SettingsActivity.class));
 
 			return true;
 			// case R.id.mnu_tafseer:
@@ -278,14 +339,26 @@ public class MainActivity extends Activity {
 
 				g.setSelection(604 - i);
 			}
-		}/* else if (requestCode == 4) {
-			this.mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK,
-					"My Tag");
-			if (AC.bScreenOn) {
-				this.mWakeLock.acquire();
-			} else
-				this.mWakeLock.release();
-		}*/
+		}
+		// Settinngs
+		else if (requestCode == 4) {
+			ReadSettings();
+
+		} else if (requestCode == 5) {
+			if (!(data == null || data.getExtras() == null)) {
+				Bundle extras = data.getExtras();
+				Integer i = extras.getInt("returnKey");
+				AC.iLanguage = i;
+				WriteSettings();
+				Toast.makeText(this, AC.getTextbyLanguage(R.string.plzrestart),
+						Toast.LENGTH_LONG).show();
+			}
+		}/*
+		 * else if (requestCode == 4) { this.mWakeLock =
+		 * pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag"); if
+		 * (AC.bScreenOn) { this.mWakeLock.acquire(); } else
+		 * this.mWakeLock.release(); }
+		 */
 	}
 
 	@Override
@@ -351,14 +424,22 @@ public class MainActivity extends Activity {
 			// to let it work like Arabic we will subtract position by 604
 			// imgView.setImageResource(mImageIds[position]);
 			String strFile = baseDir + Integer.toString(604 - position)
+					+ ".img";
+			String strFileOld = baseDir + Integer.toString(604 - position)
 					+ ".gif";
+			File f = new File(strFileOld);
 
+			if (f.exists()) {
+				f.renameTo(new File(strFile));
+				f.delete();
+			}
+
+			f = new File(strFile);
 			// http://dl.dropbox.com/u/27675084/img/9.gif
-			File f = new File(strFile);
 			if (!f.exists()) {
 				// ImageManager.DownloadFromUrl(Integer.toString(position),strFile);
 				// callOptionsItemSelected(null, R.id.mnu_settings);
-				strFile = baseDir + "no.gif";
+				strFile = baseDir + "no.img";
 				Drawable d = Drawable.createFromPath(strFile);
 				imgView.setImageDrawable(d);
 			} else {

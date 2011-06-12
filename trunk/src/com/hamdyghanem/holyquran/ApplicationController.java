@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.os.Environment;
 import android.widget.Toast;
 
@@ -15,8 +16,10 @@ public class ApplicationController extends Application {
 	public BookmarkUtil bookmarkUtitliy;
 	public Integer iCurrentPage = 0;
 	public Integer iLanguage = 0;
-	//public Boolean bScreenOn = false;
+	public String LastVersion= "";
 
+	// public Boolean bScreenOn = false;
+	
 	@Override
 	public void onCreate() {
 
@@ -107,7 +110,7 @@ public class ApplicationController extends Application {
 
 	}
 
-	public void WriteSettings() {
+	/*public void WriteSettings() {
 		String data = "";
 		String strFileSettings = Environment.getExternalStorageDirectory()
 				.getAbsolutePath()
@@ -115,7 +118,7 @@ public class ApplicationController extends Application {
 				+ "hQuran"
 				+ File.separator
 				+ "Settings.dat";
-		data = Integer.toString(iLanguage) + "#" ;
+		data = Integer.toString(iLanguage) + "#";
 		File file = new File(strFileSettings);
 		FileWriter writer;
 		try {
@@ -129,55 +132,32 @@ public class ApplicationController extends Application {
 			Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
 		}
 		// Toast.makeText(this, data, Toast.LENGTH_SHORT).show();
-	}
+	}*/
 
-	public void ReadSettings() {
-		String strFileSettings = Environment.getExternalStorageDirectory()
-				.getAbsolutePath()
-				+ File.separator
-				+ "hQuran"
-				+ File.separator
-				+ "Settings.dat";
-		String data = "";
-		File file = new File(strFileSettings);
-		if (!file.exists())
-			WriteSettings();
-		FileReader reader = null;
-		try {
-			reader = new FileReader(file);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		BufferedReader br = new BufferedReader(reader);
-		String thisLine = null;
-		try {
-			while ((thisLine = br.readLine()) != null) {
-				data += thisLine;
-			}
-			String[] separated = data.split("#");
-			if (separated.length > 0)
-				if (separated[0] != "1" | separated[0] != "0")
-				{
-					file.delete();
-					WriteSettings();
-				}
-				else
-					iLanguage = Integer.parseInt(separated[0]);
-			//if (separated.length > 1)
-			//	bScreenOn = Boolean.parseBoolean(separated[1]);
-			// meanse there is new settings
-			if (separated.length <= 1) {
-				file.delete();
-				WriteSettings();
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			file.delete();
-			WriteSettings();
-		}
-	}
+	/*public void ReadSettings() {
+
+		iLanguage = mySharedPreferences.getInt("language_preference", 0);
+*/
+		/*
+		 * String strFileSettings = Environment.getExternalStorageDirectory()
+		 * .getAbsolutePath() + File.separator + "hQuran" + File.separator +
+		 * "Settings.dat"; String data = ""; File file = new
+		 * File(strFileSettings); if (!file.exists()) WriteSettings();
+		 * FileReader reader = null; try { reader = new FileReader(file); }
+		 * catch (FileNotFoundException e) { // TODO Auto-generated catch block
+		 * e.printStackTrace(); } BufferedReader br = new
+		 * BufferedReader(reader); String thisLine = null; try { while
+		 * ((thisLine = br.readLine()) != null) { data += thisLine; } String[]
+		 * separated = data.split("#"); if (separated.length > 0) if
+		 * (separated[0] != "1" | separated[0] != "0") { file.delete();
+		 * WriteSettings(); } else iLanguage = Integer.parseInt(separated[0]);
+		 * //if (separated.length > 1) // bScreenOn =
+		 * Boolean.parseBoolean(separated[1]); // meanse there is new settings
+		 * if (separated.length <= 1) { file.delete(); WriteSettings(); } }
+		 * catch (IOException e) { // TODO Auto-generated catch block
+		 * e.printStackTrace(); file.delete(); WriteSettings(); }
+		 */
+	//}
 
 	public String GetSora(Integer iPage) {
 		String[] soranames = getResources().getStringArray(
