@@ -59,7 +59,7 @@ public class TafseerActivity extends Activity {
 		// TextView lbl = (TextView) findViewById(R.id.TextView01);
 		try {
 			WebView myWebView = (WebView) findViewById(R.id.webviewtafseer);
-			// myWebView.loadUrl("http://dl.dropbox.com/u/27675084/tafseer_html/1.html");
+			// myWebView.loadUrl("http://dl.dropbox.com/u/" + AC.Dropbox + "/tafseer_html/1.html");
 			String strFile = Environment.getExternalStorageDirectory()
 					.getAbsolutePath()
 					+ "/hQuran/tafseer/"

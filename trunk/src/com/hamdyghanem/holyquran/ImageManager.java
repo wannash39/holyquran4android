@@ -17,13 +17,13 @@ import android.os.Environment;
 import android.util.Log;
 
 public class ImageManager {
-	public static void DownloadFromUrl(String imgName, String fileName) { // this
+	public static void DownloadFromUrl(String strDropbox, String imgName, String fileName) { // this
 		// is
 		// the
 		// downloader
 		// method
 		try {
-			URL url = new URL("http://dl.dropbox.com/u/27675084/img/" + imgName
+			URL url = new URL("http://dl.dropbox.com/u/" + strDropbox + "/img/" + imgName
 					+ ".img");
 			File file = new File(fileName);
 
@@ -64,12 +64,12 @@ public class ImageManager {
 
 	}
 
-	public static void DownloadDBFromUrl() {
+	public static void DownloadDBFromUrl(String strDropbox) {
 		// is // the // downloader // method
 		try {
-			// http://dl.dropbox.com/u/27675084/tafseer/1.TXT
+			// http://dl.dropbox.com/u/" + strDropbox + "/tafseer/1.TXT
 			URL url = new URL(
-					"http://dl.dropbox.com/u/27675084/database/hquran.dat");
+					"http://dl.dropbox.com/u/" + strDropbox + "/database/hquran.dat");
 			File file = new File(Environment.getExternalStorageDirectory()
 					.getAbsolutePath() + "/hQuran/hquran.dat");
 			file.deleteOnExit();
@@ -141,11 +141,11 @@ public class ImageManager {
 		return createdFile.toString();
 	}
 
-	public static void DownloadTafserFromUrl(String imgName, String fileName) { // this
+	public static void DownloadTafserFromUrl(String strDropbox,String imgName, String fileName) { // this
 		// is // the // downloader // method
 		try {
-			// http://dl.dropbox.com/u/27675084/tafseer/1.TXT
-			URL url = new URL("http://dl.dropbox.com/u/27675084/tafseer_html/"
+			// http://dl.dropbox.com/u/" + strDropbox + "/tafseer/1.TXT
+			URL url = new URL("http://dl.dropbox.com/u/" + strDropbox + "/tafseer_html/"
 					+ imgName + ".html");
 			File file = new File(fileName);
 
@@ -186,14 +186,14 @@ public class ImageManager {
 
 	}
 
-	public static void DownloadTareefFromUrl(String imgName, String fileName) { // this
+	public static void DownloadTareefFromUrl(String strDropbox,String imgName, String fileName) { // this
 		// is
 		// the
 		// downloader
 		// method
 		try {
-			// http://dl.dropbox.com/u/27675084/tafseer/1.TXT
-			URL url = new URL("http://dl.dropbox.com/u/27675084/taareef/"
+			// http://dl.dropbox.com/u/" + strDropbox + "/tafseer/1.TXT
+			URL url = new URL("http://dl.dropbox.com/u/" + strDropbox + "/taareef/"
 					+ imgName + ".html");
 			File file = new File(fileName);
 
@@ -234,14 +234,14 @@ public class ImageManager {
 
 	}
 
-	public static void DownloadDictionaryFromUrl(String imgName, String fileName) { // this
+	public static void DownloadDictionaryFromUrl(String strDropbox,String imgName, String fileName) { // this
 		// is
 		// the
 		// downloader
 		// method
 		try {
-			// http://dl.dropbox.com/u/27675084/tafseer/1.TXT
-			URL url = new URL("http://dl.dropbox.com/u/27675084/dictionary/"
+			// http://dl.dropbox.com/u/" + strDropbox + "/tafseer/1.TXT
+			URL url = new URL("http://dl.dropbox.com/u/" + strDropbox + "/dictionary/"
 					+ imgName + ".html");
 			File file = new File(fileName);
 

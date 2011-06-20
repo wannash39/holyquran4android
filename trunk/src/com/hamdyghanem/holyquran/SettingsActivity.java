@@ -95,12 +95,18 @@ public class SettingsActivity extends PreferenceActivity {
 		listPref.setKey("language_preference");
 		listPref.setValueIndex(AC.iLanguage);
 		listPref.setTitle(AC.getTextbyLanguage(R.string.Language));
+		inlinePrefSetting.addPreference(listPref);
+
 		// if (AC.iLanguage == 0)
 		// listPref.setSummary(R.string.LangArabic);
 		// else
 		// listPref.setSummary(R.string.LangEnglish);
-
-		inlinePrefSetting.addPreference(listPref);
+		//
+		CheckBoxPreference togglePref = new CheckBoxPreference(this);
+		togglePref.setKey("screenon_preference");
+		togglePref.setTitle(AC.getTextbyLanguage(R.string.ScreenOn));
+		togglePref.setSummary(AC.getTextbyLanguage(R.string.ScreenOnAlert));
+		inlinePrefSetting.addPreference(togglePref);
 
 		return root;
 	}

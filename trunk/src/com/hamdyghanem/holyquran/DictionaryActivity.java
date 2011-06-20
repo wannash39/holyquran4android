@@ -62,7 +62,7 @@ public class DictionaryActivity extends Activity {
 			// .getAbsolutePath()
 			// + "/hQuran/tafseer/" + Integer.toString(i) + ".txt";
 			WebView myWebView = (WebView) findViewById(R.id.webviewtafseer);
-			// myWebView.loadUrl("http://dl.dropbox.com/u/27675084/tafseer_html/1.html");
+			// myWebView.loadUrl("http://dl.dropbox.com/u/" + AC.Dropbox + "/tafseer_html/1.html");
 			String strFile = Environment.getExternalStorageDirectory()
 					.getAbsolutePath()
 					+ "/hQuran/dictionary/"
