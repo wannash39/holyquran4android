@@ -5,14 +5,29 @@
 
 
 	<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-	 android:id="@+id/ScrollView01"	android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:scrollbars="vertical|horizontal">
-		
-		
-			<Gallery android:id="@+id/Gallery01" android:layout_width="fill_parent"
-		android:layout_height="fill_parent" android:gravity="fill"></Gallery>
-		
+		android:id="@+id/ScrollView01" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:scrollbars="vertical|horizontal">
+
+
+		<Gallery android:id="@+id/Gallery01" android:layout_width="fill_parent"
+			android:layout_height="fill_parent" android:gravity="fill"></Gallery>
+
 	</ScrollView>
+	<RelativeLayout android:layout_height="wrap_content"
+		android:layout_width="fill_parent">
+
+		<RelativeLayout android:id="@+id/musicLayout"
+			android:layout_height="wrap_content" android:layout_width="fill_parent"
+			android:layout_alignParentBottom="true">
+
+			<ImageButton android:layout_width="wrap_content"
+		 android:onClick="OnStopRecitation" 	  android:src="@drawable/stop"	android:id="@+id/imageButton1" android:layout_height="wrap_content" />
+			<ImageButton android:layout_width="wrap_content"
+				android:id="@+id/imageButton2" android:layout_height="wrap_content"
+		 android:onClick= "OnPlayRecitation"	  android:src="@drawable/play"	android:layout_alignParentRight="true" />
+
+		</RelativeLayout>
+	</RelativeLayout>
 
 
 </RelativeLayout>

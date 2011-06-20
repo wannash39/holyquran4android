@@ -30,6 +30,9 @@ import android.widget.Toast;
 public class ZoomActivity extends Activity {
 	/** Called when the activity is first created. */
 	ApplicationController AC;
+	String baseDir = "";
+	String strFile = "";
+	String strFileOld = "";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,7 @@ public class ZoomActivity extends Activity {
 		final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 
 		setContentView(R.layout.tafseer);
+
 		AC = (ApplicationController) getApplicationContext(); // RadioGroup.VERTICAL
 
 		// /////////CHANGE THE TITLE BAR///////////////
@@ -51,7 +55,7 @@ public class ZoomActivity extends Activity {
 		final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
 		if (myTitleText != null) {
 			myTitleText.setTypeface(arabicFont);
-			myTitleText.setText(AC.getTextbyLanguage(R.string.tafseer));
+			myTitleText.setText(AC.getTextbyLanguage(R.string.mnuZoom));
 			// myTitleText.setBackgroundColor(R.color.blackblue);
 		}
 		// //////////////////////
@@ -59,8 +63,18 @@ public class ZoomActivity extends Activity {
 		getWindow().setLayout(LayoutParams.FILL_PARENT,
 				LayoutParams.FILL_PARENT);
 		try {
+			baseDir = Environment.getExternalStorageDirectory()
+					.getAbsolutePath() + "/hQuran/img/";
+			strFile = baseDir + Integer.toString(AC.iCurrentPage) + ".img";
+			strFileOld = baseDir + Integer.toString(AC.iCurrentPage) + ".gif";
+			//
 			WebView myWebView = (WebView) findViewById(R.id.webviewtafseer);
-			// myWebView.loadUrl("http://dl.dropbox.com/u/27675084/tafseer_html/1.html");
+			// myWebView.loadUrl("http://dl.dropbox.com/u/" + AC.Dropbox + "/tafseer_html/1.html");
+
+			File f = new File(strFile);
+			if (f.exists()) {
+				f.renameTo(new File(strFileOld));
+			}
 			myWebView.loadUrl("file:///sdcard/hQuran/img/"
 					+ Integer.toString(AC.iCurrentPage) + ".gif");
 			myWebView.getSettings().setBuiltInZoomControls(true);
@@ -75,4 +89,12 @@ public class ZoomActivity extends Activity {
 
 		}
 	}
+
+	@Override
+	public void onStop() {
+		File f = new File(strFileOld);
+		f.deleteOnExit();
+		super.onStop();
+	}
+
 }

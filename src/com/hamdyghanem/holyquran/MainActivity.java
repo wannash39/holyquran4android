@@ -57,9 +57,10 @@ public class MainActivity extends Activity {
 	SharedPreferences.Editor editor;
 
 	//
-	/*
-	 * protected PowerManager pm; protected PowerManager.WakeLock mWakeLock;
-	 */
+
+	protected PowerManager pm;
+	protected PowerManager.WakeLock mWakeLock;
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -70,11 +71,11 @@ public class MainActivity extends Activity {
 			requestWindowFeature(Window.FEATURE_NO_TITLE);
 			// android:theme="@android:style/Theme.NoTitleBar"
 			setContentView(R.layout.main);
-			/*
-			 * pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-			 * this.mWakeLock =
-			 * pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
-			 */
+
+			pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+			this.mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK,
+					"My Tag");
+
 			// /////////CHANGE THE TITLE BAR/////////////// Typeface
 			// arabicFont = Typeface.createFromAsset(getAssets(),
 			// "fonts/DroidSansArabic.ttf");
@@ -130,9 +131,11 @@ public class MainActivity extends Activity {
 				Toast.makeText(this, "New version", Toast.LENGTH_LONG).show();
 
 			}
-			/*
-			 * if (AC.bScreenOn) { this.mWakeLock.acquire(); }
-			 */
+
+			if (AC.ScreenOn) {
+				this.mWakeLock.acquire();
+			}
+
 			// Check first time
 			AC.ReadBookmarks();
 			if (bFirstTime) {
@@ -176,6 +179,9 @@ public class MainActivity extends Activity {
 		AC.iLanguage = Integer.parseInt(strLanguage);
 		AC.LastVersion = mySharedPreferences.getString(
 				"LastVersion_preference", "0");
+
+		AC.ScreenOn = mySharedPreferences.getBoolean("screenon_preference",
+				false);
 		// Toast.makeText(this,
 		// "Request failed: " + Integer.toString(AC.iLanguage),
 		// Toast.LENGTH_LONG).show();
@@ -196,6 +202,8 @@ public class MainActivity extends Activity {
 		//
 		editor.putString("LastVersion_preference", versionName);
 		editor.putString("language_preference", Integer.toString(AC.iLanguage));
+		editor.putBoolean("screenon_preference", AC.ScreenOn);
+
 		//
 		editor.commit();
 
@@ -225,19 +233,23 @@ public class MainActivity extends Activity {
 	public void onStop() {
 		AC.saveBookmarks(g.getSelectedItemPosition());
 		WriteSettings();
-		/*
-		 * if (AC.bScreenOn) {
-		 * 
-		 * this.mWakeLock.release(); }
-		 */
+
 		super.onStop();
 	}
 
-	/*
-	 * @Override public void onDestroy() { if (AC.bScreenOn) {
-	 * 
-	 * this.mWakeLock.release(); } super.onDestroy(); }
-	 */
+	@Override
+	public void onDestroy() {
+		try {
+			if (AC.ScreenOn) {
+				this.mWakeLock.release();
+			}
+			super.onDestroy();
+		} catch (Throwable t) {
+			Toast.makeText(this, "Request failed: " + t.toString(),
+					Toast.LENGTH_LONG).show();
+		}
+
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -312,55 +324,99 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		// Toast.makeText(this, "aaaaaaaaaaa", Toast.LENGTH_LONG).show();
-		// Toast.makeText(this, Integer.toString(requestCode),
-		// Toast.LENGTH_LONG).show();
-
-		if (requestCode == 1) {
-			if (!(data == null || data.getExtras() == null)) {
-
-				Bundle extras = data.getExtras();
-				Integer i = extras.getInt("returnKey");
-				AC.bookmarkUtitliy.setDefault(i);
-				// Toast.makeText(this, Integer.toString(i), Toast.LENGTH_LONG)
-				// .show();
-				AC.saveBookmarksDefalut();
-			}
-			// Toast.makeText(this, "Request failed: " + Integer.toString(i),
+		try {
+			// Toast.makeText(this, "aaaaaaaaaaa", Toast.LENGTH_LONG).show();
+			// Toast.makeText(this, Integer.toString(requestCode),
 			// Toast.LENGTH_LONG).show();
-			//
-			g.setSelection(604 - AC.bookmarkUtitliy.arr.get(
-					AC.bookmarkUtitliy.getDefault()).getPage());
-			// }
-		} else if (requestCode == 3) {
-			if (!(data == null || data.getExtras() == null)) {
-				Bundle extras = data.getExtras();
-				Integer i = extras.getInt("returnKey");
 
-				g.setSelection(604 - i);
+			if (requestCode == 1) {
+				if (!(data == null || data.getExtras() == null)) {
+
+					Bundle extras = data.getExtras();
+					Integer i = extras.getInt("returnKey");
+					AC.bookmarkUtitliy.setDefault(i);
+					// Toast.makeText(this, Integer.toString(i),
+					// Toast.LENGTH_LONG)
+					// .show();
+					AC.saveBookmarksDefalut();
+				}
+				// Toast.makeText(this, "Request failed: " +
+				// Integer.toString(i),
+				// Toast.LENGTH_LONG).show();
+				//
+				g.setSelection(604 - AC.bookmarkUtitliy.arr.get(
+						AC.bookmarkUtitliy.getDefault()).getPage());
+				// }
+			} else if (requestCode == 3) {
+				if (!(data == null || data.getExtras() == null)) {
+					Bundle extras = data.getExtras();
+					Integer i = extras.getInt("returnKey");
+
+					g.setSelection(604 - i);
+				}
 			}
-		}
-		// Settinngs
-		else if (requestCode == 4) {
-			ReadSettings();
-
-		} else if (requestCode == 5) {
-			if (!(data == null || data.getExtras() == null)) {
-				Bundle extras = data.getExtras();
-				Integer i = extras.getInt("returnKey");
-				AC.iLanguage = i;
+			// Settinngs
+			else if (requestCode == 4) {
+				ReadSettings();
 				WriteSettings();
-				Toast.makeText(this, AC.getTextbyLanguage(R.string.plzrestart),
+				// Toast.makeText(this, Boolean.toString(AC.ScreenOn),
+				// Toast.LENGTH_LONG).show();
+
+				if (AC.ScreenOn)
+					this.mWakeLock.acquire();
+				else
+					this.mWakeLock.release();
+
+			} else if (requestCode == 5) {
+				if (!(data == null || data.getExtras() == null)) {
+					Bundle extras = data.getExtras();
+					Integer i = extras.getInt("returnKey");
+					AC.iLanguage = i;
+					WriteSettings();
+				}
+			}/*
+			 * else if (requestCode == 4) { this.mWakeLock =
+			 * pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag"); if
+			 * (AC.bScreenOn) { this.mWakeLock.acquire(); } else
+			 * this.mWakeLock.release(); }
+			 */
+
+		} catch (Throwable t) {
+			if (requestCode == 4) {
+			} else {
+				Toast.makeText(this, "Request failed: " + t.toString(),
 						Toast.LENGTH_LONG).show();
 			}
-		}/*
-		 * else if (requestCode == 4) { this.mWakeLock =
-		 * pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag"); if
-		 * (AC.bScreenOn) { this.mWakeLock.acquire(); } else
-		 * this.mWakeLock.release(); }
-		 */
+		}
 	}
 
+	// Recitiation methods
+	public void OnPlayRecitation(View view) {
+		try {
+			// check database exist
+			// if (!AC.databaseIsExist()) {
+			// Toast.makeText(this, AC.getTextbyLanguage(R.string.notexistdb),
+			// Toast.LENGTH_LONG).show();
+			// return;}
+
+			// check the audio files
+			Integer iPage = 604 - g.getSelectedItemPosition();
+			String firstRecitationFile = AC.GetFirstRecitationFile(iPage);
+			Toast.makeText(this, firstRecitationFile, Toast.LENGTH_LONG).show();
+		//	String baseDir = Environment.getExternalStorageDirectory()
+		//			.getAbsolutePath() + "/hQuran/Audio/Mashary";
+		} catch (Throwable t) {
+
+			Toast.makeText(this, "Request failed: " + t.toString(),
+					Toast.LENGTH_LONG).show();
+		}
+	}
+
+	public void OnStopRecitation(View view) {
+		Toast.makeText(this, "OnStopRecitation", Toast.LENGTH_LONG).show();
+	}
+
+	//
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
@@ -435,7 +491,7 @@ public class MainActivity extends Activity {
 			}
 
 			f = new File(strFile);
-			// http://dl.dropbox.com/u/27675084/img/9.gif
+			// http://dl.dropbox.com/u/" + AC.Dropbox + "/img/9.gif
 			if (!f.exists()) {
 				// ImageManager.DownloadFromUrl(Integer.toString(position),strFile);
 				// callOptionsItemSelected(null, R.id.mnu_settings);
