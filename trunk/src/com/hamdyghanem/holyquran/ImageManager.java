@@ -145,7 +145,7 @@ public class ImageManager {
 		// is // the // downloader // method
 		try {
 			// http://dl.dropbox.com/u/" + strDropbox + "/tafseer/1.TXT
-			URL url = new URL("http://dl.dropbox.com/u/" + strDropbox + "/tafseer_html/"
+			URL url = new URL("http://dl.dropbox.com/u/" + strDropbox + "/tafseer/"
 					+ imgName + ".html");
 			File file = new File(fileName);
 
@@ -249,6 +249,52 @@ public class ImageManager {
 			// Log.d("ImageManager", "download begining");
 			// Log.d("ImageManager", "download url:" + url);
 			Log.d("ImageManager", "downloaded file name:" + fileName);
+			/* Open a connection to that URL. */
+			URLConnection ucon = url.openConnection();
+
+			/*
+			 * Define InputStreams to read from the URLConnection.
+			 */
+			InputStream is = ucon.getInputStream();
+			BufferedInputStream bis = new BufferedInputStream(is, 8192);
+
+			/*
+			 * Read bytes to the Buffer until there is nothing more to read(-1).
+			 */
+			ByteArrayBuffer baf = new ByteArrayBuffer(50);
+			int current = 0;
+			while ((current = bis.read()) != -1) {
+				baf.append((byte) current);
+			}
+
+			/* Convert the Bytes read to a String. */
+			FileOutputStream fos = new FileOutputStream(file);
+			fos.write(baf.toByteArray());
+			fos.close();
+			Log.d("ImageManager",
+					"download ready in"
+							+ ((System.currentTimeMillis() - startTime) / 1000)
+							+ " sec");
+
+		} catch (IOException e) {
+			Log.d("ImageManager", "Error: " + e);
+		}
+
+	}
+	public static void DownloadAudioFromUrl(String strDropbox, String imgName, String fileName) { // this
+		// is
+		// the
+		// downloader
+		// method
+		try {
+			URL url = new URL("http://dl.dropbox.com/u/" + strDropbox + "/Audio/Mashary/" + imgName
+					+ ".aud");
+			File file = new File(fileName);
+
+			long startTime = System.currentTimeMillis();
+			// Log.d("ImageManager", "download begining");
+			// Log.d("ImageManager", "download url:" + url);
+			Log.d("ImageManager", "downloaded audio file name:" + fileName);
 			/* Open a connection to that URL. */
 			URLConnection ucon = url.openConnection();
 

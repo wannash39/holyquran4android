@@ -103,6 +103,12 @@ public class SettingsActivity extends PreferenceActivity {
 		// listPref.setSummary(R.string.LangEnglish);
 		//
 		CheckBoxPreference togglePref = new CheckBoxPreference(this);
+		togglePref.setKey("audioon_preference");
+		togglePref.setTitle(AC.getTextbyLanguage(R.string.AudioOn));
+		togglePref.setSummary(AC.getTextbyLanguage(R.string.AudioOnSumm));
+		inlinePrefSetting.addPreference(togglePref);
+		//
+		togglePref = new CheckBoxPreference(this);
 		togglePref.setKey("screenon_preference");
 		togglePref.setTitle(AC.getTextbyLanguage(R.string.ScreenOn));
 		togglePref.setSummary(AC.getTextbyLanguage(R.string.ScreenOnAlert));

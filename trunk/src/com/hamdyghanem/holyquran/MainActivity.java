@@ -22,6 +22,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.PowerManager;
@@ -39,8 +40,11 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.Gallery;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,7 +59,18 @@ public class MainActivity extends Activity {
 	Typeface arabicFont = null;
 	SharedPreferences mySharedPreferences;
 	SharedPreferences.Editor editor;
+	MediaPlayer mediaPlayer;
+	private int stateMediaPlayer;
+	private final int stateMP_Error = 0;
+	private final int stateMP_NotStarter = 1;
+	private final int stateMP_Playing = 2;
+	private final int stateMP_Pausing = 3;
+	private final int stateMP_Stop = 4;
+	private ImageButton buttonPlayPause;
+	private String strCurrentAudioFileName = "";
+	private String strCurrentAudioFilePath = "";
 
+	private String baseDir = "";
 	//
 
 	protected PowerManager pm;
@@ -99,6 +114,8 @@ public class MainActivity extends Activity {
 			// MYPREFS, mode);
 
 			// Begin
+			// RecetationLayout
+			buttonPlayPause = (ImageButton) findViewById(R.id.buttonPlayPause);
 
 			// Reference the Gallery view
 			g = (Gallery) findViewById(R.id.Gallery01);
@@ -111,8 +128,8 @@ public class MainActivity extends Activity {
 			// Set the adapter to our custom adapter (below)
 			//
 			Boolean bFirstTime = false;
-			String baseDir = Environment.getExternalStorageDirectory()
-					.getAbsolutePath() + "/hQuran";
+			baseDir = Environment.getExternalStorageDirectory()
+					.getAbsolutePath() + "/hQuran/";
 			File file = new File(baseDir);
 			if (!file.exists()) {
 				file.mkdirs();
@@ -141,7 +158,7 @@ public class MainActivity extends Activity {
 			if (bFirstTime) {
 				// Toast.makeText(this, "not exist",
 				// Toast.LENGTH_LONG).show();
-				CreateFolders(baseDir);
+				CreateFolders();
 				ImageManager.saveToSDCard(BitmapFactory.decodeResource(
 						this.getResources(), R.drawable.img_0), "0");
 				ImageManager.saveToSDCard(BitmapFactory.decodeResource(
@@ -164,7 +181,7 @@ public class MainActivity extends Activity {
 				g.setSelection(604 - AC.bookmarkUtitliy.arr.get(
 						AC.bookmarkUtitliy.getDefault()).getPage());
 			}
-			CreateFolders(baseDir);
+			CreateFolders();
 
 		} catch (Throwable t) {
 			Toast.makeText(this, "Request failed: " + t.toString(),
@@ -179,13 +196,22 @@ public class MainActivity extends Activity {
 		AC.iLanguage = Integer.parseInt(strLanguage);
 		AC.LastVersion = mySharedPreferences.getString(
 				"LastVersion_preference", "0");
+		AC.AudioOn = mySharedPreferences.getBoolean("audioon_preference",
+				AC.AudioOn);
 
 		AC.ScreenOn = mySharedPreferences.getBoolean("screenon_preference",
 				false);
 		// Toast.makeText(this,
 		// "Request failed: " + Integer.toString(AC.iLanguage),
 		// Toast.LENGTH_LONG).show();
-
+		RelativeLayout lay = (RelativeLayout) findViewById(R.id.RecetationLayout);
+		if (AC.AudioOn)
+			lay.setVisibility(1);
+		else
+			lay.setVisibility(View.GONE);
+		//Toast.makeText(this,
+		//		 "Request failed: " + Boolean.toString(AC.AudioOn),
+		//		 Toast.LENGTH_LONG).show();
 	}
 
 	public void WriteSettings() {
@@ -203,28 +229,28 @@ public class MainActivity extends Activity {
 		editor.putString("LastVersion_preference", versionName);
 		editor.putString("language_preference", Integer.toString(AC.iLanguage));
 		editor.putBoolean("screenon_preference", AC.ScreenOn);
-
+		editor.putBoolean("audioon_preference", AC.AudioOn);
 		//
 		editor.commit();
 
 	}
 
-	private void CreateFolders(String baseDir) {
+	private void CreateFolders() {
 		File file = new File(baseDir);
 		file.mkdirs();
-		file = new File(baseDir + "/tafseer/");
+		file = new File(baseDir + "tafseer/");
 		file.mkdirs();
-		file = new File(baseDir + "/img/");
+		file = new File(baseDir + "img/");
 		file.mkdirs();
-		file = new File(baseDir + "/dictionary/");
+		file = new File(baseDir + "dictionary/");
 		file.mkdirs();
-		file = new File(baseDir + "/taareef/");
+		file = new File(baseDir + "taareef/");
 		file.mkdirs();
-		file = new File(baseDir + "/English/");
+		file = new File(baseDir + "English/");
 		file.mkdirs();
-		file = new File(baseDir + "/Audio/");
+		file = new File(baseDir + "Audio/");
 		file.mkdirs();
-		file = new File(baseDir + "/Audio/Mashary");
+		file = new File(baseDir + "Audio/Mashary");
 		file.mkdirs();
 
 	}
@@ -392,19 +418,69 @@ public class MainActivity extends Activity {
 
 	// Recitiation methods
 	public void OnPlayRecitation(View view) {
+		PlayRecitation();
+	}
+
+	public void PlayRecitation() {
 		try {
 			// check database exist
 			// if (!AC.databaseIsExist()) {
-			// Toast.makeText(this, AC.getTextbyLanguage(R.string.notexistdb),
-			// Toast.LENGTH_LONG).show();
-			// return;}
 
+			// return;}
+			if (stateMediaPlayer == stateMP_Playing) {
+				mediaPlayer.pause();
+				buttonPlayPause.setImageResource(R.drawable.play);
+				// buttonPlayPause.setText("Play");
+				// textState.setText("- PAUSING -");
+				stateMediaPlayer = stateMP_Pausing;
+				return;
+			}
+			if (stateMediaPlayer == stateMP_Pausing) {
+				mediaPlayer.start();
+				buttonPlayPause.setImageResource(R.drawable.pause);
+				// buttonPlayPause.setText("Play");
+				// textState.setText("- PAUSING -");
+				stateMediaPlayer = stateMP_Playing;
+				return;
+			}
 			// check the audio files
 			Integer iPage = 604 - g.getSelectedItemPosition();
-			String firstRecitationFile = AC.GetFirstRecitationFile(iPage);
-			Toast.makeText(this, firstRecitationFile, Toast.LENGTH_LONG).show();
-		//	String baseDir = Environment.getExternalStorageDirectory()
-		//			.getAbsolutePath() + "/hQuran/Audio/Mashary";
+			// Toast.makeText(this,
+			// Integer.toString(AC.GetSoraIndex(iPage)),Toast.LENGTH_LONG).show();
+			// first time or after stop
+			if (AC.iCurrentAya == -1) {
+				AC.iCurrentAya = 0;
+				strCurrentAudioFileName = AC.GetFirstRecitationFile(iPage);
+			} else {
+				AC.iCurrentAya += 1;
+				strCurrentAudioFileName = AC.GetFirstRecitationFile();
+			}
+			strCurrentAudioFilePath = baseDir + "Audio/Mashary/"
+					+ strCurrentAudioFileName;
+			File f = new File(strCurrentAudioFilePath);
+			if (!f.exists()) {
+				Toast.makeText(this,
+						AC.getTextbyLanguage(R.string.notexistaudio),
+						Toast.LENGTH_LONG).show();
+				// open the download activity
+				AC.iCurrentPage = iPage;
+				//
+				StopRecitation();
+				startActivity(new Intent(this, DownloadRecitationActivity.class));
+				//
+
+				return;
+			}
+			//
+			buttonPlayPause.setImageResource(R.drawable.pause);
+			initMediaPlayer();
+			mediaPlayer.start();
+			// buttonPlayPause.setText("Pause");
+			// textState.setText("- PLAYING -");
+			stateMediaPlayer = stateMP_Playing;
+			//
+			Toast.makeText(this, strCurrentAudioFilePath, Toast.LENGTH_LONG)
+					.show();
 		} catch (Throwable t) {
 
 			Toast.makeText(this, "Request failed: " + t.toString(),
@@ -413,7 +489,62 @@ public class MainActivity extends Activity {
 	}
 
 	public void OnStopRecitation(View view) {
+		StopRecitation();
+	}
+
+	private void StopRecitation() {
+		AC.iCurrentAya = -1;
 		Toast.makeText(this, "OnStopRecitation", Toast.LENGTH_LONG).show();
+		if (mediaPlayer != null)
+			mediaPlayer.stop();
+		// buttonPlayPause.setText("Pause");
+		// textState.setText("- PLAYING -");
+		stateMediaPlayer = stateMP_Stop;
+	}
+
+	MediaPlayer.OnCompletionListener completionListener = new MediaPlayer.OnCompletionListener() {
+
+		@Override
+		public void onCompletion(MediaPlayer arg0) {
+			// TODO Auto-generated method stub
+			initMediaPlayer();
+			PlayRecitation();
+			// buttonPlayPause.setEnabled(true);
+		}
+	};
+
+	private void initMediaPlayer() {
+		mediaPlayer = new MediaPlayer();
+
+		mediaPlayer.setOnCompletionListener(completionListener);
+
+		try {
+			mediaPlayer.setDataSource(strCurrentAudioFilePath);
+			mediaPlayer.prepare();
+			Toast.makeText(this, strCurrentAudioFilePath, Toast.LENGTH_LONG)
+					.show();
+			stateMediaPlayer = stateMP_NotStarter;
+			// textState.setText("- IDLE -");
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+			stateMediaPlayer = stateMP_Error;
+			// textState.setText("- ERROR!!! -");
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+			stateMediaPlayer = stateMP_Error;
+			// textState.setText("- ERROR!!! -");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Toast.makeText(this, "Error-> " + e.toString(), Toast.LENGTH_LONG)
+					.show();
+			stateMediaPlayer = stateMP_Error;
+			// textState.setText("- ERROR!!! -");
+		}
 	}
 
 	//
@@ -437,6 +568,8 @@ public class MainActivity extends Activity {
 	}
 
 	public class ImageAdapter extends BaseAdapter {
+		String baseImgDir = Environment.getExternalStorageDirectory()
+				.getAbsolutePath() + "/hQuran/img/";
 		int mGalleryItemBackground;
 		// Toast.makeText(this, "Request failed: " + t.toString(),
 		// Toast.LENGTH_LONG).show();
@@ -472,16 +605,14 @@ public class MainActivity extends Activity {
 
 		public View getView(int position, View convertView, ViewGroup parent) {
 			ImageView imgView = new ImageView(mContext);
-
-			String baseDir = Environment.getExternalStorageDirectory()
-					.getAbsolutePath() + "/hQuran/img/";
 			// imgView.setScaleType(ScaleType.FIT_XY);
 
 			// to let it work like Arabic we will subtract position by 604
 			// imgView.setImageResource(mImageIds[position]);
-			String strFile = baseDir + Integer.toString(604 - position)
+
+			String strFile = baseImgDir + Integer.toString(604 - position)
 					+ ".img";
-			String strFileOld = baseDir + Integer.toString(604 - position)
+			String strFileOld = baseImgDir + Integer.toString(604 - position)
 					+ ".gif";
 			File f = new File(strFileOld);
 
@@ -495,7 +626,7 @@ public class MainActivity extends Activity {
 			if (!f.exists()) {
 				// ImageManager.DownloadFromUrl(Integer.toString(position),strFile);
 				// callOptionsItemSelected(null, R.id.mnu_settings);
-				strFile = baseDir + "no.img";
+				strFile = baseImgDir + "no.img";
 				Drawable d = Drawable.createFromPath(strFile);
 				imgView.setImageDrawable(d);
 			} else {

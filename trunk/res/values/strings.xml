@@ -17,13 +17,13 @@
 
 
 	<string name="BILanguage">Select the language اختر اللغة</string>
-	
+
 	<string name="plzrestart">من فضلك اعد تشغيل البرنامج</string>
 	<string name="plzrestart_en">Please restart the application</string>
-	
-	
-	<string name="downloadingpages"> ... تنزيل الصفحات</string>
-	<string name="downloadingpages_en">Downloading pages ...</string>
+
+
+	<string name="downloadingpages"> ... تنزيل الملفات</string>
+	<string name="downloadingpages_en">Downloading files ...</string>
 	<string name="downloadingtareef"> ... تنزيل كتاب التعريف</string>
 	<string name="downloadingtareef_en">Downloading Details book ...</string>
 	<string name="downloadingdictionary"> ... تنزيل المعجم</string>
@@ -40,6 +40,11 @@
 	<string name="SearchNoData_en">Not valid criteria, at leaset three characters
 		needed
 	</string>
+		<string name="downloadaudiofiles">تنزيل الملفات الصوتية</string>
+	<string name="downloadaudiofiles_en">Download audio files</string>
+	
+	<string name="notexistaudio">ملف الصوت غير موجودة ...</string>
+	<string name="notexistaudio_en">The audio file not exist ...</string>
 	<string name="Searching"> ... جاري البحث</string>
 	<string name="Searching_en">Searching ... </string>
 	<string name="Search"> البحث</string>
@@ -47,6 +52,16 @@
 
 	<string name="defaultbookmark">الورد اليومي,0,0,1#الكهف,293,1,0</string>
 
+
+
+	<string name="btndownloadaudiopage">تنزيل ملفات الصفحة</string>
+	<string name="btndownloadaudiopage_en">Download the page</string>
+
+	<string name="btndownloadaudiosura">تنزيل ملفات السورة</string>
+	<string name="btndownloadaudiosura_en">Download the sura</string>
+
+	<string name="btndownloadaudioquran">تنزيل ملفات القرآن كاملاً</string>
+	<string name="btndownloadaudioquran_en">Download all Quran</string>
 
 	<string name="English">ترجمة للانجليزية</string>
 	<string name="English_en">Translate to English</string>
@@ -128,10 +143,15 @@
 
 	<string name="ScreenOn">اناره مستمرة للشاشة </string>
 	<string name="ScreenOn_en">Light on </string>
+	<string name="AudioOn">تلاوة</string>
+	<string name="AudioOn_en">Recitation</string>
 
 	<string name="ScreenOnAlert">كن حذرا ً في استخدام هذا الخيار حيث يأثر علي
 		البطارية</string>
 	<string name="ScreenOnAlert_en">Be careful about your battery</string>
+		<string name="AudioOnSumm">اظهار شريط أدوات التلاوة</string>
+	<string name="AudioOnSumm_en">Show recitation toolbar</string>
+	
 	<string name="LanguageAlert">لا بد من اعادة تشغيل البرنامج</string>
 	<string name="LanguageAlert_en">You have to restart the application</string>
 
@@ -169,6 +189,6 @@
 	<string name="gotoPage3">سورة</string>
 	<string name="gotoPage3_en">Surah</string>
 
-	
+
 
 </resources>
