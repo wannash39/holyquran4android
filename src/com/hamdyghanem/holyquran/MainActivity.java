@@ -44,6 +44,7 @@ import android.widget.Button;
 import android.widget.Gallery;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -56,6 +57,8 @@ public class MainActivity extends Activity {
 	int duration = Toast.LENGTH_SHORT;
 	ApplicationController AC;
 	Gallery g;
+	Button vwCurrentAya;
+	TextView myTitleText;
 	Typeface arabicFont = null;
 	SharedPreferences mySharedPreferences;
 	SharedPreferences.Editor editor;
@@ -66,10 +69,13 @@ public class MainActivity extends Activity {
 	private final int stateMP_Playing = 2;
 	private final int stateMP_Pausing = 3;
 	private final int stateMP_Stop = 4;
+	private final int stateMP_PlayNext = 5;
+	private final int stateMP_PlayBack = 6;
 	private ImageButton buttonPlayPause;
+	private ImageButton buttonRecitationSettings;
 	private String strCurrentAudioFileName = "";
 	private String strCurrentAudioFilePath = "";
-
+	private Integer iLastAya = 0;
 	private String baseDir = "";
 	//
 
@@ -83,40 +89,40 @@ public class MainActivity extends Activity {
 			super.onCreate(savedInstanceState);
 			// final boolean customTitleSupported =
 			// requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+			// Hide title
 			requestWindowFeature(Window.FEATURE_NO_TITLE);
-			// android:theme="@android:style/Theme.NoTitleBar"
 			setContentView(R.layout.main);
 
 			pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 			this.mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK,
 					"My Tag");
-
 			// /////////CHANGE THE TITLE BAR/////////////// Typeface
-			// arabicFont = Typeface.createFromAsset(getAssets(),
-			// "fonts/DroidSansArabic.ttf");
-
-			// if (customTitleSupported) {
-			// getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
-			// R.layout.mytitle);
-			// }
-
-			// /final TextView myTitleText = (TextView)
-			// findViewById(R.id.myTitle);
-			// if (myTitleText != null) {
-			// myTitleText.setTypeface(arabicFont);
-			// myTitleText.setText(R.string.holyquran); //
-			// myTitleText.setBackgroundColor(R.color.blackblue);
-			// } //
-
-			//
+			arabicFont = Typeface.createFromAsset(getAssets(),
+					"fonts/DroidSansArabic.ttf");
 			AC = (ApplicationController) getApplicationContext();
+			AC.GetActivePath();
+			/*
+			 * if (customTitleSupported) {
+			 * getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
+			 * R.layout.mytitle); }
+			 * 
+			 * myTitleText = (TextView) findViewById(R.id.myTitle); if
+			 * (myTitleText != null) { myTitleText.setTypeface(arabicFont);
+			 * myTitleText.setText(AC.getTextbyLanguage(R.string.holyquran)); //
+			 * // myTitleText.setBackgroundColor(R.color.blackblue); } //
+			 */
+			//
+
 			// mySharedPreferences = getSharedPreferences(
 			// MYPREFS, mode);
 
 			// Begin
 			// RecetationLayout
 			buttonPlayPause = (ImageButton) findViewById(R.id.buttonPlayPause);
+			buttonRecitationSettings = (ImageButton) findViewById(R.id.buttonRecitationSettings);
+			buttonRecitationSettings.setVisibility(View.GONE);
 
+			vwCurrentAya = (Button) findViewById(R.id.vwCurrentAya);
 			// Reference the Gallery view
 			g = (Gallery) findViewById(R.id.Gallery01);
 			g.setAdapter(new ImageAdapter(this));
@@ -137,16 +143,22 @@ public class MainActivity extends Activity {
 			}
 
 			AC.bookmarkUtitliy = new BookmarkUtil(AC.ReadBookmarks());
+			//Toast.makeText(this, AC.ActivePath, Toast.LENGTH_LONG).show();
 
 			mySharedPreferences = PreferenceManager
 					.getDefaultSharedPreferences(this);
 			ReadSettings();
-			//
+			//message for the new version
 			String versionName = this.getPackageManager().getPackageInfo(
 					this.getPackageName(), 0).versionName;
+			String strNewFeatures = "New features : Recitation , Please if you fins any error mail me first";
 			if (!versionName.equals(AC.LastVersion)) {
-				Toast.makeText(this, "New version", Toast.LENGTH_LONG).show();
-
+				if (AC.iLanguage == 0)
+					strNewFeatures = "ÇáããíÒÇÊ ÇáÌÏíÏ: ÇáÊáÇæÉ , ÑÇÓáäí  ãä ÝÖáß ÇÐÇ æÌÏÊ Çí ãÔßáÉ ";
+				Toast.makeText(
+						this,
+						AC.getTextbyLanguage(R.string.newversion)
+								+ strNewFeatures, Toast.LENGTH_LONG).show();
 			}
 
 			if (AC.ScreenOn) {
@@ -178,8 +190,10 @@ public class MainActivity extends Activity {
 			} else {
 				// if (AC.NeedDownload())
 				// callOptionsItemSelected(null, R.id.mnu_settings);
-				g.setSelection(604 - AC.bookmarkUtitliy.arr.get(
-						AC.bookmarkUtitliy.getDefault()).getPage());
+				AC.iCurrentPage = AC.bookmarkUtitliy.arr.get(
+						AC.bookmarkUtitliy.getDefault()).getPage();
+				AC.iCurrenSura = AC.GetSoraIndex(AC.iCurrentPage);
+				g.setSelection(604 - AC.iCurrentPage);
 			}
 			CreateFolders();
 
@@ -204,14 +218,14 @@ public class MainActivity extends Activity {
 		// Toast.makeText(this,
 		// "Request failed: " + Integer.toString(AC.iLanguage),
 		// Toast.LENGTH_LONG).show();
-		RelativeLayout lay = (RelativeLayout) findViewById(R.id.RecetationLayout);
+		LinearLayout lay = (LinearLayout) findViewById(R.id.RecetationLayout);
 		if (AC.AudioOn)
 			lay.setVisibility(1);
 		else
 			lay.setVisibility(View.GONE);
-		//Toast.makeText(this,
-		//		 "Request failed: " + Boolean.toString(AC.AudioOn),
-		//		 Toast.LENGTH_LONG).show();
+		// Toast.makeText(this,
+		// "Request failed: " + Boolean.toString(AC.AudioOn),
+		// Toast.LENGTH_LONG).show();
 	}
 
 	public void WriteSettings() {
@@ -259,6 +273,7 @@ public class MainActivity extends Activity {
 	public void onStop() {
 		AC.saveBookmarks(g.getSelectedItemPosition());
 		WriteSettings();
+		StopRecitation(true);
 
 		super.onStop();
 	}
@@ -418,54 +433,103 @@ public class MainActivity extends Activity {
 
 	// Recitiation methods
 	public void OnPlayRecitation(View view) {
+		AC.iCurrentPage = 604 - g.getSelectedItemPosition();
+
+		// if (AC.iCurrentAya != -1) {
+		// AC.iCurrentAya -= 1;
+		// }
+		if (stateMediaPlayer == stateMP_Playing) {
+			mediaPlayer.pause();
+			buttonPlayPause.setImageResource(R.drawable.play);
+			// buttonPlayPause.setText("Play");
+			// textState.setText("- PAUSING -");
+			stateMediaPlayer = stateMP_Pausing;
+			return;
+		}
+		if (stateMediaPlayer == stateMP_Pausing) {
+			mediaPlayer.start();
+			buttonPlayPause.setImageResource(R.drawable.pause);
+			// buttonPlayPause.setText("Play");
+			// textState.setText("- PAUSING -");
+			stateMediaPlayer = stateMP_Playing;
+			return;
+		}
 		PlayRecitation();
 	}
 
 	public void PlayRecitation() {
 		try {
-			// check database exist
-			// if (!AC.databaseIsExist()) {
 
-			// return;}
-			if (stateMediaPlayer == stateMP_Playing) {
-				mediaPlayer.pause();
-				buttonPlayPause.setImageResource(R.drawable.play);
-				// buttonPlayPause.setText("Play");
-				// textState.setText("- PAUSING -");
-				stateMediaPlayer = stateMP_Pausing;
-				return;
-			}
-			if (stateMediaPlayer == stateMP_Pausing) {
-				mediaPlayer.start();
-				buttonPlayPause.setImageResource(R.drawable.pause);
-				// buttonPlayPause.setText("Play");
-				// textState.setText("- PAUSING -");
-				stateMediaPlayer = stateMP_Playing;
-				return;
-			}
 			// check the audio files
-			Integer iPage = 604 - g.getSelectedItemPosition();
-			// Toast.makeText(this,
-			// Integer.toString(AC.GetSoraIndex(iPage)),Toast.LENGTH_LONG).show();
+
 			// first time or after stop
+
 			if (AC.iCurrentAya == -1) {
 				AC.iCurrentAya = 0;
-				strCurrentAudioFileName = AC.GetFirstRecitationFile(iPage);
+				strCurrentAudioFileName = AC
+						.GetFirstRecitationFile(AC.iCurrentPage);
 			} else {
+				// Check if next sura
+				if (AC.iCurrentAya == -2) {
+					AC.iCurrentAya = -1;
+				}
 				AC.iCurrentAya += 1;
 				strCurrentAudioFileName = AC.GetFirstRecitationFile();
 			}
+
 			strCurrentAudioFilePath = baseDir + "Audio/Mashary/"
 					+ strCurrentAudioFileName;
+
+			// Toast.makeText(this,Integer.toString(AC.iCurrentAya),
+			// Toast.LENGTH_LONG).show();
+			vwCurrentAya.setText(Integer.toString(AC.iCurrentPage) + "/"
+					+ Integer.toString(AC.iCurrentAya));
+
+			// buttonPlayPause.set(Integer.toString(AC.iCurrentAya));
+
 			File f = new File(strCurrentAudioFilePath);
+			//
+			// Toast.makeText(this, strCurrentAudioFilePath, Toast.LENGTH_SHORT)
+			// .show();
+			/*
+			 * Toast.makeText( this, Integer.toString( AC.iCurrenSura) + ">" +
+			 * AC.GetSoraPage( AC.iCurrenSura) + ">" +
+			 * Integer.toString(AC.getAyaPage(AC.iCurrenSura, AC.iCurrentAya)),
+			 * Toast.LENGTH_LONG).show();
+			 */
+			if (AC.iCurrentAya > 0) {
+				AC.iCurrentPage = AC.getAyaPage(AC.iCurrenSura, AC.iCurrentAya);
+				g.setSelection(604 - AC.iCurrentPage);
+
+			} else {
+				AC.iCurrentPage = AC.getAyaPage(AC.iCurrenSura,
+						AC.iCurrentAya + 1);
+				g.setSelection(604 - AC.iCurrentPage);
+			}
+			// if the Verrese is not in this sura, means sura is finished
+			// check if sura is finished
+			Integer iAyaCount = AC.getAyaCount(AC.iCurrenSura);
+			// Toast.makeText(this, Integer.toString(iAyaCount),
+			// Toast.LENGTH_LONG).show();
+			if (AC.iCurrentAya > iAyaCount) {
+				// Toast.makeText(this, "Stopped ", Toast.LENGTH_SHORT).show();
+				// StopRecitation(true);
+				if (AC.iCurrenSura == 114) {
+					// finished
+					StopRecitation(true);
+				} else {
+					AC.iCurrenSura += 1;
+					AC.iCurrentAya = -2;
+					PlayRecitation();
+				}
+				return;
+			}
 			if (!f.exists()) {
-				Toast.makeText(this,
-						AC.getTextbyLanguage(R.string.notexistaudio),
-						Toast.LENGTH_LONG).show();
+
 				// open the download activity
-				AC.iCurrentPage = iPage;
+				// AC.iCurrentPage = iPage;
 				//
-				StopRecitation();
+				StopRecitation(true);
 				startActivity(new Intent(this, DownloadRecitationActivity.class));
 				//
 
@@ -479,8 +543,8 @@ public class MainActivity extends Activity {
 			// textState.setText("- PLAYING -");
 			stateMediaPlayer = stateMP_Playing;
 			//
-			Toast.makeText(this, strCurrentAudioFilePath, Toast.LENGTH_LONG)
-					.show();
+			// Toast.makeText(this, strCurrentAudioFilePath, Toast.LENGTH_LONG)
+			// .show();
 		} catch (Throwable t) {
 
 			Toast.makeText(this, "Request failed: " + t.toString(),
@@ -488,18 +552,46 @@ public class MainActivity extends Activity {
 		}
 	}
 
-	public void OnStopRecitation(View view) {
-		StopRecitation();
+	public void OnRecitationSettings(View view) {
 	}
 
-	private void StopRecitation() {
-		AC.iCurrentAya = -1;
-		Toast.makeText(this, "OnStopRecitation", Toast.LENGTH_LONG).show();
+	public void OnPlayRecitationBack(View view) {
+		StopRecitation(false);
+		AC.iCurrentAya -= 2;
+		if (AC.iCurrentAya < 0)
+			AC.iCurrentAya = 0;
+
+		stateMediaPlayer = stateMP_PlayBack;
+
+		iLastAya -= 2;
+		PlayRecitation();
+
+	}
+
+	public void OnPlayRecitationNext(View view) {
+		StopRecitation(false);
+		stateMediaPlayer = stateMP_PlayNext;
+		PlayRecitation();
+
+	}
+
+	public void OnStopRecitation(View view) {
+		iLastAya = 0;
+		StopRecitation(true);
+
+	}
+
+	private void StopRecitation(Boolean bChangeCurrentAya) {
+		if (bChangeCurrentAya) {
+			AC.iCurrentAya = -1;
+			vwCurrentAya.setText(Integer.toString(AC.iCurrentPage) + "/0");
+		}// Toast.makeText(this, "OnStopRecitation", Toast.LENGTH_LONG).show();
 		if (mediaPlayer != null)
 			mediaPlayer.stop();
 		// buttonPlayPause.setText("Pause");
 		// textState.setText("- PLAYING -");
 		stateMediaPlayer = stateMP_Stop;
+		buttonPlayPause.setImageResource(R.drawable.play);
 	}
 
 	MediaPlayer.OnCompletionListener completionListener = new MediaPlayer.OnCompletionListener() {
@@ -521,8 +613,8 @@ public class MainActivity extends Activity {
 		try {
 			mediaPlayer.setDataSource(strCurrentAudioFilePath);
 			mediaPlayer.prepare();
-			Toast.makeText(this, strCurrentAudioFilePath, Toast.LENGTH_LONG)
-					.show();
+			// Toast.makeText(this, strCurrentAudioFilePath,
+			// Toast.LENGTH_SHORT).show();
 			stateMediaPlayer = stateMP_NotStarter;
 			// textState.setText("- IDLE -");
 		} catch (IllegalArgumentException e) {
@@ -542,6 +634,9 @@ public class MainActivity extends Activity {
 			e.printStackTrace();
 			Toast.makeText(this, "Error-> " + e.toString(), Toast.LENGTH_LONG)
 					.show();
+			Toast.makeText(this, "Error-> " + strCurrentAudioFilePath,
+					Toast.LENGTH_LONG).show();
+
 			stateMediaPlayer = stateMP_Error;
 			// textState.setText("- ERROR!!! -");
 		}
@@ -606,7 +701,18 @@ public class MainActivity extends Activity {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			ImageView imgView = new ImageView(mContext);
 			// imgView.setScaleType(ScaleType.FIT_XY);
-
+			// if (!bNavigateByCode) {
+			// StopRecitation(true);
+			// bNavigateByCode = false;
+			// }
+			Integer iPage = 604 - g.getSelectedItemPosition();
+			Integer iAya = AC.iCurrentAya;
+			if (iAya == -1)
+				iAya = 0;
+			// myTitleText.setText(AC.getTextbyLanguage( R.string.holyquran) +
+			// "/" + Integer.toString(iPage)); //
+			vwCurrentAya.setText(Integer.toString(iPage) + "/"
+					+ Integer.toString(iAya));
 			// to let it work like Arabic we will subtract position by 604
 			// imgView.setImageResource(mImageIds[position]);
 
@@ -639,16 +745,21 @@ public class MainActivity extends Activity {
 			int height = display.getHeight();
 			// matrix.setScale(scale, scale);
 			imgView.setPadding(1, 1, 1, 1);
+			int iMinus = 50;
 
+			if (AC.AudioOn) {
+				// iMinus = iMinus + buttonPlayPause.getHeight();
+				// iMinus =120;
+			}
 			if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
 				float myFlo = (float) (width * 1.5);
 				height = (int) myFlo;
-				imgView.setLayoutParams(new Gallery.LayoutParams(width,
-						height - 50));
+				imgView.setLayoutParams(new Gallery.LayoutParams(width, height
+						- iMinus));
 				imgView.setScaleType(ImageView.ScaleType.FIT_XY);
 			} else { //
 				imgView.setLayoutParams(new Gallery.LayoutParams(width, //
-						height - 50));
+						height - iMinus));
 				imgView.setScaleType(ImageView.ScaleType.FIT_XY);
 			}
 

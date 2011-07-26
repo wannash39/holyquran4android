@@ -88,9 +88,9 @@ public class GoToActivity extends Activity {
 					.setOnItemSelectedListener(new OnChapterSelectedListener());
 			// SORA
 			if (AC.iLanguage == 0)
-			adapter = spinneradapter.createFromResource(this,
-					R.array.SoraName_array,
-					android.R.layout.simple_spinner_item, arabicFont);
+				adapter = spinneradapter.createFromResource(this,
+						R.array.SoraName_array,
+						android.R.layout.simple_spinner_item, arabicFont);
 			else
 				adapter = spinneradapter.createFromResource(this,
 						R.array.SoraNameEn_array,
@@ -153,7 +153,7 @@ public class GoToActivity extends Activity {
 			if (iChapter == 0)
 				iPage = 1;
 			editPage.setText(Integer.toString(iPage));
-			snpSora.setSelection(AC.GetSoraIndex(iPage));
+			snpSora.setSelection(AC.GetSoraIndex(iPage) - 1);
 		}
 
 		public void onNothingSelected(AdapterView parent) {

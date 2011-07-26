@@ -57,8 +57,8 @@ public class AboutActivity extends Activity {
 			strAbout += "البرنامج مفتوح المصدر و يمكنك الذهاب الي موقع المصدر حيث يمكنكم الدعم او النسخ من  <br />";
 			strAbout += "<a href=\'http://code.google.com/p/holyquran4android/'>هنا</a> <br />";
 
-			strAbout += " للمساعدة و الشرح يمكنك التصفح من  ";
-			strAbout += "<a href=\'http://code.google.com/p/holyquran4android/ '>هنا </a> <br />";
+			strAbout += " للمساعدة و الشرح و الدعم اشترك معنا علي صفحة الفيس بوك  ";
+			strAbout += "<a href=\'http://www.facebook.com/HolyQuran4Android'>هنا </a> <br />";
 			strAbout += "<br />";
 			strAbout += "للتواصل";
 		} else {
@@ -71,12 +71,12 @@ public class AboutActivity extends Activity {
 			strAbout += "The program is open source and you can go to the source site where you can support us or copy <br />";
 			strAbout += "<a href=\'http://code.google.com/p/holyquran4android/'>here</a> <br />";
 
-			strAbout += " For more details you can browse ";
-			strAbout += "<a href=\'http://code.google.com/p/holyquran4android/ '>here </a> <br />";
+			strAbout += " For more details and support please join us in facebook";
+			strAbout += "<a href=\'http://www.facebook.com/HolyQuran4Android'>here </a> <br />";
 			strAbout += "<br />";
 			strAbout += "Contact us";
 		}
-		strAbout += "<a href='mailto:Hamdy.ghanem@gmail.com'>Hamdy.ghanem@gmail.com</a> ";
+		strAbout += "<a href='mailto:Hamdy.ghanem@gmail.com'>hamdy.ghanem@gmail.com</a> ";
 		strAbout += "<br />";
 		strAbout += "</font>";
 		//

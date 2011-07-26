@@ -13,20 +13,40 @@
 			android:layout_height="fill_parent" android:gravity="fill"></Gallery>
 
 	</ScrollView>
+
 	<RelativeLayout android:layout_height="wrap_content"
 		android:layout_width="fill_parent">
 
-		<RelativeLayout android:id="@+id/RecetationLayout"
+		<LinearLayout android:id="@+id/RecetationLayout"
 			android:layout_height="wrap_content" android:layout_width="fill_parent"
 			android:layout_alignParentBottom="true">
 
 			<ImageButton android:layout_width="wrap_content"
-		 android:onClick="OnStopRecitation" 	  android:src="@drawable/stop"	android:id="@+id/buttonStop" android:layout_height="wrap_content" />
+				android:onClick="OnRecitationSettings" android:src="@drawable/recsettings"
+				android:id="@+id/buttonRecitationSettings" android:layout_height="wrap_content" />
+
+
+			<Button android:layout_width="wrap_content" android:id="@+id/vwCurrentAya"
+				android:layout_height="wrap_content" android:text="0" />
+
+			<ImageButton android:layout_width="wrap_content"
+				android:onClick="OnStopRecitation" android:src="@drawable/stop"
+				android:id="@+id/buttonStop" android:layout_height="wrap_content" />
+
+			<ImageButton android:layout_width="wrap_content"
+				android:id="@+id/buttonPlayBack" android:layout_height="wrap_content"
+				android:onClick="OnPlayRecitationBack" android:src="@drawable/recback" />
+
 			<ImageButton android:layout_width="wrap_content"
 				android:id="@+id/buttonPlayPause" android:layout_height="wrap_content"
-		 android:onClick= "OnPlayRecitation"	  android:src="@drawable/play"	android:layout_alignParentRight="true" />
+				android:onClick="OnPlayRecitation" android:src="@drawable/play"
+				android:layout_alignParentRight="true" />
+			<ImageButton android:layout_width="wrap_content"
+				android:id="@+id/buttonPlayNext" android:layout_height="wrap_content"
+				android:onClick="OnPlayRecitationNext" android:src="@drawable/recnext"
+		/>
 
-		</RelativeLayout>
+		</LinearLayout>
 	</RelativeLayout>
 
 

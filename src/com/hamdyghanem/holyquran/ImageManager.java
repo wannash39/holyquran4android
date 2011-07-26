@@ -17,13 +17,13 @@ import android.os.Environment;
 import android.util.Log;
 
 public class ImageManager {
-	public static void DownloadFromUrl(String strDropbox, String imgName, String fileName) { // this
+	public static void DownloadFromUrl(String strActivePath, String imgName, String fileName) { // this
 		// is
 		// the
 		// downloader
 		// method
 		try {
-			URL url = new URL("http://dl.dropbox.com/u/" + strDropbox + "/img/" + imgName
+			URL url = new URL(strActivePath + "/img/" + imgName
 					+ ".img");
 			File file = new File(fileName);
 
@@ -64,12 +64,12 @@ public class ImageManager {
 
 	}
 
-	public static void DownloadDBFromUrl(String strDropbox) {
+	public static void DownloadDBFromUrl(String strActivePath) {
 		// is // the // downloader // method
 		try {
-			// http://dl.dropbox.com/u/" + strDropbox + "/tafseer/1.TXT
+			// http://dl.dropbox.com/u/" + strActivePath + "/tafseer/1.TXT
 			URL url = new URL(
-					"http://dl.dropbox.com/u/" + strDropbox + "/database/hquran.dat");
+					strActivePath + "/hquran.dat");
 			File file = new File(Environment.getExternalStorageDirectory()
 					.getAbsolutePath() + "/hQuran/hquran.dat");
 			file.deleteOnExit();
@@ -77,6 +77,56 @@ public class ImageManager {
 			// Log.d("ImageManager", "download begining");
 			// Log.d("ImageManager", "download url:" + url);
 			Log.d("ImageManager", "downloaded file name:" + "hquran.dat");
+			/* Open a connection to that URL. */
+			URLConnection ucon = url.openConnection();
+			int lenghtOfFile = ucon.getContentLength();
+
+			/*
+			 * Define InputStreams to read from the URLConnection.
+			 */
+			FileOutputStream fos = new FileOutputStream(file);
+			InputStream is = ucon.getInputStream();
+			byte data[] = new byte[1024];
+
+			int count = 0;
+			long total = 0;
+			int progress = 0;
+
+			while ((count = is.read(data)) != -1) {
+				total += count;
+				int progress_temp = (int) total * 100 / lenghtOfFile;
+				if (progress_temp % 10 == 0 && progress != progress_temp) {
+					progress = progress_temp;
+					Log.v("Downloading", "total = " + progress);
+				}
+				fos.write(data, 0, count);
+			}
+
+			is.close();
+			fos.close();
+
+			Log.d("ImageManager",
+					"download ready in"
+							+ ((System.currentTimeMillis() - startTime) / 1000)
+							+ " sec");
+
+		} catch (IOException e) {
+			Log.d("ImageManager", "Error: " + e);
+		}
+
+	}
+	public static void DownloadActivePath() {
+		try {
+			// from my gmail dropbox account
+			URL url = new URL(
+					"http://dl.dropbox.com/u/27675084/ActivePath.txt");
+			File file = new File(Environment.getExternalStorageDirectory()
+					.getAbsolutePath() + "/hQuran/ActivePath.txt");
+			file.deleteOnExit();
+			long startTime = System.currentTimeMillis();
+			// Log.d("ImageManager", "download begining");
+			// Log.d("ImageManager", "download url:" + url);
+			Log.d("ImageManager", "downloaded file name:" + "ActivePath.txt");
 			/* Open a connection to that URL. */
 			URLConnection ucon = url.openConnection();
 			int lenghtOfFile = ucon.getContentLength();
@@ -141,11 +191,11 @@ public class ImageManager {
 		return createdFile.toString();
 	}
 
-	public static void DownloadTafserFromUrl(String strDropbox,String imgName, String fileName) { // this
+	public static void DownloadTafserFromUrl(String strActivePath,String imgName, String fileName) { // this
 		// is // the // downloader // method
 		try {
-			// http://dl.dropbox.com/u/" + strDropbox + "/tafseer/1.TXT
-			URL url = new URL("http://dl.dropbox.com/u/" + strDropbox + "/tafseer/"
+			// http://dl.dropbox.com/u/" + strActivePath + "/tafseer/1.TXT
+			URL url = new URL(strActivePath + "/tafseer/"
 					+ imgName + ".html");
 			File file = new File(fileName);
 
@@ -186,14 +236,14 @@ public class ImageManager {
 
 	}
 
-	public static void DownloadTareefFromUrl(String strDropbox,String imgName, String fileName) { // this
+	public static void DownloadTareefFromUrl(String strActivePath,String imgName, String fileName) { // this
 		// is
 		// the
 		// downloader
 		// method
 		try {
-			// http://dl.dropbox.com/u/" + strDropbox + "/tafseer/1.TXT
-			URL url = new URL("http://dl.dropbox.com/u/" + strDropbox + "/taareef/"
+			// http://dl.dropbox.com/u/" + strActivePath + "/tafseer/1.TXT
+			URL url = new URL(strActivePath + "/taareef/"
 					+ imgName + ".html");
 			File file = new File(fileName);
 
@@ -234,14 +284,14 @@ public class ImageManager {
 
 	}
 
-	public static void DownloadDictionaryFromUrl(String strDropbox,String imgName, String fileName) { // this
+	public static void DownloadDictionaryFromUrl(String strActivePath,String imgName, String fileName) { // this
 		// is
 		// the
 		// downloader
 		// method
 		try {
-			// http://dl.dropbox.com/u/" + strDropbox + "/tafseer/1.TXT
-			URL url = new URL("http://dl.dropbox.com/u/" + strDropbox + "/dictionary/"
+			// http://dl.dropbox.com/u/" + strActivePath + "/tafseer/1.TXT
+			URL url = new URL(strActivePath + "/dictionary/"
 					+ imgName + ".html");
 			File file = new File(fileName);
 
@@ -281,20 +331,21 @@ public class ImageManager {
 		}
 
 	}
-	public static void DownloadAudioFromUrl(String strDropbox, String imgName, String fileName) { // this
+	public static void DownloadAudioFromUrl(String strActivePath, String imgName, String fileName) { // this
 		// is
 		// the
 		// downloader
 		// method
 		try {
-			URL url = new URL("http://dl.dropbox.com/u/" + strDropbox + "/Audio/Mashary/" + imgName
+			URL url = new URL(strActivePath + "/audio/mashary/" + imgName
 					+ ".aud");
 			File file = new File(fileName);
 
 			long startTime = System.currentTimeMillis();
 			// Log.d("ImageManager", "download begining");
 			// Log.d("ImageManager", "download url:" + url);
-			Log.d("ImageManager", "downloaded audio file name:" + fileName);
+			Log.d("ImageManager", "downloaded audio file name:" + fileName+ " * path:"+ url.getFile());
+			
 			/* Open a connection to that URL. */
 			URLConnection ucon = url.openConnection();
 
