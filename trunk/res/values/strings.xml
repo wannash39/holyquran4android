@@ -2,6 +2,8 @@
 <resources>
 	<string name="app_name">Holy Quran</string>
 
+	<string name="newversion">اصدار جديد</string>
+	<string name="newversion_en">New version</string>
 	<string name="download">تنزيلات</string>
 	<string name="download_en">Downloads</string>
 	<string name="btn_download_pages">تنزيل الصفحات</string>
