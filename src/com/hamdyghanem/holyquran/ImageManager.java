@@ -17,14 +17,14 @@ import android.os.Environment;
 import android.util.Log;
 
 public class ImageManager {
-	public static void DownloadFromUrl(String strActivePath, String imgName, String fileName) { // this
+	public static void DownloadFromUrl(String strActivePath, String imgName,
+			String fileName) { // this
 		// is
 		// the
 		// downloader
 		// method
 		try {
-			URL url = new URL(strActivePath + "/img/" + imgName
-					+ ".img");
+			URL url = new URL(strActivePath + "/img/" + imgName + ".img");
 			File file = new File(fileName);
 
 			long startTime = System.currentTimeMillis();
@@ -68,8 +68,7 @@ public class ImageManager {
 		// is // the // downloader // method
 		try {
 			// http://dl.dropbox.com/u/" + strActivePath + "/tafseer/1.TXT
-			URL url = new URL(
-					strActivePath + "/hquran.dat");
+			URL url = new URL(strActivePath + "/hquran.dat");
 			File file = new File(Environment.getExternalStorageDirectory()
 					.getAbsolutePath() + "/hQuran/hquran.dat");
 			file.deleteOnExit();
@@ -115,11 +114,11 @@ public class ImageManager {
 		}
 
 	}
+
 	public static void DownloadActivePath() {
 		try {
 			// from my gmail dropbox account
-			URL url = new URL(
-					"http://dl.dropbox.com/u/27675084/ActivePath.txt");
+			URL url = new URL("http://dl.dropbox.com/u/27675084/ActivePath.txt");
 			File file = new File(Environment.getExternalStorageDirectory()
 					.getAbsolutePath() + "/hQuran/ActivePath.txt");
 			file.deleteOnExit();
@@ -191,12 +190,12 @@ public class ImageManager {
 		return createdFile.toString();
 	}
 
-	public static void DownloadTafserFromUrl(String strActivePath,String imgName, String fileName) { // this
+	public static void DownloadTafserFromUrl(String strActivePath,
+			String imgName, String fileName) { // this
 		// is // the // downloader // method
 		try {
 			// http://dl.dropbox.com/u/" + strActivePath + "/tafseer/1.TXT
-			URL url = new URL(strActivePath + "/tafseer/"
-					+ imgName + ".html");
+			URL url = new URL(strActivePath + "/tafseer/" + imgName + ".html");
 			File file = new File(fileName);
 
 			long startTime = System.currentTimeMillis();
@@ -236,15 +235,15 @@ public class ImageManager {
 
 	}
 
-	public static void DownloadTareefFromUrl(String strActivePath,String imgName, String fileName) { // this
+	public static void DownloadTareefFromUrl(String strActivePath,
+			String imgName, String fileName) { // this
 		// is
 		// the
 		// downloader
 		// method
 		try {
 			// http://dl.dropbox.com/u/" + strActivePath + "/tafseer/1.TXT
-			URL url = new URL(strActivePath + "/taareef/"
-					+ imgName + ".html");
+			URL url = new URL(strActivePath + "/taareef/" + imgName + ".html");
 			File file = new File(fileName);
 
 			long startTime = System.currentTimeMillis();
@@ -284,15 +283,16 @@ public class ImageManager {
 
 	}
 
-	public static void DownloadDictionaryFromUrl(String strActivePath,String imgName, String fileName) { // this
+	public static void DownloadDictionaryFromUrl(String strActivePath,
+			String imgName, String fileName) { // this
 		// is
 		// the
 		// downloader
 		// method
 		try {
 			// http://dl.dropbox.com/u/" + strActivePath + "/tafseer/1.TXT
-			URL url = new URL(strActivePath + "/dictionary/"
-					+ imgName + ".html");
+			URL url = new URL(strActivePath + "/dictionary/" + imgName
+					+ ".html");
 			File file = new File(fileName);
 
 			long startTime = System.currentTimeMillis();
@@ -331,7 +331,9 @@ public class ImageManager {
 		}
 
 	}
-	public static void DownloadAudioFromUrl(String strActivePath, String imgName, String fileName) { // this
+
+	public static void DownloadAudioFromUrl(String strActivePath,
+			String imgName, String fileName) { // this
 		// is
 		// the
 		// downloader
@@ -344,8 +346,9 @@ public class ImageManager {
 			long startTime = System.currentTimeMillis();
 			// Log.d("ImageManager", "download begining");
 			// Log.d("ImageManager", "download url:" + url);
-			Log.d("ImageManager", "downloaded audio file name:" + fileName+ " * path:"+ url.getFile());
-			
+			Log.d("ImageManager", "downloaded audio file name:" + fileName
+					+ " * path:" + url.getFile());
+
 			/* Open a connection to that URL. */
 			URLConnection ucon = url.openConnection();
 
@@ -366,6 +369,8 @@ public class ImageManager {
 
 			/* Convert the Bytes read to a String. */
 			FileOutputStream fos = new FileOutputStream(file);
+			if (file.length() == 0)
+				file.deleteOnExit();
 			fos.write(baf.toByteArray());
 			fos.close();
 			Log.d("ImageManager",

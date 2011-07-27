@@ -1,25 +1,15 @@
 package com.hamdyghanem.holyquran;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-
-import org.apache.http.util.LangUtils;
-
 import com.hamdyghanem.holyquran.R;
 import android.app.Activity;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
-import android.content.res.TypedArray;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
@@ -27,6 +17,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -100,7 +92,7 @@ public class MainActivity extends Activity {
 			arabicFont = Typeface.createFromAsset(getAssets(),
 					"fonts/DroidSansArabic.ttf");
 			AC = (ApplicationController) getApplicationContext();
-			AC.GetActivePath();
+
 			/*
 			 * if (customTitleSupported) {
 			 * getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
@@ -121,6 +113,10 @@ public class MainActivity extends Activity {
 			buttonPlayPause = (ImageButton) findViewById(R.id.buttonPlayPause);
 			buttonRecitationSettings = (ImageButton) findViewById(R.id.buttonRecitationSettings);
 			buttonRecitationSettings.setVisibility(View.GONE);
+			TelephonyManager mgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+			if (mgr != null) {
+				mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+			}
 
 			vwCurrentAya = (Button) findViewById(R.id.vwCurrentAya);
 			// Reference the Gallery view
@@ -143,12 +139,11 @@ public class MainActivity extends Activity {
 			}
 
 			AC.bookmarkUtitliy = new BookmarkUtil(AC.ReadBookmarks());
-			//Toast.makeText(this, AC.ActivePath, Toast.LENGTH_LONG).show();
-
+			// Toast.makeText(this, AC.ActivePath, Toast.LENGTH_LONG).show();
 			mySharedPreferences = PreferenceManager
 					.getDefaultSharedPreferences(this);
 			ReadSettings();
-			//message for the new version
+			// message for the new version
 			String versionName = this.getPackageManager().getPackageInfo(
 					this.getPackageName(), 0).versionName;
 			String strNewFeatures = "New features : Recitation , Please if you fins any error mail me first";
@@ -273,14 +268,14 @@ public class MainActivity extends Activity {
 	public void onStop() {
 		AC.saveBookmarks(g.getSelectedItemPosition());
 		WriteSettings();
-		StopRecitation(true);
-
+		//StopRecitation(false);
 		super.onStop();
 	}
 
 	@Override
 	public void onDestroy() {
 		try {
+			StopRecitation(true);
 			if (AC.ScreenOn) {
 				this.mWakeLock.release();
 			}
@@ -431,10 +426,36 @@ public class MainActivity extends Activity {
 		}
 	}
 
+	PhoneStateListener phoneStateListener = new PhoneStateListener() {
+		@Override
+		public void onCallStateChanged(int state, String incomingNumber) {
+			if (state == TelephonyManager.CALL_STATE_RINGING) {
+				// Incoming call: Pause music
+				if (stateMediaPlayer == stateMP_Playing) {
+					mediaPlayer.pause();
+					buttonPlayPause.setImageResource(R.drawable.play);
+					stateMediaPlayer = stateMP_Pausing;
+					return;
+				}
+			} else if (state == TelephonyManager.CALL_STATE_IDLE) {
+				// Not in call: Play music
+			} else if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
+				// A call is dialing, active or on hold
+				// Incoming call: Pause music
+				if (stateMediaPlayer == stateMP_Playing) {
+					mediaPlayer.pause();
+					buttonPlayPause.setImageResource(R.drawable.play);
+					stateMediaPlayer = stateMP_Pausing;
+					return;
+				}
+			}
+			super.onCallStateChanged(state, incomingNumber);
+		}
+	};
+
 	// Recitiation methods
 	public void OnPlayRecitation(View view) {
 		AC.iCurrentPage = 604 - g.getSelectedItemPosition();
-
 		// if (AC.iCurrentAya != -1) {
 		// AC.iCurrentAya -= 1;
 		// }
@@ -482,9 +503,7 @@ public class MainActivity extends Activity {
 
 			// Toast.makeText(this,Integer.toString(AC.iCurrentAya),
 			// Toast.LENGTH_LONG).show();
-			vwCurrentAya.setText(Integer.toString(AC.iCurrentPage) + "/"
-					+ Integer.toString(AC.iCurrentAya));
-
+			PrintAya(AC.iCurrentAya);
 			// buttonPlayPause.set(Integer.toString(AC.iCurrentAya));
 
 			File f = new File(strCurrentAudioFilePath);
@@ -498,14 +517,18 @@ public class MainActivity extends Activity {
 			 * Toast.LENGTH_LONG).show();
 			 */
 			if (AC.iCurrentAya > 0) {
-				AC.iCurrentPage = AC.getAyaPage(AC.iCurrenSura, AC.iCurrentAya);
-				g.setSelection(604 - AC.iCurrentPage);
+				if (AC.iCurrenSura == 9)
+					AC.iCurrentPage = AC.getAyaPage(AC.iCurrenSura,
+							AC.iCurrentAya - 1);
+				else
+					AC.iCurrentPage = AC.getAyaPage(AC.iCurrenSura,
+							AC.iCurrentAya);
 
 			} else {
 				AC.iCurrentPage = AC.getAyaPage(AC.iCurrenSura,
 						AC.iCurrentAya + 1);
-				g.setSelection(604 - AC.iCurrentPage);
 			}
+			g.setSelection(604 - AC.iCurrentPage);
 			// if the Verrese is not in this sura, means sura is finished
 			// check if sura is finished
 			Integer iAyaCount = AC.getAyaCount(AC.iCurrenSura);
@@ -525,15 +548,21 @@ public class MainActivity extends Activity {
 				return;
 			}
 			if (!f.exists()) {
-
 				// open the download activity
 				// AC.iCurrentPage = iPage;
 				//
 				StopRecitation(true);
 				startActivity(new Intent(this, DownloadRecitationActivity.class));
-				//
-
 				return;
+			} else {
+				// It happenes
+				if (f.length() == 0) {
+					StopRecitation(true);
+					startActivity(new Intent(this,
+							DownloadRecitationActivity.class));
+					f.delete();
+					return;
+				}
 			}
 			//
 			buttonPlayPause.setImageResource(R.drawable.pause);
@@ -546,7 +575,7 @@ public class MainActivity extends Activity {
 			// Toast.makeText(this, strCurrentAudioFilePath, Toast.LENGTH_LONG)
 			// .show();
 		} catch (Throwable t) {
-
+			StopRecitation(false);
 			Toast.makeText(this, "Request failed: " + t.toString(),
 					Toast.LENGTH_LONG).show();
 		}
@@ -584,7 +613,7 @@ public class MainActivity extends Activity {
 	private void StopRecitation(Boolean bChangeCurrentAya) {
 		if (bChangeCurrentAya) {
 			AC.iCurrentAya = -1;
-			vwCurrentAya.setText(Integer.toString(AC.iCurrentPage) + "/0");
+			PrintAya(0);
 		}// Toast.makeText(this, "OnStopRecitation", Toast.LENGTH_LONG).show();
 		if (mediaPlayer != null)
 			mediaPlayer.stop();
@@ -631,6 +660,8 @@ public class MainActivity extends Activity {
 			// textState.setText("- ERROR!!! -");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			StopRecitation(false);
+
 			e.printStackTrace();
 			Toast.makeText(this, "Error-> " + e.toString(), Toast.LENGTH_LONG)
 					.show();
@@ -640,6 +671,20 @@ public class MainActivity extends Activity {
 			stateMediaPlayer = stateMP_Error;
 			// textState.setText("- ERROR!!! -");
 		}
+	}
+
+	private void PrintAya(Integer iAya) {
+		if (AC.iCurrenSura == 9)
+			iAya += 1;
+		vwCurrentAya.setText(Integer.toString(AC.iCurrentPage) + "/"
+				+ Integer.toString(iAya));
+	}
+
+	private void PrintAya(Integer iPage, Integer iAya) {
+		if (AC.iCurrenSura == 9)
+			iAya += 1;
+		vwCurrentAya.setText(Integer.toString(iPage) + "/"
+				+ Integer.toString(iAya));
 	}
 
 	//
@@ -711,8 +756,7 @@ public class MainActivity extends Activity {
 				iAya = 0;
 			// myTitleText.setText(AC.getTextbyLanguage( R.string.holyquran) +
 			// "/" + Integer.toString(iPage)); //
-			vwCurrentAya.setText(Integer.toString(iPage) + "/"
-					+ Integer.toString(iAya));
+			PrintAya(iPage, iAya);
 			// to let it work like Arabic we will subtract position by 604
 			// imgView.setImageResource(mImageIds[position]);
 
