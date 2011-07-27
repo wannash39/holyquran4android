@@ -8,7 +8,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Environment;
 import android.widget.Toast;
 
@@ -22,7 +25,9 @@ public class ApplicationController extends Application {
 	public String LastVersion = "";
 	public Boolean AudioOn = true;
 
-	public String ActivePath = "http://dl.dropbox.com/u/32200142/";// gmail: 27675084 yahoo:32200142
+	public String ActivePath = "http://dl.dropbox.com/u/32200142/";// gmail:
+																	// 27675084
+																	// yahoo:32200142
 	public boolean ScreenOn = false;
 
 	@Override
@@ -44,11 +49,22 @@ public class ApplicationController extends Application {
 		WriteBookmarks(bookmarkUtitliy.getBookmarksString());
 	}
 
-	public Boolean databaseIsExist() {
-		ExternalStorageReadOnlyOpenHelper objdb = new ExternalStorageReadOnlyOpenHelper(
-				this);
-		//
-		return objdb.databaseFileExists();
+	public Boolean isNetConnected() {
+		ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		// ARE WE CONNECTED TO THE NET
+
+		if (conMgr.getActiveNetworkInfo() != null
+
+		&& conMgr.getActiveNetworkInfo().isAvailable()
+
+		&& conMgr.getActiveNetworkInfo().isConnected()) {
+
+			return true;
+
+		} else {
+			return false;
+
+		}
 	}
 
 	public void saveBookmarks(Integer iPos) {
@@ -245,25 +261,29 @@ public class ApplicationController extends Application {
 			i = 0;
 		if (i == -1)
 			i = 1;
+		if (iCurrenSura == 9 && i > 0)
+			i -= 1;
 		return Integer.toString(i);
 	}
 
 	public String GetFirstRecitationFile(Integer iPage) {
-
+		iCurrenSura = GetSoraIndex(iPage);
 		String strFirstAya = GetVerseByPage(iPage);
 		iCurrentAya = Integer.parseInt(strFirstAya);
-		strFirstAya = String.format("%03d", iCurrentAya);
-		//
-		// String strSoraIndex=Integer.toString( GetSoraIndex(iPage));
-		iCurrenSura = GetSoraIndex(iPage);
-		String strSoraIndex = String.format("%03d", iCurrenSura);
-
-		return strSoraIndex + strFirstAya + ".aud";
+		Integer iAya = iCurrentAya;
+		// Only for toba
+		// if (iCurrenSura == 9 && iAya > 0)
+		// iCurrentAya -= 1;
+		return GetFirstRecitationFile(iCurrenSura, iAya);
 	}
 
 	public String GetFirstRecitationFile() {
-		String strFirstAya = String.format("%03d", iCurrentAya);
-		String strSoraIndex = String.format("%03d", iCurrenSura);
+		return GetFirstRecitationFile(iCurrenSura, iCurrentAya);
+	}
+
+	public String GetFirstRecitationFile(Integer iSura, Integer iAya) {
+		String strFirstAya = String.format("%03d", iAya);
+		String strSoraIndex = String.format("%03d", iSura);
 		return strSoraIndex + strFirstAya + ".aud";
 	}
 
@@ -276,6 +296,10 @@ public class ApplicationController extends Application {
 	// By current page and current aya
 	public Integer getAyaPage(Integer iSura, Integer iAya) {
 		iCurrentPage = GetSoraPage(iSura);
+		// For Toba only
+		if (iSura == 9 && iAya > 0)
+			iAya += 1;
+
 		for (Integer i = iCurrentPage + 1; i <= 604; i++) {
 			Integer j = Integer.parseInt(GetVerseByPage(i));
 			if (j == 0) {
@@ -292,6 +316,7 @@ public class ApplicationController extends Application {
 				return iCurrentPage;
 			}
 		}
+
 		return iCurrentPage;
 	}
 

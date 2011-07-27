@@ -4,6 +4,10 @@
 
 	<string name="newversion">اصدار جديد</string>
 	<string name="newversion_en">New version</string>
+	
+	<string name="NoInternet">لا يوجد اتصال بالشبكة</string>
+	<string name="NoInternet_en">New internet connection</string>
+	
 	<string name="download">تنزيلات</string>
 	<string name="download_en">Downloads</string>
 	<string name="btn_download_pages">تنزيل الصفحات</string>
@@ -11,7 +15,7 @@
 	<string name="btn_download_database">تنزيل قاعدة البيانات للبحث</string>
 	<string name="btn_download_database_en">Download database</string>
 	<string name="btn_download_tafser">تنزيل التفسير</string>
-	<string name="btn_download_tafser_en">Download Tafier</string>
+	<string name="btn_download_tafser_en">Download Tafsier</string>
 	<string name="btn_download_tareef">تنزيل التعريف</string>
 	<string name="btn_download_tareef_en">Download Details book</string>
 	<string name="btn_download_dictionary">تنزيل المعجم</string>
@@ -33,7 +37,7 @@
 	<string name="downloadingdatabase"> ... تنزيل قاعدة البيانات للبحث</string>
 	<string name="downloadingdatabase_en">Downloading database ...</string>
 	<string name="downloadingtafseer"> ... تنزيل التفسير</string>
-	<string name="downloadingtafseer_en">Downloading Tafier ...</string>
+	<string name="downloadingtafseer_en">Downloading Tafsier ...</string>
 	<string name="notexistpage">صفحة غير موجودة</string>
 	<string name="notexistpage_en">Not exist page ...</string>
 	<string name="found">نتيجية البحث </string>
