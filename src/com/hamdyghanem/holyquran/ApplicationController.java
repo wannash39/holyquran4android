@@ -22,8 +22,9 @@ public class ApplicationController extends Application {
 	public Integer iCurrenSura = 0;
 
 	public Integer iLanguage = 0;
+	public String CurrentImageType = "0";
 	public String LastVersion = "";
-	public Boolean AudioOn = true;
+	public Boolean AudioOn = false;
 
 	public String ActivePath = "http://dl.dropbox.com/u/32200142/";// gmail:
 																	// 27675084
@@ -38,12 +39,12 @@ public class ApplicationController extends Application {
 		// Do Application initialization over here
 	}
 
-	public Boolean NeedDownload() {
+	/*public Boolean NeedDownload() {
 		String baseDir = Environment.getExternalStorageDirectory()
 				.getAbsolutePath() + "/hQuran/img/";
 		File file = new File(baseDir);
 		return file.listFiles().length < 604;
-	}
+	}*/
 
 	public void saveBookmarksDefalut() {
 		WriteBookmarks(bookmarkUtitliy.getBookmarksString());
@@ -205,9 +206,25 @@ public class ApplicationController extends Application {
 		}
 	}
 
+	public String GetChapter(Integer iPage) {
+		String[] chapternames = getResources().getStringArray(
+				R.array.Chapter_array);
+		if (iLanguage == 1)
+			chapternames = getResources().getStringArray(
+					R.array.Chapter_array_en);
+		Integer iChapter = 0;
+		iChapter = Math.abs((iPage - 2) / 20);
+
+		return chapternames[iChapter ].trim();
+
+	}
+
 	public String GetSora(Integer iPage) {
 		String[] soranames = getResources().getStringArray(
 				R.array.SoraName_array);
+		if (iLanguage == 1)
+			soranames = getResources().getStringArray(R.array.SoraNameEn_array);
+
 		String[] sorapages = getResources().getStringArray(
 				R.array.SoraValue_array);
 		if (iPage <= 0)

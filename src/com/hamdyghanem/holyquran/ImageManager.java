@@ -17,14 +17,15 @@ import android.os.Environment;
 import android.util.Log;
 
 public class ImageManager {
-	public static void DownloadFromUrl(String strActivePath, String imgName,
-			String fileName) { // this
+	public static void DownloadFromUrl(String ImageType, String strActivePath,
+			String imgName, String fileName) { // this
 		// is
 		// the
 		// downloader
 		// method
 		try {
-			URL url = new URL(strActivePath + "/img/" + imgName + ".img");
+			URL url = new URL(strActivePath + "/img/" + ImageType + "/"
+					+ imgName + ".img");
 			File file = new File(fileName);
 
 			long startTime = System.currentTimeMillis();
@@ -165,11 +166,15 @@ public class ImageManager {
 
 	}
 
-	public static String saveToSDCard(Bitmap resourceImage, String finalName) {
+	public static String saveToSDCard(Bitmap resourceImage, String str,
+			Boolean inimgTypes) {
 		StringBuffer createdFile = new StringBuffer();
-
-		finalName = Environment.getExternalStorageDirectory().getAbsolutePath()
-				+ "/hQuran/img/" + finalName + ".img";
+		String finalName = Environment.getExternalStorageDirectory()
+				.getAbsolutePath();
+		if (inimgTypes)
+			finalName += "/hQuran/imgTypes/" + str + ".img";
+		else
+			finalName += "/hQuran/img/" + str + ".img";
 		File externalStorageFile = new File(finalName);
 
 		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -334,10 +339,6 @@ public class ImageManager {
 
 	public static void DownloadAudioFromUrl(String strActivePath,
 			String imgName, String fileName) { // this
-		// is
-		// the
-		// downloader
-		// method
 		try {
 			URL url = new URL(strActivePath + "/audio/mashary/" + imgName
 					+ ".aud");

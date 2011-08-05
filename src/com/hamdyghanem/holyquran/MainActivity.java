@@ -1,6 +1,7 @@
 package com.hamdyghanem.holyquran;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import com.hamdyghanem.holyquran.R;
 import android.app.Activity;
@@ -27,10 +28,16 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
+import android.view.View.OnClickListener;
+
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.Gallery;
@@ -47,11 +54,17 @@ public class MainActivity extends Activity {
 	public static final String MYPREFS = "mySharedPreferences";
 	int mode = Activity.MODE_WORLD_WRITEABLE;
 	int duration = Toast.LENGTH_SHORT;
-	ApplicationController AC;
-	Gallery g;
-	Button vwCurrentAya;
+	float X = 0f;
+	float Y = 0f;
+	int width = 0;
+	int height = 0;
+	private ApplicationController AC;
+	private Gallery g;
 	TextView myTitleText;
+	TextView myHeaderText;
 	Typeface arabicFont = null;
+	LinearLayout headerLayout = null;
+	LinearLayout recetationLayout = null;
 	SharedPreferences mySharedPreferences;
 	SharedPreferences.Editor editor;
 	MediaPlayer mediaPlayer;
@@ -92,7 +105,6 @@ public class MainActivity extends Activity {
 			arabicFont = Typeface.createFromAsset(getAssets(),
 					"fonts/DroidSansArabic.ttf");
 			AC = (ApplicationController) getApplicationContext();
-
 			/*
 			 * if (customTitleSupported) {
 			 * getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
@@ -110,15 +122,15 @@ public class MainActivity extends Activity {
 
 			// Begin
 			// RecetationLayout
+			myHeaderText = (TextView) findViewById(R.id.txtHeader);
 			buttonPlayPause = (ImageButton) findViewById(R.id.buttonPlayPause);
 			buttonRecitationSettings = (ImageButton) findViewById(R.id.buttonRecitationSettings);
 			buttonRecitationSettings.setVisibility(View.GONE);
 			TelephonyManager mgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
 			if (mgr != null) {
-				mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+				mgr.listen(phoneStateListener,
+						PhoneStateListener.LISTEN_CALL_STATE);
 			}
-
-			vwCurrentAya = (Button) findViewById(R.id.vwCurrentAya);
 			// Reference the Gallery view
 			g = (Gallery) findViewById(R.id.Gallery01);
 			g.setAdapter(new ImageAdapter(this));
@@ -132,6 +144,8 @@ public class MainActivity extends Activity {
 			Boolean bFirstTime = false;
 			baseDir = Environment.getExternalStorageDirectory()
 					.getAbsolutePath() + "/hQuran/";
+			fixImagesForOldVersion();
+
 			File file = new File(baseDir);
 			if (!file.exists()) {
 				file.mkdirs();
@@ -146,10 +160,10 @@ public class MainActivity extends Activity {
 			// message for the new version
 			String versionName = this.getPackageManager().getPackageInfo(
 					this.getPackageName(), 0).versionName;
-			String strNewFeatures = "New features : Recitation , Please if you fins any error mail me first";
+			String strNewFeatures = "New features : You can click to show and hide the header and footer";
 			if (!versionName.equals(AC.LastVersion)) {
 				if (AC.iLanguage == 0)
-					strNewFeatures = "ÇáããíÒÇÊ ÇáÌÏíÏ: ÇáÊáÇæÉ , ÑÇÓáäí  ãä ÝÖáß ÇÐÇ æÌÏÊ Çí ãÔßáÉ ";
+					strNewFeatures = "ÇáããíÒÇÊ ÇáÌÏíÏ: ÈÇáÖÛØ Úáí ÇáÕæÑÉ íãßäß ÇÎÝÇÁ Çæ ÇÙåÇÁ ÔÑíØ  ÇáãÚáæãÇÊ ÈÇáÃÚáì æ ÇáÃÓÝá ";
 				Toast.makeText(
 						this,
 						AC.getTextbyLanguage(R.string.newversion)
@@ -166,12 +180,6 @@ public class MainActivity extends Activity {
 				// Toast.makeText(this, "not exist",
 				// Toast.LENGTH_LONG).show();
 				CreateFolders();
-				ImageManager.saveToSDCard(BitmapFactory.decodeResource(
-						this.getResources(), R.drawable.img_0), "0");
-				ImageManager.saveToSDCard(BitmapFactory.decodeResource(
-						this.getResources(), R.drawable.img_1), "1");
-				ImageManager.saveToSDCard(BitmapFactory.decodeResource(
-						this.getResources(), R.drawable.img_no), "no");
 				// Open settings to load images directly
 				g.setSelection(604);
 				// callOptionsItemSelected(null, R.id.mnu_settings);
@@ -191,11 +199,36 @@ public class MainActivity extends Activity {
 				g.setSelection(604 - AC.iCurrentPage);
 			}
 			CreateFolders();
+			// Set a item click listener, and just Toast the clicked position
+			myHeaderText.setBackgroundColor(R.color.blackblue);
+			g.setOnItemClickListener(new OnItemClickListener() {
+				public void onItemClick(AdapterView parent, View v,
+						int position, long id) {
+					// myHeaderText.setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_settings));
+					myHeaderText.setBackgroundColor(R.color.blackblue); //
+					ShowHeader();
+				}
+			});
 
 		} catch (Throwable t) {
 			Toast.makeText(this, "Request failed: " + t.toString(),
 					Toast.LENGTH_LONG).show();
 		}
+	}
+
+	public void ShowHeader() {
+		if (headerLayout.getVisibility() == View.VISIBLE) {
+			headerLayout.setVisibility(View.GONE);
+			if (AC.AudioOn)
+				recetationLayout.setVisibility(View.GONE);
+		} else {
+			headerLayout.setVisibility(View.VISIBLE);
+			if (AC.AudioOn)
+				recetationLayout.setVisibility(View.VISIBLE);
+		}
+		// Toast.makeText(MainActivity.this,
+		// "Request failed: >>>>>>>>>>.", Toast.LENGTH_LONG).show();
+
 	}
 
 	public void ReadSettings() {
@@ -210,14 +243,19 @@ public class MainActivity extends Activity {
 
 		AC.ScreenOn = mySharedPreferences.getBoolean("screenon_preference",
 				false);
+		AC.CurrentImageType = mySharedPreferences.getString(
+				"currentimagetype_preference", AC.CurrentImageType);
+
 		// Toast.makeText(this,
 		// "Request failed: " + Integer.toString(AC.iLanguage),
 		// Toast.LENGTH_LONG).show();
-		LinearLayout lay = (LinearLayout) findViewById(R.id.RecetationLayout);
+		recetationLayout = (LinearLayout) findViewById(R.id.RecetationLayout);
+		headerLayout = (LinearLayout) findViewById(R.id.HeaderLayout);
+
 		if (AC.AudioOn)
-			lay.setVisibility(1);
+			recetationLayout.setVisibility(1);
 		else
-			lay.setVisibility(View.GONE);
+			recetationLayout.setVisibility(View.GONE);
 		// Toast.makeText(this,
 		// "Request failed: " + Boolean.toString(AC.AudioOn),
 		// Toast.LENGTH_LONG).show();
@@ -239,6 +277,7 @@ public class MainActivity extends Activity {
 		editor.putString("language_preference", Integer.toString(AC.iLanguage));
 		editor.putBoolean("screenon_preference", AC.ScreenOn);
 		editor.putBoolean("audioon_preference", AC.AudioOn);
+		editor.putString("currentimagetype_preference", AC.CurrentImageType);
 		//
 		editor.commit();
 
@@ -251,6 +290,10 @@ public class MainActivity extends Activity {
 		file.mkdirs();
 		file = new File(baseDir + "img/");
 		file.mkdirs();
+		file = new File(baseDir + "img/0/");
+		file.mkdirs();
+		file = new File(baseDir + "img/1/");
+		file.mkdirs();
 		file = new File(baseDir + "dictionary/");
 		file.mkdirs();
 		file = new File(baseDir + "taareef/");
@@ -261,6 +304,31 @@ public class MainActivity extends Activity {
 		file.mkdirs();
 		file = new File(baseDir + "Audio/Mashary");
 		file.mkdirs();
+		file = new File(baseDir + "imgTypes");
+		file.mkdirs();
+		//
+		File f = new File(baseDir + "imgTypes/img_1_50");
+		if (f.exists()) {
+			ImageManager.saveToSDCard(BitmapFactory.decodeResource(
+					this.getResources(), R.drawable.img_no), "no", false);
+			ImageManager.saveToSDCard(BitmapFactory.decodeResource(
+					this.getResources(), R.drawable.img_0_50), "0", true);
+			ImageManager.saveToSDCard(BitmapFactory.decodeResource(
+					this.getResources(), R.drawable.img_1_50), "1", true);
+		}
+	}
+
+	public void fixImagesForOldVersion() {
+
+		File folder = new File(baseDir + "img/");
+		File[] files = folder.listFiles(new imgFilter());
+		// }
+		// Move old files to "\img\0" folder
+		for (int i = 1; i < files.length; i++) {
+			if (!files[i].getName().equals("no.img"))
+				files[i].renameTo(new File(baseDir + "img/0", files[i]
+						.getName()));
+		}
 
 	}
 
@@ -268,7 +336,7 @@ public class MainActivity extends Activity {
 	public void onStop() {
 		AC.saveBookmarks(g.getSelectedItemPosition());
 		WriteSettings();
-		//StopRecitation(false);
+		// StopRecitation(false);
 		super.onStop();
 	}
 
@@ -503,7 +571,7 @@ public class MainActivity extends Activity {
 
 			// Toast.makeText(this,Integer.toString(AC.iCurrentAya),
 			// Toast.LENGTH_LONG).show();
-			PrintAya(AC.iCurrentAya);
+			PrintAya(AC.iCurrentPage, AC.iCurrentAya);
 			// buttonPlayPause.set(Integer.toString(AC.iCurrentAya));
 
 			File f = new File(strCurrentAudioFilePath);
@@ -613,7 +681,7 @@ public class MainActivity extends Activity {
 	private void StopRecitation(Boolean bChangeCurrentAya) {
 		if (bChangeCurrentAya) {
 			AC.iCurrentAya = -1;
-			PrintAya(0);
+			PrintAya(AC.iCurrentPage, 0);
 		}// Toast.makeText(this, "OnStopRecitation", Toast.LENGTH_LONG).show();
 		if (mediaPlayer != null)
 			mediaPlayer.stop();
@@ -673,18 +741,15 @@ public class MainActivity extends Activity {
 		}
 	}
 
-	private void PrintAya(Integer iAya) {
-		if (AC.iCurrenSura == 9)
-			iAya += 1;
-		vwCurrentAya.setText(Integer.toString(AC.iCurrentPage) + "/"
-				+ Integer.toString(iAya));
-	}
-
 	private void PrintAya(Integer iPage, Integer iAya) {
 		if (AC.iCurrenSura == 9)
 			iAya += 1;
-		vwCurrentAya.setText(Integer.toString(iPage) + "/"
-				+ Integer.toString(iAya));
+		String strHeader = AC.GetChapter(iPage);
+		strHeader += "     " + AC.GetSora(iPage);
+		// strHeader += "\r\n" + AC.GetSora(iPage);
+		strHeader += "\r\n" + Integer.toString(iPage) + "/"
+				+ Integer.toString(iAya);
+		myHeaderText.setText(strHeader);
 	}
 
 	//
@@ -759,20 +824,12 @@ public class MainActivity extends Activity {
 			PrintAya(iPage, iAya);
 			// to let it work like Arabic we will subtract position by 604
 			// imgView.setImageResource(mImageIds[position]);
+			Integer iImage = 604 - position;
+			String strFile = baseImgDir + AC.CurrentImageType + "/"
+					+ Integer.toString(iImage) + ".img";
 
-			String strFile = baseImgDir + Integer.toString(604 - position)
-					+ ".img";
-			String strFileOld = baseImgDir + Integer.toString(604 - position)
-					+ ".gif";
-			File f = new File(strFileOld);
+			File f = new File(strFile);
 
-			if (f.exists()) {
-				f.renameTo(new File(strFile));
-				f.delete();
-			}
-
-			f = new File(strFile);
-			// http://dl.dropbox.com/u/" + AC.Dropbox + "/img/9.gif
 			if (!f.exists()) {
 				// ImageManager.DownloadFromUrl(Integer.toString(position),strFile);
 				// callOptionsItemSelected(null, R.id.mnu_settings);
@@ -785,8 +842,8 @@ public class MainActivity extends Activity {
 			}
 
 			Display display = getWindowManager().getDefaultDisplay();
-			int width = display.getWidth();
-			int height = display.getHeight();
+			width = display.getWidth();
+			height = display.getHeight();
 			// matrix.setScale(scale, scale);
 			imgView.setPadding(1, 1, 1, 1);
 			int iMinus = 50;
@@ -823,14 +880,43 @@ public class MainActivity extends Activity {
 			imgView.setBackgroundColor(getTitleColor());
 
 			// imgView.setBackgroundResource(mGalleryItemBackground);
+			//
+			if (AC.AudioOn) {
+				imgView.setOnClickListener(new OnClickListener() {
+					public void onClick(View v) {
+						ShowHeader();
+						if (X > 0 && X < 40)
+							Toast.makeText(v.getContext(), "left",
+									Toast.LENGTH_SHORT).show();
+						if (X > width - 40 && X < width)
+							Toast.makeText(v.getContext(), "right",
+									Toast.LENGTH_SHORT).show();
+					}
+				});
+			}
+			// else
+			// imgView.setOnClickListener(null);
 
-			// imgView. setOnLongClickListener(new OnLongClickListener() {
-			// @Override
-			// public boolean onLongClick(View v) {
-			// MainActivity ma = (MainActivity) mContext;
-			// return ma.callOptionsItemSelected(null, R.id.mnu_bookmark);
-			// }
-			// });
+			//
+			imgView.setOnTouchListener(new OnTouchListener() {
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					// ImageView img = (ImageView) v;
+					final int action = event.getAction();
+					switch (action) {
+
+					// MotionEvent class constant signifying a finger-down event
+
+					case MotionEvent.ACTION_DOWN: {
+						X = event.getX();
+						Y = event.getY();
+					}
+					}
+					X = event.getX();
+					Y = event.getY();
+					return false;
+				}
+			});
 
 			return imgView;
 		}
