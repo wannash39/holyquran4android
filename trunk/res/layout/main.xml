@@ -13,6 +13,20 @@
 			android:layout_height="fill_parent" android:gravity="fill"></Gallery>
 
 	</ScrollView>
+	<RelativeLayout android:layout_height="wrap_content"
+		android:layout_width="fill_parent">
+
+		<LinearLayout android:id="@+id/HeaderLayout"
+			android:layout_height="wrap_content" android:layout_width="fill_parent"
+			android:layout_alignParentTop="true">
+			<TextView  android:id="@+id/txtHeader"
+				android:layout_width="fill_parent" android:layout_height="wrap_content"
+				android:gravity="center_vertical|center_horizontal"
+				android:textColor="@color/whiteyellow" />
+
+		</LinearLayout>
+	</RelativeLayout>
+
 
 	<RelativeLayout android:layout_height="wrap_content"
 		android:layout_width="fill_parent">
@@ -23,28 +37,24 @@
 
 			<ImageButton android:layout_width="wrap_content"
 				android:onClick="OnRecitationSettings" android:src="@drawable/recsettings"
-				android:id="@+id/buttonRecitationSettings" android:layout_height="wrap_content" />
-
-
-			<Button android:layout_width="wrap_content" android:id="@+id/vwCurrentAya"
-				android:layout_height="wrap_content" android:text="0" />
+				android:background="@null" 	android:id="@+id/buttonRecitationSettings" android:layout_height="wrap_content" 
+			android:visibility="gone"	/>
 
 			<ImageButton android:layout_width="wrap_content"
 				android:onClick="OnStopRecitation" android:src="@drawable/stop"
-				android:id="@+id/buttonStop" android:layout_height="wrap_content" />
+				android:background="@null" android:id="@+id/buttonStop" android:layout_height="wrap_content" />
 
 			<ImageButton android:layout_width="wrap_content"
 				android:id="@+id/buttonPlayBack" android:layout_height="wrap_content"
-				android:onClick="OnPlayRecitationBack" android:src="@drawable/recback" />
+				android:background="@null" 	android:onClick="OnPlayRecitationBack" android:src="@drawable/recback" />
 
 			<ImageButton android:layout_width="wrap_content"
 				android:id="@+id/buttonPlayPause" android:layout_height="wrap_content"
 				android:onClick="OnPlayRecitation" android:src="@drawable/play"
-				android:layout_alignParentRight="true" />
+				android:background="@null" 	android:layout_alignParentRight="true" />
 			<ImageButton android:layout_width="wrap_content"
 				android:id="@+id/buttonPlayNext" android:layout_height="wrap_content"
-				android:onClick="OnPlayRecitationNext" android:src="@drawable/recnext"
-		/>
+				android:background="@null" 	android:onClick="OnPlayRecitationNext" android:src="@drawable/recnext" />
 
 		</LinearLayout>
 	</RelativeLayout>
