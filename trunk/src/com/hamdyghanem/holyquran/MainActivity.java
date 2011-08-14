@@ -54,16 +54,19 @@ public class MainActivity extends Activity {
 	public static final String MYPREFS = "mySharedPreferences";
 	int mode = Activity.MODE_WORLD_WRITEABLE;
 	int duration = Toast.LENGTH_SHORT;
-	float X = 0f;
-	float Y = 0f;
-	int width = 0;
-	int height = 0;
-	private ApplicationController AC;
-	private Gallery g;
+	
+	
+	int iButtonWidth = 0;
+
+	public ApplicationController AC;
+	public Gallery g;
 	TextView myTitleText;
 	TextView myHeaderText;
 	Typeface arabicFont = null;
 	LinearLayout headerLayout = null;
+	ScrollView scroller = null;
+	int width = 0;
+	int height = 0;
 	LinearLayout recetationLayout = null;
 	SharedPreferences mySharedPreferences;
 	SharedPreferences.Editor editor;
@@ -97,13 +100,14 @@ public class MainActivity extends Activity {
 			// Hide title
 			requestWindowFeature(Window.FEATURE_NO_TITLE);
 			setContentView(R.layout.main);
-
 			pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 			this.mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK,
 					"My Tag");
 			// /////////CHANGE THE TITLE BAR/////////////// Typeface
 			arabicFont = Typeface.createFromAsset(getAssets(),
 					"fonts/DroidSansArabic.ttf");
+			getTitleColor();
+			
 			AC = (ApplicationController) getApplicationContext();
 			/*
 			 * if (customTitleSupported) {
@@ -123,6 +127,18 @@ public class MainActivity extends Activity {
 			// Begin
 			// RecetationLayout
 			myHeaderText = (TextView) findViewById(R.id.txtHeader);
+			//
+			Display display = getWindowManager().getDefaultDisplay();
+			width = display.getWidth();
+			height = display.getHeight();
+			iButtonWidth = 70;
+			// Toast.makeText(this,
+			// Integer.toString(iButtonWidth),Toast.LENGTH_LONG).show();
+			if (AC.ManualNavigation)
+				myHeaderText.setWidth(width - (iButtonWidth * 2));
+			else
+				myHeaderText.setWidth(width);
+
 			buttonPlayPause = (ImageButton) findViewById(R.id.buttonPlayPause);
 			buttonRecitationSettings = (ImageButton) findViewById(R.id.buttonRecitationSettings);
 			buttonRecitationSettings.setVisibility(View.GONE);
@@ -144,6 +160,7 @@ public class MainActivity extends Activity {
 			Boolean bFirstTime = false;
 			baseDir = Environment.getExternalStorageDirectory()
 					.getAbsolutePath() + "/hQuran/";
+			CreateFolders();
 			fixImagesForOldVersion();
 
 			File file = new File(baseDir);
@@ -175,11 +192,13 @@ public class MainActivity extends Activity {
 			}
 
 			// Check first time
+
 			AC.ReadBookmarks();
+
 			if (bFirstTime) {
 				// Toast.makeText(this, "not exist",
 				// Toast.LENGTH_LONG).show();
-				CreateFolders();
+				// CreateFolders();
 				// Open settings to load images directly
 				g.setSelection(604);
 				// callOptionsItemSelected(null, R.id.mnu_settings);
@@ -198,7 +217,7 @@ public class MainActivity extends Activity {
 				AC.iCurrenSura = AC.GetSoraIndex(AC.iCurrentPage);
 				g.setSelection(604 - AC.iCurrentPage);
 			}
-			CreateFolders();
+			// CreateFolders();
 			// Set a item click listener, and just Toast the clicked position
 			myHeaderText.setBackgroundColor(R.color.blackblue);
 			g.setOnItemClickListener(new OnItemClickListener() {
@@ -232,7 +251,6 @@ public class MainActivity extends Activity {
 	}
 
 	public void ReadSettings() {
-
 		String strLanguage = mySharedPreferences.getString(
 				"language_preference", "0");
 		AC.iLanguage = Integer.parseInt(strLanguage);
@@ -240,6 +258,8 @@ public class MainActivity extends Activity {
 				"LastVersion_preference", "0");
 		AC.AudioOn = mySharedPreferences.getBoolean("audioon_preference",
 				AC.AudioOn);
+		AC.ManualNavigation = mySharedPreferences.getBoolean(
+				"manualnavigation_preference", AC.ManualNavigation);
 
 		AC.ScreenOn = mySharedPreferences.getBoolean("screenon_preference",
 				false);
@@ -251,11 +271,22 @@ public class MainActivity extends Activity {
 		// Toast.LENGTH_LONG).show();
 		recetationLayout = (LinearLayout) findViewById(R.id.RecetationLayout);
 		headerLayout = (LinearLayout) findViewById(R.id.HeaderLayout);
+		scroller = (ScrollView) findViewById(R.id.ScrollView01);
 
 		if (AC.AudioOn)
 			recetationLayout.setVisibility(1);
 		else
 			recetationLayout.setVisibility(View.GONE);
+
+		if (AC.ManualNavigation) {
+			findViewById(R.id.buttonNavNext).setVisibility(View.VISIBLE);
+			findViewById(R.id.buttonNavBack).setVisibility(View.VISIBLE);
+			myHeaderText.setWidth(width - (iButtonWidth * 2));
+		} else {
+			findViewById(R.id.buttonNavNext).setVisibility(View.GONE);
+			findViewById(R.id.buttonNavBack).setVisibility(View.GONE);
+			myHeaderText.setWidth(width);
+		}
 		// Toast.makeText(this,
 		// "Request failed: " + Boolean.toString(AC.AudioOn),
 		// Toast.LENGTH_LONG).show();
@@ -277,6 +308,15 @@ public class MainActivity extends Activity {
 		editor.putString("language_preference", Integer.toString(AC.iLanguage));
 		editor.putBoolean("screenon_preference", AC.ScreenOn);
 		editor.putBoolean("audioon_preference", AC.AudioOn);
+		editor.putBoolean("manualnavigation_preference", AC.ManualNavigation);
+		editor.putString("currentimagetype_preference", AC.CurrentImageType);
+		//
+		editor.commit();
+
+	}
+
+	public void WriteSettings1() {
+		SharedPreferences.Editor editor = mySharedPreferences.edit();
 		editor.putString("currentimagetype_preference", AC.CurrentImageType);
 		//
 		editor.commit();
@@ -308,7 +348,7 @@ public class MainActivity extends Activity {
 		file.mkdirs();
 		//
 		File f = new File(baseDir + "imgTypes/img_1_50");
-		if (f.exists()) {
+		if (!f.exists()) {
 			ImageManager.saveToSDCard(BitmapFactory.decodeResource(
 					this.getResources(), R.drawable.img_no), "no", false);
 			ImageManager.saveToSDCard(BitmapFactory.decodeResource(
@@ -455,12 +495,19 @@ public class MainActivity extends Activity {
 				if (!(data == null || data.getExtras() == null)) {
 					Bundle extras = data.getExtras();
 					Integer i = extras.getInt("returnKey");
-
 					g.setSelection(604 - i);
 				}
 			}
 			// Settinngs
 			else if (requestCode == 4) {
+				// Toast.makeText(this, AC.CurrentImageType,
+				// Toast.LENGTH_LONG).show();
+				// AC.CurrentImageType = "1";
+				// Save CurrentImageType first
+				WriteSettings1();
+				// refresh the gallery
+				((BaseAdapter) g.getAdapter()).notifyDataSetChanged();
+				//
 				ReadSettings();
 				WriteSettings();
 				// Toast.makeText(this, Boolean.toString(AC.ScreenOn),
@@ -478,7 +525,8 @@ public class MainActivity extends Activity {
 					AC.iLanguage = i;
 					WriteSettings();
 				}
-			}/*
+			}
+			/*
 			 * else if (requestCode == 4) { this.mWakeLock =
 			 * pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag"); if
 			 * (AC.bScreenOn) { this.mWakeLock.acquire(); } else
@@ -492,6 +540,18 @@ public class MainActivity extends Activity {
 						Toast.LENGTH_LONG).show();
 			}
 		}
+	}
+
+	public void OnNavNext(View view) {
+
+		AC.iCurrentPage -= 1;
+		g.setSelection(604 - AC.iCurrentPage);
+
+	}
+
+	public void OnNavBack(View view) {
+		AC.iCurrentPage += 1;
+		g.setSelection(604 - AC.iCurrentPage);
 	}
 
 	PhoneStateListener phoneStateListener = new PhoneStateListener() {
@@ -741,7 +801,7 @@ public class MainActivity extends Activity {
 		}
 	}
 
-	private void PrintAya(Integer iPage, Integer iAya) {
+	public void PrintAya(Integer iPage, Integer iAya) {
 		if (AC.iCurrenSura == 9)
 			iAya += 1;
 		String strHeader = AC.GetChapter(iPage);
@@ -771,155 +831,4 @@ public class MainActivity extends Activity {
 		callOptionsItemSelected(null, item.getItemId());
 		return true;
 	}
-
-	public class ImageAdapter extends BaseAdapter {
-		String baseImgDir = Environment.getExternalStorageDirectory()
-				.getAbsolutePath() + "/hQuran/img/";
-		int mGalleryItemBackground;
-		// Toast.makeText(this, "Request failed: " + t.toString(),
-		// Toast.LENGTH_LONG).show();
-		// for (Bookmark b : bookmarkUtitliy.arr) {
-		// String str = b.getBookmarkName();
-
-		private Context mContext;
-		File path = Environment.getExternalStorageDirectory();
-
-		public ImageAdapter(Context c) {
-			mContext = c;
-
-			// See res/values/attrs.xml for the <declare-styleable> that defines
-			// Gallery1.
-			// TypedArray a = obtainStyledAttributes(R.styleable.Gallery01);
-			// mGalleryItemBackground = a.getResourceId(
-			// R.styleable.Gallery01_android_galleryItemBackground, 0);
-			// a.recycle();
-		}
-
-		public int getCount() {
-			// return mImageIds.length;
-			return 605;
-		}
-
-		public Object getItem(int position) {
-			return position;
-		}
-
-		public long getItemId(int position) {
-			return position;
-		}
-
-		public View getView(int position, View convertView, ViewGroup parent) {
-			ImageView imgView = new ImageView(mContext);
-			// imgView.setScaleType(ScaleType.FIT_XY);
-			// if (!bNavigateByCode) {
-			// StopRecitation(true);
-			// bNavigateByCode = false;
-			// }
-			Integer iPage = 604 - g.getSelectedItemPosition();
-			Integer iAya = AC.iCurrentAya;
-			if (iAya == -1)
-				iAya = 0;
-			// myTitleText.setText(AC.getTextbyLanguage( R.string.holyquran) +
-			// "/" + Integer.toString(iPage)); //
-			PrintAya(iPage, iAya);
-			// to let it work like Arabic we will subtract position by 604
-			// imgView.setImageResource(mImageIds[position]);
-			Integer iImage = 604 - position;
-			String strFile = baseImgDir + AC.CurrentImageType + "/"
-					+ Integer.toString(iImage) + ".img";
-
-			File f = new File(strFile);
-
-			if (!f.exists()) {
-				// ImageManager.DownloadFromUrl(Integer.toString(position),strFile);
-				// callOptionsItemSelected(null, R.id.mnu_settings);
-				strFile = baseImgDir + "no.img";
-				Drawable d = Drawable.createFromPath(strFile);
-				imgView.setImageDrawable(d);
-			} else {
-				Drawable d = Drawable.createFromPath(strFile);
-				imgView.setImageDrawable(d);
-			}
-
-			Display display = getWindowManager().getDefaultDisplay();
-			width = display.getWidth();
-			height = display.getHeight();
-			// matrix.setScale(scale, scale);
-			imgView.setPadding(1, 1, 1, 1);
-			int iMinus = 50;
-
-			if (AC.AudioOn) {
-				// iMinus = iMinus + buttonPlayPause.getHeight();
-				// iMinus =120;
-			}
-			if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-				float myFlo = (float) (width * 1.5);
-				height = (int) myFlo;
-				imgView.setLayoutParams(new Gallery.LayoutParams(width, height
-						- iMinus));
-				imgView.setScaleType(ImageView.ScaleType.FIT_XY);
-			} else { //
-				imgView.setLayoutParams(new Gallery.LayoutParams(width, //
-						height - iMinus));
-				imgView.setScaleType(ImageView.ScaleType.FIT_XY);
-			}
-
-			// imgView.setLayoutParams(new Gallery.LayoutParams(width, height -
-			// 50));
-
-			imgView.setScaleType(ImageView.ScaleType.FIT_XY);
-			// imgView.setScaleType(ScaleType.MATRIX);
-			// Matrix matrix=new Matrix();
-			// imgView.setMinimumWidth(width);
-			// imgView.setMinimumHeight(height);
-
-			// imgView.setMaxWidth(width);
-			// imgView.setMaxHeight(height);
-
-			imgView.setAdjustViewBounds(true);
-			imgView.setBackgroundColor(getTitleColor());
-
-			// imgView.setBackgroundResource(mGalleryItemBackground);
-			//
-			if (AC.AudioOn) {
-				imgView.setOnClickListener(new OnClickListener() {
-					public void onClick(View v) {
-						ShowHeader();
-						if (X > 0 && X < 40)
-							Toast.makeText(v.getContext(), "left",
-									Toast.LENGTH_SHORT).show();
-						if (X > width - 40 && X < width)
-							Toast.makeText(v.getContext(), "right",
-									Toast.LENGTH_SHORT).show();
-					}
-				});
-			}
-			// else
-			// imgView.setOnClickListener(null);
-
-			//
-			imgView.setOnTouchListener(new OnTouchListener() {
-				@Override
-				public boolean onTouch(View v, MotionEvent event) {
-					// ImageView img = (ImageView) v;
-					final int action = event.getAction();
-					switch (action) {
-
-					// MotionEvent class constant signifying a finger-down event
-
-					case MotionEvent.ACTION_DOWN: {
-						X = event.getX();
-						Y = event.getY();
-					}
-					}
-					X = event.getX();
-					Y = event.getY();
-					return false;
-				}
-			});
-
-			return imgView;
-		}
-	}
-
 }
