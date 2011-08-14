@@ -17,8 +17,8 @@ import android.os.Environment;
 import android.util.Log;
 
 public class ImageManager {
-	public static void DownloadFromUrl(String ImageType, String strActivePath,
-			String imgName, String fileName) { // this
+	public static String DownloadFromUrl(String ImageType,
+			String strActivePath, String imgName, String fileName) { // this
 		// is
 		// the
 		// downloader
@@ -31,7 +31,8 @@ public class ImageManager {
 			long startTime = System.currentTimeMillis();
 			// Log.d("ImageManager", "download begining");
 			// Log.d("ImageManager", "download url:" + url);
-			Log.d("ImageManager", "downloaded file name:" + fileName);
+			Log.d("ImageManager", "downloaded file name:" + fileName
+					+ " - url:" + url.toString());
 			/* Open a connection to that URL. */
 			URLConnection ucon = url.openConnection();
 
@@ -58,14 +59,15 @@ public class ImageManager {
 					"download ready in"
 							+ ((System.currentTimeMillis() - startTime) / 1000)
 							+ " sec");
-
+			return "";
 		} catch (IOException e) {
 			Log.d("ImageManager", "Error: " + e);
+			return e.getMessage();
 		}
 
 	}
 
-	public static void DownloadDBFromUrl(String strActivePath) {
+	public static String DownloadDBFromUrl(String strActivePath) {
 		// is // the // downloader // method
 		try {
 			// http://dl.dropbox.com/u/" + strActivePath + "/tafseer/1.TXT
@@ -109,14 +111,15 @@ public class ImageManager {
 					"download ready in"
 							+ ((System.currentTimeMillis() - startTime) / 1000)
 							+ " sec");
-
+			return "";
 		} catch (IOException e) {
 			Log.d("ImageManager", "Error: " + e);
+			return e.getMessage();
 		}
 
 	}
 
-	public static void DownloadActivePath() {
+	public static String DownloadActivePath() {
 		try {
 			// from my gmail dropbox account
 			URL url = new URL("http://dl.dropbox.com/u/27675084/ActivePath.txt");
@@ -159,9 +162,10 @@ public class ImageManager {
 					"download ready in"
 							+ ((System.currentTimeMillis() - startTime) / 1000)
 							+ " sec");
-
+			return "";
 		} catch (IOException e) {
 			Log.d("ImageManager", "Error: " + e);
+			return e.getMessage();
 		}
 
 	}
@@ -190,12 +194,13 @@ public class ImageManager {
 			filoutputStream.close();
 			createdFile.append(externalStorageFile.getAbsolutePath());
 		} catch (IOException e) {
+			return e.getMessage();
 		}
 
 		return createdFile.toString();
 	}
 
-	public static void DownloadTafserFromUrl(String strActivePath,
+	public static String DownloadTafserFromUrl(String strActivePath,
 			String imgName, String fileName) { // this
 		// is // the // downloader // method
 		try {
@@ -233,14 +238,15 @@ public class ImageManager {
 					"download ready in"
 							+ ((System.currentTimeMillis() - startTime) / 1000)
 							+ " sec");
-
+			return "";
 		} catch (IOException e) {
 			Log.d("ImageManager", "Error: " + e);
+			return e.getMessage();
 		}
 
 	}
 
-	public static void DownloadTareefFromUrl(String strActivePath,
+	public static String DownloadTareefFromUrl(String strActivePath,
 			String imgName, String fileName) { // this
 		// is
 		// the
@@ -281,14 +287,15 @@ public class ImageManager {
 					"download ready in"
 							+ ((System.currentTimeMillis() - startTime) / 1000)
 							+ " sec");
-
+			return "";
 		} catch (IOException e) {
 			Log.d("ImageManager", "Error: " + e);
+			return e.getMessage();
 		}
 
 	}
 
-	public static void DownloadDictionaryFromUrl(String strActivePath,
+	public static String DownloadDictionaryFromUrl(String strActivePath,
 			String imgName, String fileName) { // this
 		// is
 		// the
@@ -330,14 +337,15 @@ public class ImageManager {
 					"download ready in"
 							+ ((System.currentTimeMillis() - startTime) / 1000)
 							+ " sec");
-
+			return "";
 		} catch (IOException e) {
 			Log.d("ImageManager", "Error: " + e);
+			return e.getMessage();
 		}
 
 	}
 
-	public static void DownloadAudioFromUrl(String strActivePath,
+	public static String DownloadAudioFromUrl(String strActivePath,
 			String imgName, String fileName) { // this
 		try {
 			URL url = new URL(strActivePath + "/audio/mashary/" + imgName
@@ -378,9 +386,10 @@ public class ImageManager {
 					"download ready in"
 							+ ((System.currentTimeMillis() - startTime) / 1000)
 							+ " sec");
-
+			return "";
 		} catch (IOException e) {
 			Log.d("ImageManager", "Error: " + e);
+			return e.getMessage();
 		}
 
 	}

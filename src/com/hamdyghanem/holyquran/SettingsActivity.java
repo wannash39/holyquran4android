@@ -65,27 +65,35 @@ public class SettingsActivity extends PreferenceActivity {
 		// Root
 		PreferenceScreen root = getPreferenceManager().createPreferenceScreen(
 				this);
-
 		// Inline preferences
 		PreferenceCategory inlinePrefDownload = new PreferenceCategory(this);
-		inlinePrefDownload.setTitle(AC.getTextbyLanguage(R.string.download));
+		inlinePrefDownload.setTitle(AC.getTextbyLanguage(R.string.ImgType));
 		root.addPreference(inlinePrefDownload);
-
 		//
 		PreferenceScreen intentPref = getPreferenceManager()
 				.createPreferenceScreen(this);
-		Intent intent = new Intent(this, DownloadActivity.class);
 		// intent.putExtra( EXTRAS_KEY, extras );
+		Intent intent = new Intent(this, SelectImageType.class);
 		intentPref.setIntent(intent);
-		intentPref.setTitle(AC.getTextbyLanguage(R.string.download));
+		intentPref.setTitle(AC.getTextbyLanguage(R.string.ImgType));
 		// intentPref.setKey("language_preference");
-		intentPref.setSummary(AC.getTextbyLanguage(R.string.download));
+		intentPref.setSummary(AC.getTextbyLanguage(R.string.ImgTypeSumm));
 		inlinePrefDownload.addPreference(intentPref);
 		//
+		//
+		inlinePrefDownload = new PreferenceCategory(this);
+		inlinePrefDownload.setTitle(AC.getTextbyLanguage(R.string.download));
+		root.addPreference(inlinePrefDownload);
+		intentPref = getPreferenceManager().createPreferenceScreen(this);
+		intent = new Intent(this, DownloadActivity.class);
+		intentPref.setIntent(intent);
+		intentPref.setTitle(AC.getTextbyLanguage(R.string.download));
+		intentPref.setSummary(AC.getTextbyLanguage(R.string.downloadSumm));
+		inlinePrefDownload.addPreference(intentPref);
+		// /
 		PreferenceCategory inlinePrefSetting = new PreferenceCategory(this);
 		inlinePrefSetting.setTitle(AC.getTextbyLanguage(R.string.settings));
 		root.addPreference(inlinePrefSetting);
-
 		//
 		//
 		ListPreference listPref = new ListPreference(this);
@@ -109,6 +117,12 @@ public class SettingsActivity extends PreferenceActivity {
 		inlinePrefSetting.addPreference(togglePref);
 		//
 		togglePref = new CheckBoxPreference(this);
+		togglePref.setKey("manualnavigation_preference");
+		togglePref.setTitle(AC.getTextbyLanguage(R.string.ManualNav));
+		togglePref.setSummary(AC.getTextbyLanguage(R.string.ManualNavSum));
+		inlinePrefSetting.addPreference(togglePref);
+		//
+		togglePref = new CheckBoxPreference(this);
 		togglePref.setKey("screenon_preference");
 		togglePref.setTitle(AC.getTextbyLanguage(R.string.ScreenOn));
 		togglePref.setSummary(AC.getTextbyLanguage(R.string.ScreenOnAlert));
@@ -116,5 +130,4 @@ public class SettingsActivity extends PreferenceActivity {
 
 		return root;
 	}
-
 }
