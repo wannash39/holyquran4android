@@ -1,7 +1,6 @@
 package com.hamdyghanem.holyquran;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 import com.hamdyghanem.holyquran.R;
 import android.app.Activity;
@@ -9,10 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
@@ -20,42 +17,30 @@ import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Display;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
-import android.view.View.OnClickListener;
-
-import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.Gallery;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ImageView.ScaleType;
 
 public class MainActivity extends Activity {
 	public static final String MYPREFS = "mySharedPreferences";
 	int mode = Activity.MODE_WORLD_WRITEABLE;
 	int duration = Toast.LENGTH_SHORT;
-	
-	
+
 	int iButtonWidth = 0;
 
 	public ApplicationController AC;
@@ -64,7 +49,9 @@ public class MainActivity extends Activity {
 	TextView myHeaderText;
 	Typeface arabicFont = null;
 	LinearLayout headerLayout = null;
-	ScrollView scroller = null;
+	ScrollView scroller1 = null;
+	HorizontalScrollView scroller2 = null;
+
 	int width = 0;
 	int height = 0;
 	LinearLayout recetationLayout = null;
@@ -86,6 +73,7 @@ public class MainActivity extends Activity {
 	private Integer iLastAya = 0;
 	private String baseDir = "";
 	//
+	private long lastTouchTime = -1;
 
 	protected PowerManager pm;
 	protected PowerManager.WakeLock mWakeLock;
@@ -107,7 +95,7 @@ public class MainActivity extends Activity {
 			arabicFont = Typeface.createFromAsset(getAssets(),
 					"fonts/DroidSansArabic.ttf");
 			getTitleColor();
-			
+
 			AC = (ApplicationController) getApplicationContext();
 			/*
 			 * if (customTitleSupported) {
@@ -150,10 +138,10 @@ public class MainActivity extends Activity {
 			// Reference the Gallery view
 			g = (Gallery) findViewById(R.id.Gallery01);
 			g.setAdapter(new ImageAdapter(this));
-			registerForContextMenu(g);
-			LayoutInflater inflater = (LayoutInflater) this
-					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			inflater.inflate(R.layout.main, g, false);
+			// registerForContextMenu(g);
+			// LayoutInflater inflater = (LayoutInflater) this
+			// .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			// inflater.inflate(R.layout.main, g, false);
 
 			// Set the adapter to our custom adapter (below)
 			//
@@ -161,7 +149,7 @@ public class MainActivity extends Activity {
 			baseDir = Environment.getExternalStorageDirectory()
 					.getAbsolutePath() + "/hQuran/";
 			CreateFolders();
-			fixImagesForOldVersion();
+			// fixImagesForOldVersion();
 
 			File file = new File(baseDir);
 			if (!file.exists()) {
@@ -173,6 +161,7 @@ public class MainActivity extends Activity {
 			// Toast.makeText(this, AC.ActivePath, Toast.LENGTH_LONG).show();
 			mySharedPreferences = PreferenceManager
 					.getDefaultSharedPreferences(this);
+			//
 			ReadSettings();
 			// message for the new version
 			String versionName = this.getPackageManager().getPackageInfo(
@@ -180,7 +169,7 @@ public class MainActivity extends Activity {
 			String strNewFeatures = "New features : You can click to show and hide the header and footer";
 			if (!versionName.equals(AC.LastVersion)) {
 				if (AC.iLanguage == 0)
-					strNewFeatures = "«·„„Ì“«  «·ÃœÌœ: »«·÷€ÿ ⁄·Ì «·’Ê—… Ì„ﬂ‰ﬂ «Œ›«¡ «Ê «ŸÂ«¡ ‘—Ìÿ  «·„⁄·Ê„«  »«·√⁄·Ï Ê «·√”›· ";
+					strNewFeatures = "";
 				Toast.makeText(
 						this,
 						AC.getTextbyLanguage(R.string.newversion)
@@ -226,6 +215,9 @@ public class MainActivity extends Activity {
 					// myHeaderText.setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_settings));
 					myHeaderText.setBackgroundColor(R.color.blackblue); //
 					ShowHeader();
+					DoubleClick();
+					//
+
 				}
 			});
 
@@ -233,6 +225,27 @@ public class MainActivity extends Activity {
 			Toast.makeText(this, "Request failed: " + t.toString(),
 					Toast.LENGTH_LONG).show();
 		}
+	}
+
+	public void DoubleClick() {
+
+		long thisTime = System.currentTimeMillis();
+		if (thisTime - lastTouchTime < 250) {
+			// Double tap
+			startActivityForResult(new Intent(this, ZoomActivity.class), 6);
+			// if (zoomLayer.getVisibility() ==
+			// View.GONE) zoomLayer.setVisibility(View.VISIBLE); else
+			// * zoomLayer.setVisibility(View.GONE);
+			// Toast.makeText(MainActivity.this,
+			// * "Double tab", Toast.LENGTH_SHORT).show();
+
+			lastTouchTime = -1;
+		} else {
+			// Too slow :)
+			lastTouchTime = thisTime;
+			// zoomLayer.setVisibility(View.GONE);
+		}
+
 	}
 
 	public void ShowHeader() {
@@ -265,14 +278,21 @@ public class MainActivity extends Activity {
 				false);
 		AC.CurrentImageType = mySharedPreferences.getString(
 				"currentimagetype_preference", AC.CurrentImageType);
-
+		// Zoom
+		AC.imageScale = mySharedPreferences.getFloat("zoom_preference",
+				AC.imageScale);
 		// Toast.makeText(this,
 		// "Request failed: " + Integer.toString(AC.iLanguage),
 		// Toast.LENGTH_LONG).show();
 		recetationLayout = (LinearLayout) findViewById(R.id.RecetationLayout);
 		headerLayout = (LinearLayout) findViewById(R.id.HeaderLayout);
-		scroller = (ScrollView) findViewById(R.id.ScrollView01);
-
+		scroller1 = (ScrollView) findViewById(R.id.ScrollView01);
+		// scroller2 = (HorizontalScrollView) findViewById(R.id.ScrollView02);
+		// //
+		//Toast.makeText(this,
+			//	"Request failed: " + String.valueOf(AC.imageScale),
+			//	Toast.LENGTH_LONG).show();
+		
 		if (AC.AudioOn)
 			recetationLayout.setVisibility(1);
 		else
@@ -310,6 +330,8 @@ public class MainActivity extends Activity {
 		editor.putBoolean("audioon_preference", AC.AudioOn);
 		editor.putBoolean("manualnavigation_preference", AC.ManualNavigation);
 		editor.putString("currentimagetype_preference", AC.CurrentImageType);
+		editor.putFloat("zoom_preference", AC.imageScale);
+
 		//
 		editor.commit();
 
@@ -318,6 +340,8 @@ public class MainActivity extends Activity {
 	public void WriteSettings1() {
 		SharedPreferences.Editor editor = mySharedPreferences.edit();
 		editor.putString("currentimagetype_preference", AC.CurrentImageType);
+		editor.putFloat("zoom_preference", AC.imageScale);
+
 		//
 		editor.commit();
 
@@ -325,27 +349,38 @@ public class MainActivity extends Activity {
 
 	private void CreateFolders() {
 		File file = new File(baseDir);
-		file.mkdirs();
+		if (!file.exists())
+			file.mkdirs();
 		file = new File(baseDir + "tafseer/");
-		file.mkdirs();
+		if (!file.exists())
+			file.mkdirs();
 		file = new File(baseDir + "img/");
-		file.mkdirs();
+		if (!file.exists())
+			file.mkdirs();
 		file = new File(baseDir + "img/0/");
-		file.mkdirs();
+		if (!file.exists())
+			file.mkdirs();
 		file = new File(baseDir + "img/1/");
-		file.mkdirs();
+		if (!file.exists())
+			file.mkdirs();
 		file = new File(baseDir + "dictionary/");
-		file.mkdirs();
+		if (!file.exists())
+			file.mkdirs();
 		file = new File(baseDir + "taareef/");
-		file.mkdirs();
+		if (!file.exists())
+			file.mkdirs();
 		file = new File(baseDir + "English/");
-		file.mkdirs();
+		if (!file.exists())
+			file.mkdirs();
 		file = new File(baseDir + "Audio/");
-		file.mkdirs();
+		if (!file.exists())
+			file.mkdirs();
 		file = new File(baseDir + "Audio/Mashary");
-		file.mkdirs();
+		if (!file.exists())
+			file.mkdirs();
 		file = new File(baseDir + "imgTypes");
-		file.mkdirs();
+		if (!file.exists())
+			file.mkdirs();
 		//
 		File f = new File(baseDir + "imgTypes/img_1_50");
 		if (!f.exists()) {
@@ -525,13 +560,19 @@ public class MainActivity extends Activity {
 					AC.iLanguage = i;
 					WriteSettings();
 				}
+			} else if (requestCode == 6) {
+				//if (!(data == null || data.getExtras() == null)) {
+					// Bundle extras = data.getExtras();
+					// Integer i = extras.getInt("returnKey");
+					// AC.iLanguage = i;
+					WriteSettings1();
+					// refresh the gallery
+					((BaseAdapter) g.getAdapter()).notifyDataSetChanged();
+					//
+					ReadSettings();
+					WriteSettings();
+				//}
 			}
-			/*
-			 * else if (requestCode == 4) { this.mWakeLock =
-			 * pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag"); if
-			 * (AC.bScreenOn) { this.mWakeLock.acquire(); } else
-			 * this.mWakeLock.release(); }
-			 */
 
 		} catch (Throwable t) {
 			if (requestCode == 4) {
@@ -805,7 +846,9 @@ public class MainActivity extends Activity {
 		if (AC.iCurrenSura == 9)
 			iAya += 1;
 		String strHeader = AC.GetChapter(iPage);
-		strHeader += "     " + AC.GetSora(iPage);
+		String strSuraName = AC.GetSora(iPage);
+		strHeader += " ( " + Integer.toString(AC.iCurrenSura) + " ) "
+				+ strSuraName;
 		// strHeader += "\r\n" + AC.GetSora(iPage);
 		strHeader += "\r\n" + Integer.toString(iPage) + "/"
 				+ Integer.toString(iAya);

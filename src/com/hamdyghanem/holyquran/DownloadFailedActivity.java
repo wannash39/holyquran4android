@@ -1,31 +1,18 @@
 package com.hamdyghanem.holyquran;
 
-import java.io.File;
 
 import com.hamdyghanem.holyquran.R;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Intent;
+
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
-import android.view.View;
 import android.view.Window;
-import android.view.View.OnClickListener;
 import android.view.WindowManager.LayoutParams;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -74,7 +61,7 @@ public class DownloadFailedActivity extends Activity {
 			strAbout += "<font color='green'>";
 			strAbout += "  <br />";
 			if (AC.iLanguage == 0) {
-				strAbout += "  äÙÑÇğ ááÊÍãíá Úáí ÇáÎÇÏã äÃÓİ áÚÏã ÊãßääÇ ãä ÊäÒíá ÇáãáİÇÊ ãä ÇáãæŞÚ íãßäß ÇáÏÎæá Úáí ÕİÍÉ ÇáÈÑäÇãÌ Úáí ÇáİíÓ Èæß áÊÌÏ ÑæÇÈØ ãÈÇÔÑÉ æ ßíİíÉ ÊäÒíáåÇ Úáí ÇáÌæÇá <br />";
+				strAbout += "  Ù†Ø¸Ø±Ø§ Ù„Ù„ØªØ­Ù…Ù„ Ø¹Ù„ÙŠ Ø§Ù„Ø³ÙŠÙÙŠØ± Ù†Ø±Ø¬Ùˆ Ø§Ù„Ø°Ø§Ù‡Ø¨ Ù„ØµÙØ­Ø© Ø§Ù„Ø¨Ø±Ù†Ø§Ù…Ø¬ Ø¹Ù„ÙŠ Ø§Ù„ÙÙŠØ³ Ø¨ÙˆÙƒ Ù„Ù„Ø­ØµÙˆÙ„ Ø¹Ù„ÙŠ Ø±ÙˆØ§Ø¨Ø· Ù…Ø¨Ø§Ø´Ø±Ø© <br />";
 
 			} else {
 				strAbout += " Due to overload on the server we apologise that you could not download from your mobile , to get direct links and the way you install it please visit us on our page on facbook  <br />";

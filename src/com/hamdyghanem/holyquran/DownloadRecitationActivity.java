@@ -87,45 +87,12 @@ public class DownloadRecitationActivity extends Activity {
 			((Button) findViewById(R.id.btndownloadaudioquran)).setText(AC
 					.getTextbyLanguage(R.string.btndownloadaudioquran));
 
-			((Button) findViewById(R.id.btndownloadaudiosura))
-					.setVisibility(View.GONE);
-			((Button) findViewById(R.id.btndownloadaudioquran))
-					.setVisibility(View.GONE);
-
-			TextView lbl = (TextView) findViewById(R.id.txtRecitationDownload);
-			lbl.setTypeface(arabicFont);
-
-			String strAbout = "<center><H1>";
-			strAbout += "<font color='green'>";
-			strAbout += "  <br />";
-			if (AC.iLanguage == 0) {
-				strAbout += "  ‰Ÿ—« ·· Õ„Ì· ⁄·Ì «·Œ«œ„ ‰√”› ·⁄œ„  „ﬂ‰‰« „‰  ‰“Ì· „·›«  «· ·«Ê… „‰ «·„Êﬁ⁄ Ì„ﬂ‰ﬂ «·œŒÊ· ⁄·Ì ’›Õ… «·»—‰«„Ã ⁄·Ì «·›Ì” »Êﬂ · Ãœ —Ê«»ÿ „»«‘—… Ê ﬂÌ›Ì…  ‰“Ì·Â« ⁄·Ì «·ÃÊ«· <br />";
-
-			} else {
-				strAbout += " Due to overload on the server we apologise that you could not download from your mobile , to get direct links and the way you install it please visit us on our page on facbook  <br />";
-
-			}
-			strAbout += "  <br />";
-			strAbout += "<a href=\'http://www.facebook.com/HolyQuran4Android'>www.facebook.com/HolyQuran4Android </a> <br />";
-			strAbout += "<br />";
-
-			strAbout += "</font>";
-			//
-			lbl.setSingleLine(false);
-			lbl.setMovementMethod(LinkMovementMethod.getInstance());
-			lbl.setText(Html.fromHtml(strAbout));
-			lbl.setGravity(Gravity.CENTER);
-			lbl.setTextColor(getResources().getColor(R.color.blackblue));
-			/*
-			 * chkScreenOn = ((CheckBox) findViewById(R.id.chkScreenOn));
-			 * chkScreenOn.setTypeface(arabicFont);
-			 * chkScreenOn.setText(AC.getTextbyLanguage(R.string.ScreenOn));
-			 */
 			//
 			Display display = getWindowManager().getDefaultDisplay();
 			((Button) findViewById(R.id.btndownloadaudiosura)).setWidth(display
 					.getWidth());
-			lbl.setWidth(display.getWidth());
+			((Button) findViewById(R.id.btndownloadaudioquran))
+					.setWidth(display.getWidth());
 
 			baseDir = Environment.getExternalStorageDirectory()
 					.getAbsolutePath() + "/hQuran/Audio/Mashary/";
@@ -151,8 +118,17 @@ public class DownloadRecitationActivity extends Activity {
 					Toast.LENGTH_LONG).show();
 		} else
 			AC.GetActivePath();
+		// Check u can download from the path
+		baseDir = Environment.getExternalStorageDirectory().getAbsolutePath()
+		+ "/hQuran/img/0/";
+
+		String strFile = baseDir + "1.img";
+		strResult = ImageManager.DownloadFromUrl("0", AC.ActivePath, "1",
+				strFile);
+		Log.d(">>>>>>>>", strResult);
 		if (strResult.length() > 0) {
-			Toast.makeText(this, strResult, Toast.LENGTH_LONG).show();
+			Toast.makeText(this, AC.getTextbyLanguage(R.string.DownloadFailed),
+					Toast.LENGTH_LONG).show();
 			// startActivity(new Intent(this,
 			// DownloadRecitationActivity.class));
 			Intent intent = new Intent();
@@ -161,6 +137,8 @@ public class DownloadRecitationActivity extends Activity {
 			bOK = false;
 
 		}
+		baseDir = Environment.getExternalStorageDirectory()
+		.getAbsolutePath() + "/hQuran/Audio/Mashary/";
 		return bOK;
 	}
 
@@ -219,13 +197,13 @@ public class DownloadRecitationActivity extends Activity {
 						}
 
 						if (!f.exists()) {
-						strResult=	ImageManager.DownloadAudioFromUrl(AC.ActivePath,
-									strFileName, strFile);
-						if (strResult.length() > 0) {
-							Log.d("DOWNLOAD FAILED", strResult);
-							dialog.cancel();
-							return;
-						}
+							strResult = ImageManager.DownloadAudioFromUrl(
+									AC.ActivePath, strFileName, strFile);
+							if (strResult.length() > 0) {
+								Log.d("DOWNLOAD FAILED", strResult);
+								dialog.cancel();
+								return;
+							}
 						}
 						increment++;
 						// active the update handler
@@ -286,13 +264,13 @@ public class DownloadRecitationActivity extends Activity {
 							}
 
 							if (!f.exists()) {
-							strResult=	ImageManager.DownloadAudioFromUrl(
+								strResult = ImageManager.DownloadAudioFromUrl(
 										AC.ActivePath, strFileName, strFile);
-							if (strResult.length() > 0) {
-								Log.d("DOWNLOAD FAILED", strResult);
-								dialog.cancel();
-								return;
-							}
+								if (strResult.length() > 0) {
+									Log.d("DOWNLOAD FAILED", strResult);
+									dialog.cancel();
+									return;
+								}
 							}
 							increment++;
 							incrementAya++;
