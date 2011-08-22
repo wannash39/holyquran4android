@@ -22,6 +22,8 @@ public class ApplicationController extends Application {
 	public Integer iCurrenSura = 0;
 
 	public Integer iLanguage = 0;
+	public float imageScale = 1;
+
 	public String CurrentImageType = "0";
 	public String LastVersion = "";
 	public Boolean AudioOn = false;
@@ -240,10 +242,13 @@ public class ApplicationController extends Application {
 			iPage = 604;
 		// if (i == 591) i = 5911;
 		// if (i >= 595) i = Integer.parseInt(Integer.toString(i) + "1");
-		;
+		
 		for (Integer i = 0; i < sorapages.length; i++) {
 			if (iPage < Integer.parseInt(sorapages[i]))
+			{
+				iCurrenSura=i;
 				return soranames[i - 1].trim();
+			}
 		}
 		return "";
 	}

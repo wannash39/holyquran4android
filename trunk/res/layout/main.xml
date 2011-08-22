@@ -2,16 +2,21 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
 	android:id="@+id/relative">
-
-
 	<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
 		android:id="@+id/ScrollView01" android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:scrollbars="vertical|horizontal">
+		android:background="@null" android:layout_height="wrap_content"
+
+		android:scrollbars="vertical">
+		<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+			android:id="@+id/ScrollView02" android:layout_width="fill_parent"
+			android:background="@null" android:layout_height="fill_parent">
+
+			<Gallery android:id="@+id/Gallery01" android:layout_width="fill_parent"
 
 
-		<Gallery android:id="@+id/Gallery01" android:layout_width="fill_parent"
-			android:layout_height="fill_parent" android:gravity="fill"></Gallery>
+				android:layout_height="fill_parent" android:gravity="fill"></Gallery>
 
+		</HorizontalScrollView>
 	</ScrollView>
 	<RelativeLayout android:layout_height="wrap_content"
 		android:layout_width="fill_parent">
@@ -19,10 +24,16 @@
 		<LinearLayout android:id="@+id/HeaderLayout"
 			android:layout_height="wrap_content" android:layout_width="fill_parent"
 			android:layout_alignParentTop="true">
-			<TextView  android:id="@+id/txtHeader"
-				android:layout_width="fill_parent" android:layout_height="wrap_content"
-				android:gravity="center_vertical|center_horizontal"
+
+			<ImageButton android:layout_width="wrap_content"
+				android:id="@+id/buttonNavBack" android:layout_height="wrap_content"
+				android:background="@null" android:onClick="OnNavBack" android:src="@drawable/navback" />
+			<TextView android:id="@+id/txtHeader" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:gravity="center_vertical|center_horizontal"
 				android:textColor="@color/whiteyellow" />
+			<ImageButton android:layout_width="wrap_content"
+				android:id="@+id/buttonNavNext" android:layout_height="wrap_content"
+				android:background="@null" android:onClick="OnNavNext" android:src="@drawable/navnext" />
 
 		</LinearLayout>
 	</RelativeLayout>
@@ -37,25 +48,28 @@
 
 			<ImageButton android:layout_width="wrap_content"
 				android:onClick="OnRecitationSettings" android:src="@drawable/recsettings"
-				android:background="@null" 	android:id="@+id/buttonRecitationSettings" android:layout_height="wrap_content" 
-			android:visibility="gone"	/>
+				android:background="@null" android:id="@+id/buttonRecitationSettings"
+				android:layout_height="wrap_content" android:visibility="gone" />
 
 			<ImageButton android:layout_width="wrap_content"
 				android:onClick="OnStopRecitation" android:src="@drawable/stop"
-				android:background="@null" android:id="@+id/buttonStop" android:layout_height="wrap_content" />
+				android:background="@null" android:id="@+id/buttonStop"
+				android:padding="3dip" android:layout_height="wrap_content" />
 
 			<ImageButton android:layout_width="wrap_content"
 				android:id="@+id/buttonPlayBack" android:layout_height="wrap_content"
-				android:background="@null" 	android:onClick="OnPlayRecitationBack" android:src="@drawable/recback" />
+				android:background="@null" android:onClick="OnPlayRecitationBack"
+				android:padding="3dip" android:src="@drawable/recback" />
 
 			<ImageButton android:layout_width="wrap_content"
 				android:id="@+id/buttonPlayPause" android:layout_height="wrap_content"
 				android:onClick="OnPlayRecitation" android:src="@drawable/play"
-				android:background="@null" 	android:layout_alignParentRight="true" />
+				android:padding="3dip" android:background="@null"
+				android:layout_alignParentRight="true" />
 			<ImageButton android:layout_width="wrap_content"
 				android:id="@+id/buttonPlayNext" android:layout_height="wrap_content"
-				android:background="@null" 	android:onClick="OnPlayRecitationNext" android:src="@drawable/recnext" />
-
+				android:background="@null" android:onClick="OnPlayRecitationNext"
+				android:padding="3dip" android:src="@drawable/recnext" />
 		</LinearLayout>
 	</RelativeLayout>
 

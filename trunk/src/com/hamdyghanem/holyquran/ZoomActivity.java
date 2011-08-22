@@ -1,100 +1,242 @@
 package com.hamdyghanem.holyquran;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
-import com.hamdyghanem.holyquran.R;
-
-import android.R.integer;
 import android.app.Activity;
-import android.graphics.Typeface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.PointF;
+import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Environment;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
-import android.text.method.ScrollingMovementMethod;
-import android.view.Gravity;
+import android.util.DisplayMetrics;
+import android.util.FloatMath;
+import android.util.Log;
+import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.WindowManager.LayoutParams;
-import android.webkit.WebView;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.Gallery;
+import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.Toast;
 
 public class ZoomActivity extends Activity {
 	/** Called when the activity is first created. */
+	public int iLanguage = 0;
+	private static final String TAG = "Touch";
+	// These matrices will be used to move and zoom image
+	Matrix matrix = new Matrix();
+	Matrix savedMatrix = new Matrix();
 	ApplicationController AC;
-	String baseDir = "";
+	int statusBarHeight;
+
+	private static final int LOW_DPI_STATUS_BAR_HEIGHT = 19;
+
+	private static final int MEDIUM_DPI_STATUS_BAR_HEIGHT = 25;
+
+	private static final int HIGH_DPI_STATUS_BAR_HEIGHT = 38;
+	// We can be in one of these 3 states
+	static final int NONE = 0;
+	static final int DRAG = 1;
+	static final int ZOOM = 2;
+	int mode = NONE;
+	String baseImgDir = Environment.getExternalStorageDirectory()
+			.getAbsolutePath() + "/hQuran/img/";
 	String strFile = "";
-	String strFileOld = "";
+	// Remember some things for zooming
+	PointF start = new PointF();
+	PointF mid = new PointF();
+	float oldDist = 1f;
+	// Limit zoomable/pannable image
+	private ImageView img;
+	private float[] matrixValues = new float[9];
+	private float maxZoom = 2f;
+	private float minZoom = 0.25f;
+	private float displayheight;
+	private float displaywidth;
+	private RectF displayRect = new RectF();
+	Bitmap bitmap;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-		setContentView(R.layout.tafseer);
-
+		setContentView(R.layout.zoom);
+		getStatusbarHeight();
+		img = (ImageView) findViewById(R.id.img);
 		AC = (ApplicationController) getApplicationContext(); // RadioGroup.VERTICAL
+		strFile = baseImgDir + AC.CurrentImageType + "/"
+				+ Integer.toString(AC.iCurrentPage) + ".img";
 
-		// /////////CHANGE THE TITLE BAR///////////////
-		Typeface arabicFont = Typeface.createFromAsset(getAssets(),
-				"fonts/DroidSansArabic.ttf");
+		Display display = getWindowManager().getDefaultDisplay();
+		displaywidth = display.getWidth();
+		displayheight = display.getHeight();
+		displayheight = displayheight - statusBarHeight;
 
-		if (customTitleSupported) {
-			getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
-					R.layout.mytitle);
-		}
+		displayRect.set(0, 0, displaywidth, displayheight);
+		img.setScaleType(ScaleType.MATRIX);
+		// img.setAdjustViewBounds(true);
+		img.setImageMatrix(matrix);
+		bitmap = BitmapFactory.decodeFile(strFile);
+		img.setImageBitmap(bitmap);
 
-		final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
-		if (myTitleText != null) {
-			myTitleText.setTypeface(arabicFont);
-			myTitleText.setText(AC.getTextbyLanguage(R.string.mnuZoom));
-			// myTitleText.setBackgroundColor(R.color.blackblue);
-		}
-		// //////////////////////
-		// TextView lbl = (TextView) findViewById(R.id.TextView01);
-		getWindow().setLayout(LayoutParams.FILL_PARENT,
-				LayoutParams.FILL_PARENT);
-		try {
-			baseDir = Environment.getExternalStorageDirectory()
-					.getAbsolutePath() + "/hQuran/img/";
-			strFile = baseDir + Integer.toString(AC.iCurrentPage) + ".img";
-			strFileOld = baseDir + Integer.toString(AC.iCurrentPage) + ".gif";
-			//
-			WebView myWebView = (WebView) findViewById(R.id.webviewtafseer);
-			// myWebView.loadUrl("http://dl.dropbox.com/u/" + AC.Dropbox + "/tafseer_html/1.html");
+		Toast.makeText(this, AC.getTextbyLanguage(R.string.zoommode),
+				Toast.LENGTH_LONG).show();
 
-			File f = new File(strFile);
-			if (f.exists()) {
-				f.renameTo(new File(strFileOld));
+		float scale = displaywidth / bitmap.getWidth() * AC.imageScale;
+		matrix.postScale(scale, scale);
+		adjustPan();
+
+		img.setImageMatrix(matrix);
+		//
+		img.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				// ImageView img = (ImageView) v;
+				img = (ImageView) v;
+				switch (event.getAction() & MotionEvent.ACTION_MASK) {
+				// MotionEvent class constant signifying a finger-down event
+				case MotionEvent.ACTION_DOWN: {
+					savedMatrix.set(matrix);
+					start.set(event.getX(), event.getY());
+					Log.d(TAG, "mode=DRAG");
+					mode = DRAG;
+					break;
+				}
+				case MotionEvent.ACTION_POINTER_DOWN:
+					oldDist = spacing(event);
+					Log.d(TAG, "oldDist=" + oldDist);
+					if (oldDist > 10f) {
+						savedMatrix.set(matrix);
+						midPoint(mid, event);
+						mode = ZOOM;
+						Log.d(TAG, "mode=ZOOM");
+					}
+					break;
+				case MotionEvent.ACTION_UP:
+				case MotionEvent.ACTION_POINTER_UP:
+					mode = NONE;
+					Log.d(TAG, "mode=NONE");
+					break;
+				case MotionEvent.ACTION_MOVE:
+					if (mode == DRAG) {
+						// Log.d(TAG, "DRAGging");
+						// mLastTouchX = x;
+						// mLastTouchY = y;
+						//
+						matrix.set(savedMatrix);
+						matrix.postTranslate(event.getX() - start.x,
+								event.getY() - start.y);
+						//
+						adjustPan();
+						img.setImageMatrix(matrix);
+					} else if (mode == ZOOM) {
+						float newDist = spacing(event);
+						if (newDist > 10f) {
+							matrix.set(savedMatrix);
+							float scale = newDist / oldDist;
+							Log.d(TAG, "scale =" + scale);
+							// Log.d(TAG, "savedMatrix =" + savedMatrix);
+
+							matrix.postScale(scale, scale, mid.x, mid.y);
+							// the left page
+							//
+							// The range
+							float rad = matrix.mapRadius(1);
+							if (rad > minZoom & rad < maxZoom) {
+								AC.imageScale = scale;
+								// AC.imageScale = scale*
+								// bitmap.getWidth()/displaywidth ;
+								Log.d(TAG, "scale =" + AC.imageScale);
+
+								img.setImageMatrix(matrix);
+							} else {
+								matrix.set(savedMatrix);
+							}
+						}
+					}
+					if (mode == DRAG | mode == ZOOM) {
+
+					}
+					break;
+				}
+				return true;
 			}
-			myWebView.loadUrl("file:///sdcard/hQuran/img/"
-					+ Integer.toString(AC.iCurrentPage) + ".gif");
-			myWebView.getSettings().setBuiltInZoomControls(true);
-			// wv.getSettings().setUseWideViewPort(true);
+		});
+	}
 
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			// lbl.setText(R.string.notexisttafser);
-			Toast.makeText(this, getString(R.string.notexisttafser),
-					Toast.LENGTH_LONG).show();
+	private void adjustPan() {
+		matrix.getValues(matrixValues);
+		float currentY = matrixValues[Matrix.MTRANS_Y];
+		float currentX = matrixValues[Matrix.MTRANS_X];
+		float currentScale = matrixValues[Matrix.MSCALE_X];
+		float currentHeight = bitmap.getHeight() * currentScale;
+		float currentWidth = bitmap.getWidth() * currentScale;
 
+		float newX = currentX;
+		float newY = currentY;
+
+		RectF drawingRect = new RectF(newX, newY, newX + currentWidth, newY
+				+ currentHeight);
+		float diffUp = Math.min(displayRect.bottom - drawingRect.bottom,
+				displayRect.top - drawingRect.top);
+		float diffDown = Math.max(displayRect.bottom - drawingRect.bottom,
+				displayRect.top - drawingRect.top);
+		float diffLeft = Math.min(displayRect.left - drawingRect.left,
+				displayRect.right - drawingRect.right);
+		float diffRight = Math.max(displayRect.left - drawingRect.left,
+				displayRect.right - drawingRect.right);
+
+		float x = 0, y = 0;
+
+		if (diffUp > 0)
+			y += diffUp;
+		if (diffDown < 0)
+			y += diffDown;
+		if (diffLeft > 0)
+			x += diffLeft;
+		if (diffRight < 0)
+			x += diffRight;
+		if (currentWidth < displayRect.width())
+			x = -currentX + (displayRect.width() - currentWidth) / 2;
+		if (currentHeight < displayRect.height())
+			y = -currentY + (displayRect.height() - currentHeight) / 2;
+
+		matrix.postTranslate(x, y);
+	}
+
+	private float spacing(MotionEvent event) {
+		float x = event.getX(0) - event.getX(1);
+		float y = event.getY(0) - event.getY(1);
+		return FloatMath.sqrt(x * x + y * y);
+	}
+
+	private void midPoint(PointF point, MotionEvent event) {
+		float x = event.getX(0) + event.getX(1);
+		float y = event.getY(0) + event.getY(1);
+		point.set(x / 2, y / 2);
+	}
+
+	private void getStatusbarHeight() {
+		DisplayMetrics displayMetrics = new DisplayMetrics();
+		// ((WindowManager)
+		// getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(displayMetrics);
+		this.getWindowManager().getDefaultDisplay();
+		switch (displayMetrics.densityDpi) {
+		case DisplayMetrics.DENSITY_HIGH:
+			statusBarHeight = HIGH_DPI_STATUS_BAR_HEIGHT;
+			break;
+		case DisplayMetrics.DENSITY_MEDIUM:
+			statusBarHeight = MEDIUM_DPI_STATUS_BAR_HEIGHT;
+			break;
+		case DisplayMetrics.DENSITY_LOW:
+			statusBarHeight = LOW_DPI_STATUS_BAR_HEIGHT;
+			break;
+		default:
+			statusBarHeight = MEDIUM_DPI_STATUS_BAR_HEIGHT;
 		}
 	}
-
-	@Override
-	public void onStop() {
-		File f = new File(strFileOld);
-		f.deleteOnExit();
-		super.onStop();
-	}
-
 }

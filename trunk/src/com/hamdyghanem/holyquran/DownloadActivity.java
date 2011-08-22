@@ -151,6 +151,9 @@ public class DownloadActivity extends Activity {
 		} else {
 			AC.GetActivePath();
 			// Check u can download from the path
+			baseDir = Environment.getExternalStorageDirectory().getAbsolutePath()
+			+ "/hQuran/img/0/";
+
 			String strFile = baseDir + "1.img";
 			strResult = ImageManager.DownloadFromUrl("0", AC.ActivePath, "1",
 					strFile);

@@ -1,47 +1,17 @@
 package com.hamdyghanem.holyquran;
 
-import java.util.ArrayList;
-
 import com.hamdyghanem.holyquran.R;
-
-import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.TypedArray;
 import android.graphics.Typeface;
-
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
-import android.preference.EditTextPreference;
 import android.preference.ListPreference;
+import android.preference.Preference;
+import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
-import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
-import android.util.Log;
-import android.view.Display;
-import android.view.Gravity;
-import android.view.View;
-import android.view.Window;
-import android.view.View.OnClickListener;
-import android.view.WindowManager;
-import android.view.WindowManager.LayoutParams;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.Toast;
 
 public class SettingsActivity extends PreferenceActivity {
 	/** Called when the activity is first created. */
@@ -127,6 +97,20 @@ public class SettingsActivity extends PreferenceActivity {
 		togglePref.setTitle(AC.getTextbyLanguage(R.string.ScreenOn));
 		togglePref.setSummary(AC.getTextbyLanguage(R.string.ScreenOnAlert));
 		inlinePrefSetting.addPreference(togglePref);
+		//
+		Preference zoomPref = new Preference(this);
+		// zoomPref.setKey("zoom_preference");
+		zoomPref.setTitle(AC.getTextbyLanguage(R.string.zoomdefault));
+		// zoomPref.setSummary(AC.getTextbyLanguage(R.string.zoomdefault));
+		inlinePrefSetting.addPreference(zoomPref);
+		zoomPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				// TODO Auto-generated method stub
+				AC.imageScale=1;
+				return false;
+			}
+		});
 
 		return root;
 	}
