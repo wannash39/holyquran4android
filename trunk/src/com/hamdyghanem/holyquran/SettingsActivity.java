@@ -98,19 +98,18 @@ public class SettingsActivity extends PreferenceActivity {
 		togglePref.setSummary(AC.getTextbyLanguage(R.string.ScreenOnAlert));
 		inlinePrefSetting.addPreference(togglePref);
 		//
-		Preference zoomPref = new Preference(this);
-		// zoomPref.setKey("zoom_preference");
-		zoomPref.setTitle(AC.getTextbyLanguage(R.string.zoomdefault));
+		//Preference zoomPref = new Preference(this);
+		//zoomPref.setTitle(AC.getTextbyLanguage(R.string.zoomdefault));
 		// zoomPref.setSummary(AC.getTextbyLanguage(R.string.zoomdefault));
-		inlinePrefSetting.addPreference(zoomPref);
-		zoomPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-			@Override
-			public boolean onPreferenceClick(Preference preference) {
-				// TODO Auto-generated method stub
-				AC.imageScale=1;
-				return false;
-			}
-		});
+		//inlinePrefSetting.addPreference(zoomPref);
+		//zoomPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+		//	@Override
+		//	public boolean onPreferenceClick(Preference preference) {
+		//		// TODO Auto-generated method stub
+		//		AC.imageScale=1;
+		//		return false;
+		//	}
+		//});
 
 		return root;
 	}
