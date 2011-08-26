@@ -232,13 +232,7 @@ public class MainActivity extends Activity {
 		long thisTime = System.currentTimeMillis();
 		if (thisTime - lastTouchTime < 250) {
 			// Double tap
-			startActivityForResult(new Intent(this, ZoomActivity.class), 6);
-			// if (zoomLayer.getVisibility() ==
-			// View.GONE) zoomLayer.setVisibility(View.VISIBLE); else
-			// * zoomLayer.setVisibility(View.GONE);
-			// Toast.makeText(MainActivity.this,
-			// * "Double tab", Toast.LENGTH_SHORT).show();
-
+			//startActivityForResult(new Intent(this, ZoomActivity.class), 6);
 			lastTouchTime = -1;
 		} else {
 			// Too slow :)
@@ -279,8 +273,7 @@ public class MainActivity extends Activity {
 		AC.CurrentImageType = mySharedPreferences.getString(
 				"currentimagetype_preference", AC.CurrentImageType);
 		// Zoom
-		AC.imageScale = mySharedPreferences.getFloat("zoom_preference",
-				AC.imageScale);
+		AC.imageScale = 1;//mySharedPreferences.getFloat("zoom_preference",AC.imageScale);
 		// Toast.makeText(this,
 		// "Request failed: " + Integer.toString(AC.iLanguage),
 		// Toast.LENGTH_LONG).show();
