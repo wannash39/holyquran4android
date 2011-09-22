@@ -64,6 +64,8 @@ public class TafseerActivity extends Activity {
 					.getAbsolutePath()
 					+ "/hQuran/tafseer/"
 					+ Integer.toString(AC.iCurrentPage) + ".html";
+			
+
 			File f = new File(strFile);
 			if (!f.exists()) {
 				Toast.makeText(this, getString(R.string.notexisttafser),

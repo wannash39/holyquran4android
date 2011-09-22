@@ -1,20 +1,12 @@
 ﻿package com.hamdyghanem.holyquran;
 
-import com.hamdyghanem.holyquran.R;
-
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Typeface;
-
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.Gravity;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.Window;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 public class AboutActivity extends Activity {
@@ -27,8 +19,9 @@ public class AboutActivity extends Activity {
 		final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 
 		setContentView(R.layout.about);
+		//
 		AC = (ApplicationController) getApplicationContext(); // RadioGroup.VERTICAL
-//
+		//
 		// /////////CHANGE THE TITLE BAR///////////////
 		Typeface arabicFont = Typeface.createFromAsset(getAssets(),
 				"fonts/DroidSansArabic.ttf");
@@ -41,7 +34,7 @@ public class AboutActivity extends Activity {
 		final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
 		if (myTitleText != null) {
 			myTitleText.setTypeface(arabicFont);
-			myTitleText.setText(AC.getTextbyLanguage( R.string.AboutActivity));
+			myTitleText.setText(AC.getTextbyLanguage(R.string.AboutActivity));
 			// myTitleText.setBackgroundColor(R.color.blackblue);
 		}
 		// //////////////////////
@@ -80,8 +73,7 @@ public class AboutActivity extends Activity {
 		strAbout += "<br />";
 		strAbout += "</font>";
 		//
-		TextView lbl = (TextView) findViewById(R.id.TextView01);
-
+		TextView lbl = (TextView) findViewById(R.id.txtData);
 		lbl.setSingleLine(false);
 		lbl.setMovementMethod(LinkMovementMethod.getInstance());
 		lbl.setText(Html.fromHtml(strAbout));
@@ -89,6 +81,5 @@ public class AboutActivity extends Activity {
 		lbl.setTextColor(getResources().getColor(R.color.blackblue));
 
 		lbl.setTypeface(arabicFont);
-
 	}
 }

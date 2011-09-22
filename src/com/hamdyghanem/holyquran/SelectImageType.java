@@ -32,7 +32,7 @@ import android.widget.Toast;
 public class SelectImageType extends Activity {
 	private Gallery gallery;
 	private ImageView imgView;
-	private Integer[] Imgid = { R.drawable.img_0_50, R.drawable.img_1_50 };
+	private Integer[] Imgid = { R.drawable.img_0_50, R.drawable.img_1_50, R.drawable.img_2_50 };
 	ApplicationController AC;
 
 	@Override

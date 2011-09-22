@@ -40,6 +40,7 @@ public class SettingsActivity extends PreferenceActivity {
 		inlinePrefDownload.setTitle(AC.getTextbyLanguage(R.string.ImgType));
 		root.addPreference(inlinePrefDownload);
 		//
+		//
 		PreferenceScreen intentPref = getPreferenceManager()
 				.createPreferenceScreen(this);
 		// intent.putExtra( EXTRAS_KEY, extras );
@@ -49,7 +50,23 @@ public class SettingsActivity extends PreferenceActivity {
 		// intentPref.setKey("language_preference");
 		intentPref.setSummary(AC.getTextbyLanguage(R.string.ImgTypeSumm));
 		inlinePrefDownload.addPreference(intentPref);
+		// 
 		//
+		//reciter
+		intentPref = getPreferenceManager().createPreferenceScreen(this);
+		ListPreference listPref = new ListPreference(this);
+		if (AC.iLanguage == 0)
+			listPref.setEntries(R.array.Reciter);
+		else
+			listPref.setEntries(R.array.Reciter_en);
+		listPref.setDialogTitle(AC.getTextbyLanguage(R.string.Reciter));
+		listPref.setEntryValues(R.array.ReciterValues);
+		listPref.setKey("currentreciter_preference");
+		listPref.setValue(AC.CurrentReciter);
+		listPref.setTitle(AC.getTextbyLanguage(R.string.Reciter));
+		listPref.setSummary(AC.getTextbyLanguage(R.string.ReciterSumm));
+		inlinePrefDownload.addPreference(listPref);
+		// 
 		//
 		inlinePrefDownload = new PreferenceCategory(this);
 		inlinePrefDownload.setTitle(AC.getTextbyLanguage(R.string.download));
@@ -66,7 +83,7 @@ public class SettingsActivity extends PreferenceActivity {
 		root.addPreference(inlinePrefSetting);
 		//
 		//
-		ListPreference listPref = new ListPreference(this);
+		listPref = new ListPreference(this);
 		listPref.setEntries(R.array.Languages);
 		listPref.setDialogTitle(AC.getTextbyLanguage(R.string.Language));
 		listPref.setEntryValues(R.array.LanguagesValues);
@@ -98,19 +115,29 @@ public class SettingsActivity extends PreferenceActivity {
 		togglePref.setSummary(AC.getTextbyLanguage(R.string.ScreenOnAlert));
 		inlinePrefSetting.addPreference(togglePref);
 		//
-		//Preference zoomPref = new Preference(this);
-		//zoomPref.setTitle(AC.getTextbyLanguage(R.string.zoomdefault));
+		// Preference zoomPref = new Preference(this);
+		// zoomPref.setTitle(AC.getTextbyLanguage(R.string.zoomdefault));
 		// zoomPref.setSummary(AC.getTextbyLanguage(R.string.zoomdefault));
-		//inlinePrefSetting.addPreference(zoomPref);
-		//zoomPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-		//	@Override
-		//	public boolean onPreferenceClick(Preference preference) {
-		//		// TODO Auto-generated method stub
-		//		AC.imageScale=1;
-		//		return false;
-		//	}
-		//});
+		// inlinePrefSetting.addPreference(zoomPref);
+		// zoomPref.setOnPreferenceClickListener(new OnPreferenceClickListener()
+		// {
+		// @Override
+		// public boolean onPreferenceClick(Preference preference) {
+		// // TODO Auto-generated method stub
+		// AC.imageScale=1;
+		// return false;
+		// }
+		// });
 
 		return root;
 	}
+
+	private Integer GetReciterIndex(String strName) {
+		if (strName == "mashary")
+			return 0;
+		if (strName == "huzifi")
+			return 1;
+		return 0;
+	}
+
 }

@@ -13,6 +13,16 @@
 
 	<string name="ImgType">اختيار نوع الصفحات</string>
 	<string name="ImgType_en">Select page type</string>
+
+	<string name="Reciter">اختيار صوت الشيخ</string>
+	<string name="Reciter_en">Select reciter</string>
+
+	<string name="ReciterSumm">البرنامج يدعم أكثر من قارئ للمصحف - بعد الاختيار
+		يمكنك تنزيل الملفات الصوتية</string>
+	<string name="ReciterSumm_en">ِApp supports diffrent type of reciter, You can
+		download the audio files</string>
+		
+		
 	<string name="ImgTypeSumm">البرنامج يدعم أكثر من نسخة للمصحف - بعد الاختيار
 		يمكنك تنزيل الصفحات</string>
 	<string name="ImgTypeSumm_en">ِApp supports diffrent type of edition, You can
