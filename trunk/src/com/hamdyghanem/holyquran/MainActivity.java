@@ -3,6 +3,8 @@ package com.hamdyghanem.holyquran;
 import java.io.File;
 import java.io.IOException;
 import com.hamdyghanem.holyquran.R;
+
+import android.R.integer;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -17,9 +19,11 @@ import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -138,10 +142,10 @@ public class MainActivity extends Activity {
 			// Reference the Gallery view
 			g = (Gallery) findViewById(R.id.Gallery01);
 			g.setAdapter(new ImageAdapter(this));
-			// registerForContextMenu(g);
-			// LayoutInflater inflater = (LayoutInflater) this
-			// .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			// inflater.inflate(R.layout.main, g, false);
+			registerForContextMenu(g);
+			 LayoutInflater inflater = (LayoutInflater) this
+			 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			 inflater.inflate(R.layout.main, g, false);
 
 			// Set the adapter to our custom adapter (below)
 			//
@@ -166,10 +170,10 @@ public class MainActivity extends Activity {
 			// message for the new version
 			String versionName = this.getPackageManager().getPackageInfo(
 					this.getPackageName(), 0).versionName;
-			String strNewFeatures = "New features : You can click to show and hide the header and footer";
+			String strNewFeatures = "New features : Added new recitation of 'Al Huzifi' , You can change the reciter from settings.";
 			if (!versionName.equals(AC.LastVersion)) {
 				if (AC.iLanguage == 0)
-					strNewFeatures = "";
+					strNewFeatures = " اصدار جديد : تمت اضافة قراءة صوتية جديدة للشيخ علي عبدالرحمن الحذيفي و يمكنك اختيار المقرئ من الاعدادت";
 				Toast.makeText(
 						this,
 						AC.getTextbyLanguage(R.string.newversion)
@@ -272,6 +276,11 @@ public class MainActivity extends Activity {
 				false);
 		AC.CurrentImageType = mySharedPreferences.getString(
 				"currentimagetype_preference", AC.CurrentImageType);
+		AC.CurrentReciter = mySharedPreferences.getString(
+				"currentreciter_preference", AC.CurrentReciter);
+		
+		
+		
 		// Zoom
 		AC.imageScale = 1;//mySharedPreferences.getFloat("zoom_preference",AC.imageScale);
 		// Toast.makeText(this,
@@ -323,6 +332,8 @@ public class MainActivity extends Activity {
 		editor.putBoolean("audioon_preference", AC.AudioOn);
 		editor.putBoolean("manualnavigation_preference", AC.ManualNavigation);
 		editor.putString("currentimagetype_preference", AC.CurrentImageType);
+		editor.putString("currentreciter_preference", AC.CurrentReciter);
+		
 		editor.putFloat("zoom_preference", AC.imageScale);
 
 		//
@@ -333,6 +344,7 @@ public class MainActivity extends Activity {
 	public void WriteSettings1() {
 		SharedPreferences.Editor editor = mySharedPreferences.edit();
 		editor.putString("currentimagetype_preference", AC.CurrentImageType);
+		//editor.putString("currentreciter_preference", AC.CurrentReciter);
 		editor.putFloat("zoom_preference", AC.imageScale);
 
 		//
@@ -353,6 +365,9 @@ public class MainActivity extends Activity {
 		file = new File(baseDir + "img/0/");
 		if (!file.exists())
 			file.mkdirs();
+		file = new File(baseDir + "img/2/");
+		if (!file.exists())
+			file.mkdirs();
 		file = new File(baseDir + "img/1/");
 		if (!file.exists())
 			file.mkdirs();
@@ -371,6 +386,9 @@ public class MainActivity extends Activity {
 		file = new File(baseDir + "Audio/Mashary");
 		if (!file.exists())
 			file.mkdirs();
+		file = new File(baseDir + "Audio/Huzifi");
+		if (!file.exists())
+			file.mkdirs();
 		file = new File(baseDir + "imgTypes");
 		if (!file.exists())
 			file.mkdirs();
@@ -383,6 +401,8 @@ public class MainActivity extends Activity {
 					this.getResources(), R.drawable.img_0_50), "0", true);
 			ImageManager.saveToSDCard(BitmapFactory.decodeResource(
 					this.getResources(), R.drawable.img_1_50), "1", true);
+			ImageManager.saveToSDCard(BitmapFactory.decodeResource(
+					this.getResources(), R.drawable.img_2_50), "2", true);
 		}
 	}
 
@@ -528,8 +548,6 @@ public class MainActivity extends Activity {
 			}
 			// Settinngs
 			else if (requestCode == 4) {
-				// Toast.makeText(this, AC.CurrentImageType,
-				// Toast.LENGTH_LONG).show();
 				// AC.CurrentImageType = "1";
 				// Save CurrentImageType first
 				WriteSettings1();
@@ -540,7 +558,9 @@ public class MainActivity extends Activity {
 				WriteSettings();
 				// Toast.makeText(this, Boolean.toString(AC.ScreenOn),
 				// Toast.LENGTH_LONG).show();
-
+				//Toast.makeText(this, AC.CurrentReciter,
+				//		 Toast.LENGTH_SHORT).show();
+				
 				if (AC.ScreenOn)
 					this.mWakeLock.acquire();
 				else
@@ -655,12 +675,14 @@ public class MainActivity extends Activity {
 				// Check if next sura
 				if (AC.iCurrentAya == -2) {
 					AC.iCurrentAya = -1;
+					strCurrentAudioFileName = AC.GetFirstRecitationFile();
 				}
+
 				AC.iCurrentAya += 1;
 				strCurrentAudioFileName = AC.GetFirstRecitationFile();
 			}
 
-			strCurrentAudioFilePath = baseDir + "Audio/Mashary/"
+			strCurrentAudioFilePath = baseDir + "Audio/" + AC.CurrentReciter + "/"
 					+ strCurrentAudioFileName;
 
 			// Toast.makeText(this,Integer.toString(AC.iCurrentAya),
@@ -687,6 +709,7 @@ public class MainActivity extends Activity {
 							AC.iCurrentAya);
 
 			} else {
+				//Log.d("DOWNLOAD FAILED",Integer.toString( AC.iCurrenSura));	
 				AC.iCurrentPage = AC.getAyaPage(AC.iCurrenSura,
 						AC.iCurrentAya + 1);
 			}
@@ -840,9 +863,8 @@ public class MainActivity extends Activity {
 			iAya += 1;
 		String strHeader = AC.GetChapter(iPage);
 		String strSuraName = AC.GetSora(iPage);
-		strHeader += " ( " + Integer.toString(AC.iCurrenSura) + " ) "
+		strHeader += " ( " + AC.strCurrenSura + " ) "
 				+ strSuraName;
-		// strHeader += "\r\n" + AC.GetSora(iPage);
 		strHeader += "\r\n" + Integer.toString(iPage) + "/"
 				+ Integer.toString(iAya);
 		myHeaderText.setText(strHeader);

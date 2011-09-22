@@ -20,11 +20,14 @@ public class ApplicationController extends Application {
 	public Integer iCurrentPage = 0;
 	public Integer iCurrentAya = -1;
 	public Integer iCurrenSura = 0;
+	public String strCurrenSura = "0";
+
 
 	public Integer iLanguage = 0;
 	public float imageScale = 1;
 
 	public String CurrentImageType = "0";
+	public String CurrentReciter = "mashary";
 	public String LastVersion = "";
 	public Boolean AudioOn = false;
 	public Boolean ManualNavigation = false;
@@ -246,7 +249,7 @@ public class ApplicationController extends Application {
 		for (Integer i = 0; i < sorapages.length; i++) {
 			if (iPage < Integer.parseInt(sorapages[i]))
 			{
-				iCurrenSura=i;
+				strCurrenSura =Integer.toString( i);
 				return soranames[i - 1].trim();
 			}
 		}

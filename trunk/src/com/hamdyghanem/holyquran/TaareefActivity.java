@@ -64,14 +64,12 @@ public class TaareefActivity extends Activity {
 			String strFile = Environment.getExternalStorageDirectory()
 					.getAbsolutePath()
 					+ "/hQuran/taareef/"
-					+ Integer.toString(AC.GetSoraPage(AC.iCurrentPage))
+					+ Integer.toString(AC.GetSoraPage(AC.GetSoraIndex(AC.iCurrentPage)))
 					+ ".html";
 			File f = new File(strFile);
 
-		//	Toast.makeText(this,
-			//		Integer.toString(AC.GetSoraPage(AC.iCurrentPage)),
+			//Toast.makeText(this, strFile,
 			//		Toast.LENGTH_LONG).show();
-
 			if (!f.exists()) {
 				Toast.makeText(this, getString(R.string.notexisttafser),
 						Toast.LENGTH_LONG).show();
@@ -79,7 +77,7 @@ public class TaareefActivity extends Activity {
 
 			}
 			myWebView.loadUrl("file:///sdcard/hQuran/taareef/"
-					+ Integer.toString(AC.GetSoraPage(AC.iCurrentPage))
+					+ Integer.toString(AC.GetSoraPage(AC.GetSoraIndex(AC.iCurrentPage)))
 					+ ".html");
 			myWebView.getSettings().setBuiltInZoomControls(true);
 			// wv.getSettings().setUseWideViewPort(true);
