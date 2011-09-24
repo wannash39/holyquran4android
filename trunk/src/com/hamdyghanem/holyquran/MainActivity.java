@@ -1,3 +1,14 @@
+/*This Code Devleoped by :Hamdy Ghanem
+ *  
+ * You can use this code to create your own program or to leearn
+ * but without remving this comments
+ * 
+ *  for any queation or help you can contact me
+ *  hamdy.ghanem@gmail.com
+ *  
+ *  The Fan page of my program is
+ *  https://www.facebook.com/HolyQuran4Android
+ */
 package com.hamdyghanem.holyquran;
 
 import java.io.File;
@@ -387,6 +398,9 @@ public class MainActivity extends Activity {
 		if (!file.exists())
 			file.mkdirs();
 		file = new File(baseDir + "Audio/Huzifi");
+		if (!file.exists())
+			file.mkdirs();
+		file = new File(baseDir + "Audio/Menshawi");
 		if (!file.exists())
 			file.mkdirs();
 		file = new File(baseDir + "imgTypes");
