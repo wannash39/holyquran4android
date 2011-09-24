@@ -1,3 +1,14 @@
+/*This Code Devleoped by :Hamdy Ghanem
+ *  
+ * You can use this code to create your own program or to leearn
+ * but without remving this comments
+ * 
+ *  for any queation or help you can contact me
+ *  hamdy.ghanem@gmail.com
+ *  
+ *  The Fan page of my program is
+ *  https://www.facebook.com/HolyQuran4Android
+ */
 package com.hamdyghanem.holyquran;
 
 import com.hamdyghanem.holyquran.R;
@@ -131,13 +142,4 @@ public class SettingsActivity extends PreferenceActivity {
 
 		return root;
 	}
-
-	private Integer GetReciterIndex(String strName) {
-		if (strName == "mashary")
-			return 0;
-		if (strName == "huzifi")
-			return 1;
-		return 0;
-	}
-
 }
