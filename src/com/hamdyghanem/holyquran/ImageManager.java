@@ -356,10 +356,10 @@ public class ImageManager {
 
 	}
 
-	public static String DownloadAudioFromUrl(String strActivePath,
+	public static String DownloadAudioFromUrl(String Reciter,String strActivePath,
 			String imgName, String fileName) { // this
 		try {
-			URL url = new URL(strActivePath + "/audio/mashary/" + imgName
+			URL url = new URL(strActivePath + "/audio/" + Reciter + "/" + imgName
 					+ ".aud");
 			File file = new File(fileName);
 

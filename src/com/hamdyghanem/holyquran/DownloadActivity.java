@@ -11,7 +11,20 @@
  */
 package com.hamdyghanem.holyquran;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
+import org.apache.http.util.ByteArrayBuffer;
 
 import com.hamdyghanem.holyquran.R;
 
@@ -42,6 +55,8 @@ public class DownloadActivity extends Activity {
 	/** Called when the activity is first created. */
 	ProgressDialog dialog;
 	int increment = 0;
+	int allincrement = 0;
+
 	String strResult = "";
 	String baseDir = "";
 	ApplicationController AC;
@@ -125,13 +140,24 @@ public class DownloadActivity extends Activity {
 	}
 
 	public void downloadPages(View view) {
-		// downloadNow();
-		Intent intent = new Intent(Intent.ACTION_VIEW);
-		intent.setData(Uri
-				.parse("market://details?id=com.hamdyghanem.holyquranimg"
-						+ AC.CurrentImageType));
-		startActivity(intent);
+		//String strFile = Environment.getExternalStorageDirectory()
+		//		.getAbsolutePath()
+		//		+ "/hQuran/img/"
+		//		+ AC.CurrentImageType
+		//		+ ".zip";
+		//File file = new File(strFile);
+		//if (!file.exists()) {
+		//	downloadImages();
+		//}
+		// extract
+		//unpackZip();
 
+		// downloadNow();
+		 Intent intent = new Intent(Intent.ACTION_VIEW);
+		 intent.setData(Uri
+		 .parse("market://details?id=com.hamdyghanem.holyquranimg"
+		 + AC.CurrentImageType));
+		 startActivity(intent);
 	}
 
 	public void downloadTafser(View view) {
@@ -162,8 +188,8 @@ public class DownloadActivity extends Activity {
 		} else {
 			AC.GetActivePath();
 			// Check u can download from the path
-			baseDir = Environment.getExternalStorageDirectory().getAbsolutePath()
-			+ "/hQuran/img/0/";
+			baseDir = Environment.getExternalStorageDirectory()
+					.getAbsolutePath() + "/hQuran/img/0/";
 
 			String strFile = baseDir + "1.img";
 			strResult = ImageManager.DownloadFromUrl("0", AC.ActivePath, "1",
@@ -183,6 +209,121 @@ public class DownloadActivity extends Activity {
 			}
 		}
 		return bOK;
+	}
+
+	private boolean unpackZip() {
+		InputStream is;
+		ZipInputStream zis;
+		String path = Environment.getExternalStorageDirectory()
+				.getAbsolutePath() + "/hQuran/img/" + AC.CurrentImageType;
+		String fileName = path + ".zip";
+		path += "/";
+		try {
+			is = new FileInputStream(fileName);
+			zis = new ZipInputStream(new BufferedInputStream(is));
+			ZipEntry ze;
+
+			while ((ze = zis.getNextEntry()) != null) {
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				byte[] buffer = new byte[1024];
+				int count;
+
+				// zapis do souboru
+				String filename = ze.getName();
+				FileOutputStream fout = new FileOutputStream(path + filename);
+
+				// cteni zipu a zapis
+				while ((count = zis.read(buffer)) != -1) {
+					baos.write(buffer, 0, count);
+					byte[] bytes = baos.toByteArray();
+					fout.write(bytes);
+					baos.reset();
+				}
+
+				fout.close();
+				zis.closeEntry();
+			}
+
+			zis.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+		return true;
+	}
+
+	public void downloadImages() {
+		if (!isConnected())
+			return;
+		// final TextView tv = (TextView) findViewById(R.id.TextView01);
+
+		dialog = new ProgressDialog(this);
+		dialog.setCancelable(true);
+		dialog.setMessage(AC.getTextbyLanguage(R.string.downloadingpages));
+		// set the progress to be horizontal
+		dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+		// reset the bar to the default value of 0
+		dialog.setProgress(0);
+		dialog.setMax(100);
+		// display the progressbar
+		dialog.show();
+
+		// create a thread for updating the progress bar
+		Thread background = new Thread(new Runnable() {
+			public void run() {
+
+				try {
+					allincrement=0;
+					String strFile = Environment.getExternalStorageDirectory()
+							.getAbsolutePath()
+							+ "/hQuran/img/"
+							+ AC.CurrentImageType + ".zip";
+					URL url = new URL(AC.ActivePath + "/img/"
+							+ AC.CurrentImageType + ".zip");
+					long startTime = System.currentTimeMillis();
+
+					Log.d("ImageManager", "downloaded file name>:" + strFile
+							+ " - url:" + url.toString());
+					/* Open a connection to that URL. */
+					URLConnection ucon = url.openConnection();
+					dialog.setMax(ucon.getContentLength() / 1024);
+					//
+					InputStream is = ucon.getInputStream();
+					BufferedInputStream bis = new BufferedInputStream(is, 8192);
+
+					/*
+					 * Read bytes to the Buffer until there is nothing more to
+					 * read(-1).
+					 */
+					ByteArrayBuffer baf = new ByteArrayBuffer(50);
+					double current = 0;
+					while ((current = bis.read()) != -1) {
+						baf.append((byte) current);
+						//
+						allincrement += current;
+						increment = allincrement / 1024;
+
+						// active the update handler
+						progressHandler.sendMessage(progressHandler
+								.obtainMessage());
+					}
+
+					/* Convert the Bytes read to a String. */
+					FileOutputStream fos = new FileOutputStream(strFile);
+					fos.write(baf.toByteArray());
+					fos.close();
+				} catch (IOException e) {
+					Log.d("ImageManager", "Error: " + e);
+				}
+				// Finished
+				dialog.cancel();
+				// finish();
+			}
+		});
+
+		// start the background thread
+		background.start();
 	}
 
 	public void downloadNow() {

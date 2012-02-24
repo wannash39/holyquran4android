@@ -106,7 +106,7 @@ public class DownloadRecitationActivity extends Activity {
 					.setWidth(display.getWidth());
 
 			baseDir = Environment.getExternalStorageDirectory()
-					.getAbsolutePath() + "/hQuran/Audio/Mashary/";
+					.getAbsolutePath() + "/hQuran/Audio/" + AC.CurrentReciter + "/";
 
 		} catch (Throwable t) {
 			Toast.makeText(this, "Request failed: " + t.toString(),
@@ -149,7 +149,7 @@ public class DownloadRecitationActivity extends Activity {
 
 		}
 		baseDir = Environment.getExternalStorageDirectory()
-		.getAbsolutePath() + "/hQuran/Audio/Mashary/";
+		.getAbsolutePath() + "/hQuran/Audio/" + AC.CurrentReciter + "/";
 		return bOK;
 	}
 
@@ -194,7 +194,6 @@ public class DownloadRecitationActivity extends Activity {
 			dialog.setMax(imax);
 			// display the progressbar
 			dialog.show();
-
 			// create a thread for updating the progress bar
 			Thread background = new Thread(new Runnable() {
 				public void run() {
@@ -208,7 +207,7 @@ public class DownloadRecitationActivity extends Activity {
 						}
 
 						if (!f.exists()) {
-							strResult = ImageManager.DownloadAudioFromUrl(
+							strResult = ImageManager.DownloadAudioFromUrl(AC.CurrentReciter,
 									AC.ActivePath, strFileName, strFile);
 							if (strResult.length() > 0) {
 								Log.d("DOWNLOAD FAILED", strResult);
@@ -275,7 +274,7 @@ public class DownloadRecitationActivity extends Activity {
 							}
 
 							if (!f.exists()) {
-								strResult = ImageManager.DownloadAudioFromUrl(
+								strResult = ImageManager.DownloadAudioFromUrl(AC.CurrentReciter,
 										AC.ActivePath, strFileName, strFile);
 								if (strResult.length() > 0) {
 									Log.d("DOWNLOAD FAILED", strResult);

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	android:versionCode="32" android:versionName="1.32"
+	android:versionCode="41" android:versionName="2.1"
 	package="com.hamdyghanem.holyquran" android:installLocation="preferExternal">
 	<application android:icon="@drawable/ic_launcher_hq"
 		android:label="@string/app_name" android:name=".ApplicationController">
-		<activity android:name=".MainActivity" android:label="@string/app_name">
+		<activity android:name=".MainActivity" android:label="@string/app_name"    android:screenOrientation="portrait">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
@@ -27,10 +27,17 @@
 		</activity>
 		<activity android:name=".DownloadActivity">
 		</activity>
+		<activity android:name=".BacklightsettingActivity">
+		</activity>
+		
 		<activity android:name=".SelectLanguageActivity">
 		</activity>
 		<activity android:name=".DownloadRecitationActivity">
 		</activity>
+
+		<activity android:name=".TahfeezActivity">
+		</activity>
+
 
 		<activity android:name=".TafseerActivity" android:theme="@android:style/Theme.Dialog">
 		</activity>

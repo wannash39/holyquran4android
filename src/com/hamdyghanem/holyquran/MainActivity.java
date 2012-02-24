@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
@@ -40,6 +41,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -102,15 +104,17 @@ public class MainActivity extends Activity {
 			// requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 			// Hide title
 			requestWindowFeature(Window.FEATURE_NO_TITLE);
+
 			setContentView(R.layout.main);
 			pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-			this.mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK,
+			this.mWakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK,
 					"My Tag");
 			// /////////CHANGE THE TITLE BAR/////////////// Typeface
 			arabicFont = Typeface.createFromAsset(getAssets(),
 					"fonts/DroidSansArabic.ttf");
 			getTitleColor();
-
+			//
+			//
 			AC = (ApplicationController) getApplicationContext();
 			/*
 			 * if (customTitleSupported) {
@@ -134,6 +138,7 @@ public class MainActivity extends Activity {
 			Display display = getWindowManager().getDefaultDisplay();
 			width = display.getWidth();
 			height = display.getHeight();
+			Log.d("---------", Integer.toString(width));
 			iButtonWidth = 70;
 			// Toast.makeText(this,
 			// Integer.toString(iButtonWidth),Toast.LENGTH_LONG).show();
@@ -144,7 +149,8 @@ public class MainActivity extends Activity {
 
 			buttonPlayPause = (ImageButton) findViewById(R.id.buttonPlayPause);
 			buttonRecitationSettings = (ImageButton) findViewById(R.id.buttonRecitationSettings);
-			buttonRecitationSettings.setVisibility(View.GONE);
+
+			// buttonRecitationSettings.setVisibility(View.GONE);
 			TelephonyManager mgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
 			if (mgr != null) {
 				mgr.listen(phoneStateListener,
@@ -154,9 +160,9 @@ public class MainActivity extends Activity {
 			g = (Gallery) findViewById(R.id.Gallery01);
 			g.setAdapter(new ImageAdapter(this));
 			registerForContextMenu(g);
-			 LayoutInflater inflater = (LayoutInflater) this
-			 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			 inflater.inflate(R.layout.main, g, false);
+			LayoutInflater inflater = (LayoutInflater) this
+					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			inflater.inflate(R.layout.main, g, false);
 
 			// Set the adapter to our custom adapter (below)
 			//
@@ -178,13 +184,18 @@ public class MainActivity extends Activity {
 					.getDefaultSharedPreferences(this);
 			//
 			ReadSettings();
+			if (AC.HideStatusBar)
+				getWindow().setFlags(
+						WindowManager.LayoutParams.FLAG_FULLSCREEN,
+						WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
 			// message for the new version
 			String versionName = this.getPackageManager().getPackageInfo(
 					this.getPackageName(), 0).versionName;
-			String strNewFeatures = "New features : Added new recitation of 'Al Huzifi' , You can change the reciter from settings.";
+			String strNewFeatures = "New features : Add nee feature to repeat Aya while recitation and setting to hid the status bar.";
 			if (!versionName.equals(AC.LastVersion)) {
 				if (AC.iLanguage == 0)
-					strNewFeatures = " اصدار جديد : تمت اضافة قراءة صوتية جديدة للشيخ علي عبدالرحمن الحذيفي و يمكنك اختيار المقرئ من الاعدادت";
+					strNewFeatures = " اصدار جديد : تمت اضافة خاصية التحفيظ لشريط التلاوة و اضافة اعداد لاخفاء الشريط العلوي";
 				Toast.makeText(
 						this,
 						AC.getTextbyLanguage(R.string.newversion)
@@ -221,6 +232,8 @@ public class MainActivity extends Activity {
 				AC.iCurrenSura = AC.GetSoraIndex(AC.iCurrentPage);
 				g.setSelection(604 - AC.iCurrentPage);
 			}
+			setBackLightValue();
+
 			// CreateFolders();
 			// Set a item click listener, and just Toast the clicked position
 			myHeaderText.setBackgroundColor(R.color.blackblue);
@@ -247,7 +260,7 @@ public class MainActivity extends Activity {
 		long thisTime = System.currentTimeMillis();
 		if (thisTime - lastTouchTime < 250) {
 			// Double tap
-			//startActivityForResult(new Intent(this, ZoomActivity.class), 6);
+			// startActivityForResult(new Intent(this, ZoomActivity.class), 6);
 			lastTouchTime = -1;
 		} else {
 			// Too slow :)
@@ -273,52 +286,75 @@ public class MainActivity extends Activity {
 	}
 
 	public void ReadSettings() {
-		String strLanguage = mySharedPreferences.getString(
-				"language_preference", "0");
-		AC.iLanguage = Integer.parseInt(strLanguage);
-		AC.LastVersion = mySharedPreferences.getString(
-				"LastVersion_preference", "0");
-		AC.AudioOn = mySharedPreferences.getBoolean("audioon_preference",
-				AC.AudioOn);
-		AC.ManualNavigation = mySharedPreferences.getBoolean(
-				"manualnavigation_preference", AC.ManualNavigation);
+		try {
+			String strLanguage = mySharedPreferences.getString(
+					"language_preference", "0");
+			AC.iLanguage = Integer.parseInt(strLanguage);
+			AC.LastVersion = mySharedPreferences.getString(
+					"LastVersion_preference", "0");
+			AC.AudioOn = mySharedPreferences.getBoolean("audioon_preference",
+					AC.AudioOn);
+			AC.ManualNavigation = mySharedPreferences.getBoolean(
+					"manualnavigation_preference", AC.ManualNavigation);
+			AC.HideStatusBar = mySharedPreferences.getBoolean(
+					"hidestatusbar_preference", AC.HideStatusBar);
 
-		AC.ScreenOn = mySharedPreferences.getBoolean("screenon_preference",
-				false);
-		AC.CurrentImageType = mySharedPreferences.getString(
-				"currentimagetype_preference", AC.CurrentImageType);
-		AC.CurrentReciter = mySharedPreferences.getString(
-				"currentreciter_preference", AC.CurrentReciter);
-		
-		
-		
-		// Zoom
-		AC.imageScale = 1;//mySharedPreferences.getFloat("zoom_preference",AC.imageScale);
-		// Toast.makeText(this,
-		// "Request failed: " + Integer.toString(AC.iLanguage),
-		// Toast.LENGTH_LONG).show();
-		recetationLayout = (LinearLayout) findViewById(R.id.RecetationLayout);
-		headerLayout = (LinearLayout) findViewById(R.id.HeaderLayout);
-		scroller1 = (ScrollView) findViewById(R.id.ScrollView01);
-		// scroller2 = (HorizontalScrollView) findViewById(R.id.ScrollView02);
-		// //
-		//Toast.makeText(this,
-			//	"Request failed: " + String.valueOf(AC.imageScale),
-			//	Toast.LENGTH_LONG).show();
-		
-		if (AC.AudioOn)
-			recetationLayout.setVisibility(1);
-		else
-			recetationLayout.setVisibility(View.GONE);
+			AC.ScreenOn = mySharedPreferences.getBoolean("screenon_preference",
+					false);
+			AC.CurrentImageType = mySharedPreferences.getString(
+					"currentimagetype_preference", AC.CurrentImageType);
+			AC.CurrentReciter = mySharedPreferences.getString(
+					"currentreciter_preference", AC.CurrentReciter);
+			//
+			AC.CurrentSCREEN_ORIENTATION = Integer.parseInt(mySharedPreferences
+					.getString("currentscreenorientation_preference", "1"));
+			setRequestedOrientation(AC.CurrentSCREEN_ORIENTATION);
+			//
+			String strBackLightValue = mySharedPreferences.getString(
+					"BackLightValue_preference", "0.5");
+			AC.BackLightValue = Float.parseFloat(strBackLightValue);
+			AC.TahfeezStatus = mySharedPreferences.getBoolean(
+					"tahfeez_preference", AC.TahfeezStatus);
+			AC.TahfeezChapter = mySharedPreferences.getInt(
+					"tahfeezchapter_preference", AC.TahfeezChapter);
+			AC.TahfeezSura = mySharedPreferences.getInt(
+					"tahfeezsura_preference", AC.TahfeezSura);
+			AC.TahfeezFromAya = mySharedPreferences.getInt(
+					"tahfeezfromaya_preference", AC.TahfeezFromAya);
+			AC.TahfeezToAya = mySharedPreferences.getInt(
+					"tahfeeztoaya_preference", AC.TahfeezToAya);
+			// Zoom
+			AC.imageScale = 1;// mySharedPreferences.getFloat("zoom_preference",AC.imageScale);
+			// Toast.makeText(this,
+			// "Request failed: " + Integer.toString(AC.iLanguage),
+			// Toast.LENGTH_LONG).show();
+			recetationLayout = (LinearLayout) findViewById(R.id.RecetationLayout);
+			headerLayout = (LinearLayout) findViewById(R.id.HeaderLayout);
+			scroller1 = (ScrollView) findViewById(R.id.ScrollView01);
+			// scroller2 = (HorizontalScrollView)
+			// findViewById(R.id.ScrollView02);
+			// //
+			// Toast.makeText(this,
+			// "Request failed: " + String.valueOf(AC.imageScale),
+			// Toast.LENGTH_LONG).show();
 
-		if (AC.ManualNavigation) {
-			findViewById(R.id.buttonNavNext).setVisibility(View.VISIBLE);
-			findViewById(R.id.buttonNavBack).setVisibility(View.VISIBLE);
-			myHeaderText.setWidth(width - (iButtonWidth * 2));
-		} else {
-			findViewById(R.id.buttonNavNext).setVisibility(View.GONE);
-			findViewById(R.id.buttonNavBack).setVisibility(View.GONE);
-			myHeaderText.setWidth(width);
+			if (AC.AudioOn)
+				recetationLayout.setVisibility(1);
+			else
+				recetationLayout.setVisibility(View.GONE);
+
+			if (AC.ManualNavigation) {
+				findViewById(R.id.buttonNavNext).setVisibility(View.VISIBLE);
+				findViewById(R.id.buttonNavBack).setVisibility(View.VISIBLE);
+				myHeaderText.setWidth(width - (iButtonWidth * 2));
+			} else {
+				findViewById(R.id.buttonNavNext).setVisibility(View.GONE);
+				findViewById(R.id.buttonNavBack).setVisibility(View.GONE);
+				myHeaderText.setWidth(width);
+			}
+		} catch (Throwable t) {
+			Toast.makeText(this, "Error : " + t.toString(),
+					Toast.LENGTH_LONG).show();
 		}
 		// Toast.makeText(this,
 		// "Request failed: " + Boolean.toString(AC.AudioOn),
@@ -342,9 +378,14 @@ public class MainActivity extends Activity {
 		editor.putBoolean("screenon_preference", AC.ScreenOn);
 		editor.putBoolean("audioon_preference", AC.AudioOn);
 		editor.putBoolean("manualnavigation_preference", AC.ManualNavigation);
+		editor.putBoolean("hidestatusbar_preference", AC.HideStatusBar);
 		editor.putString("currentimagetype_preference", AC.CurrentImageType);
 		editor.putString("currentreciter_preference", AC.CurrentReciter);
-		
+		editor.putString("currentscreenorientation_preference",
+				Integer.toString(AC.CurrentSCREEN_ORIENTATION));
+		editor.putString("BackLightValue_preference",
+				Float.toString(AC.BackLightValue));
+
 		editor.putFloat("zoom_preference", AC.imageScale);
 
 		//
@@ -355,8 +396,24 @@ public class MainActivity extends Activity {
 	public void WriteSettings1() {
 		SharedPreferences.Editor editor = mySharedPreferences.edit();
 		editor.putString("currentimagetype_preference", AC.CurrentImageType);
-		//editor.putString("currentreciter_preference", AC.CurrentReciter);
+		// editor.putString("currentreciter_preference", AC.CurrentReciter);
 		editor.putFloat("zoom_preference", AC.imageScale);
+		editor.putString("BackLightValue_preference",
+				Float.toString(AC.BackLightValue));
+		//
+		setBackLightValue();
+		//
+		editor.commit();
+
+	}
+
+	public void WriteSettingsTahfeez() {
+		SharedPreferences.Editor editor = mySharedPreferences.edit();
+		editor.putBoolean("tahfeez_preference", AC.TahfeezStatus);
+		editor.putInt("tahfeezchapter_preference", AC.TahfeezChapter);
+		editor.putInt("tahfeezsura_preference", AC.TahfeezSura);
+		editor.putInt("tahfeezfromaya_preference", AC.TahfeezFromAya);
+		editor.putInt("tahfeeztoaya_preference", AC.TahfeezToAya);
 
 		//
 		editor.commit();
@@ -403,6 +460,30 @@ public class MainActivity extends Activity {
 		file = new File(baseDir + "Audio/Menshawi");
 		if (!file.exists())
 			file.mkdirs();
+		file = new File(baseDir + "Audio/Muaiqly");
+		if (!file.exists())
+			file.mkdirs();
+		file = new File(baseDir + "Audio/Rifai");
+		if (!file.exists())
+			file.mkdirs();
+		file = new File(baseDir + "Audio/Sudais");
+		if (!file.exists())
+			file.mkdirs();
+
+		file = new File(baseDir + "Audio/Ajmi");
+		if (!file.exists())
+			file.mkdirs();
+
+		file = new File(baseDir + "Audio/Alshatri");
+		if (!file.exists())
+			file.mkdirs();
+		file = new File(baseDir + "Audio/Ghamdi");
+		if (!file.exists())
+			file.mkdirs();
+		file = new File(baseDir + "Audio/Husari");
+		if (!file.exists())
+			file.mkdirs();
+
 		file = new File(baseDir + "imgTypes");
 		if (!file.exists())
 			file.mkdirs();
@@ -541,15 +622,19 @@ public class MainActivity extends Activity {
 					Bundle extras = data.getExtras();
 					Integer i = extras.getInt("returnKey");
 					AC.bookmarkUtitliy.setDefault(i);
+					//
 					// Toast.makeText(this, Integer.toString(i),
 					// Toast.LENGTH_LONG)
 					// .show();
+					AC.iCurrentPage = AC.bookmarkUtitliy.arr.get(
+							AC.bookmarkUtitliy.getDefault()).getPage();
 					AC.saveBookmarksDefalut();
 				}
 				// Toast.makeText(this, "Request failed: " +
 				// Integer.toString(i),
 				// Toast.LENGTH_LONG).show();
 				//
+
 				g.setSelection(604 - AC.bookmarkUtitliy.arr.get(
 						AC.bookmarkUtitliy.getDefault()).getPage());
 				// }
@@ -572,9 +657,9 @@ public class MainActivity extends Activity {
 				WriteSettings();
 				// Toast.makeText(this, Boolean.toString(AC.ScreenOn),
 				// Toast.LENGTH_LONG).show();
-				//Toast.makeText(this, AC.CurrentReciter,
-				//		 Toast.LENGTH_SHORT).show();
-				
+				// Toast.makeText(this, AC.CurrentReciter,
+				// Toast.LENGTH_SHORT).show();
+
 				if (AC.ScreenOn)
 					this.mWakeLock.acquire();
 				else
@@ -588,17 +673,32 @@ public class MainActivity extends Activity {
 					WriteSettings();
 				}
 			} else if (requestCode == 6) {
-				//if (!(data == null || data.getExtras() == null)) {
-					// Bundle extras = data.getExtras();
-					// Integer i = extras.getInt("returnKey");
-					// AC.iLanguage = i;
-					WriteSettings1();
-					// refresh the gallery
-					((BaseAdapter) g.getAdapter()).notifyDataSetChanged();
+				// if (!(data == null || data.getExtras() == null)) {
+				// Bundle extras = data.getExtras();
+				// Integer i = extras.getInt("returnKey");
+				// AC.iLanguage = i;
+				WriteSettings1();
+				// refresh the gallery
+				((BaseAdapter) g.getAdapter()).notifyDataSetChanged();
+				//
+				ReadSettings();
+				WriteSettings();
+				// }
+			} else if (requestCode == 7) {
+				//
+				if (!(data == null || data.getExtras() == null)) {
+					Bundle extras = data.getExtras();
+
+					Integer i = extras.getInt("returnKey");
 					//
-					ReadSettings();
-					WriteSettings();
-				//}
+
+					WriteSettingsTahfeez();
+					// Toast.makeText(this, "To be done, Hamdy",
+					// Toast.LENGTH_LONG)
+					// .show();
+				}
+				// hamdy
+
 			}
 
 		} catch (Throwable t) {
@@ -613,12 +713,16 @@ public class MainActivity extends Activity {
 	public void OnNavNext(View view) {
 
 		AC.iCurrentPage -= 1;
+		if (AC.iCurrentPage < 0)
+			AC.iCurrentPage = 0;
 		g.setSelection(604 - AC.iCurrentPage);
 
 	}
 
 	public void OnNavBack(View view) {
 		AC.iCurrentPage += 1;
+		if (AC.iCurrentPage > 604)
+			AC.iCurrentPage = 604;
 		g.setSelection(604 - AC.iCurrentPage);
 	}
 
@@ -678,9 +782,16 @@ public class MainActivity extends Activity {
 		try {
 
 			// check the audio files
-
+			//
+			// Check if user will use tahfeez(repetaion)
+			if (AC.TahfeezStatus) {
+				if (AC.iCurrentAya < AC.TahfeezFromAya)
+					AC.iCurrentAya = AC.TahfeezFromAya - 1;
+				// check if it reach last aya
+				if (AC.iCurrentAya > AC.TahfeezToAya - 1)
+					AC.iCurrentAya = AC.TahfeezFromAya - 1;
+			}
 			// first time or after stop
-
 			if (AC.iCurrentAya == -1) {
 				AC.iCurrentAya = 0;
 				strCurrentAudioFileName = AC
@@ -696,8 +807,8 @@ public class MainActivity extends Activity {
 				strCurrentAudioFileName = AC.GetFirstRecitationFile();
 			}
 
-			strCurrentAudioFilePath = baseDir + "Audio/" + AC.CurrentReciter + "/"
-					+ strCurrentAudioFileName;
+			strCurrentAudioFilePath = baseDir + "Audio/" + AC.CurrentReciter
+					+ "/" + strCurrentAudioFileName;
 
 			// Toast.makeText(this,Integer.toString(AC.iCurrentAya),
 			// Toast.LENGTH_LONG).show();
@@ -705,7 +816,6 @@ public class MainActivity extends Activity {
 			// buttonPlayPause.set(Integer.toString(AC.iCurrentAya));
 
 			File f = new File(strCurrentAudioFilePath);
-			//
 			// Toast.makeText(this, strCurrentAudioFilePath, Toast.LENGTH_SHORT)
 			// .show();
 			/*
@@ -723,7 +833,7 @@ public class MainActivity extends Activity {
 							AC.iCurrentAya);
 
 			} else {
-				//Log.d("DOWNLOAD FAILED",Integer.toString( AC.iCurrenSura));	
+				// Log.d("DOWNLOAD FAILED",Integer.toString( AC.iCurrenSura));
 				AC.iCurrentPage = AC.getAyaPage(AC.iCurrenSura,
 						AC.iCurrentAya + 1);
 			}
@@ -781,6 +891,8 @@ public class MainActivity extends Activity {
 	}
 
 	public void OnRecitationSettings(View view) {
+		startActivityForResult(new Intent(this, TahfeezActivity.class), 7);
+
 	}
 
 	public void OnPlayRecitationBack(View view) {
@@ -877,11 +989,16 @@ public class MainActivity extends Activity {
 			iAya += 1;
 		String strHeader = AC.GetChapter(iPage);
 		String strSuraName = AC.GetSora(iPage);
-		strHeader += " ( " + AC.strCurrenSura + " ) "
-				+ strSuraName;
+		strHeader += " ( " + AC.strCurrenSura + " ) " + strSuraName;
 		strHeader += "\r\n" + Integer.toString(iPage) + "/"
 				+ Integer.toString(iAya);
 		myHeaderText.setText(strHeader);
+		// Highlight
+		//boolean bResult = AC.getQuranPointBySura(this, iPage, iAya);
+		//if (bResult) {
+			// Manage scale
+			// this.invalidate();
+		//}
 	}
 
 	//
@@ -902,5 +1019,12 @@ public class MainActivity extends Activity {
 	public boolean onContextItemSelected(MenuItem item) {
 		callOptionsItemSelected(null, item.getItemId());
 		return true;
+	}
+
+	private void setBackLightValue() {
+		WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
+		layoutParams.screenBrightness = AC.BackLightValue;
+		getWindow().setAttributes(layoutParams);
+
 	}
 }

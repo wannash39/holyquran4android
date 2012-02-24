@@ -18,12 +18,16 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import android.R.integer;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
+import android.util.Log;
 import android.widget.Toast;
 
 public class ApplicationController extends Application {
@@ -33,21 +37,38 @@ public class ApplicationController extends Application {
 	public Integer iCurrenSura = 0;
 	public String strCurrenSura = "0";
 
+	public Integer iCurrentFromX = 0;
+	public Integer iCurrentFromY = 0;
+	public Integer iCurrentToX = 0;
+	public Integer iCurrentToY = 0;
 
 	public Integer iLanguage = 0;
 	public float imageScale = 1;
+	public Integer CurrentSCREEN_ORIENTATION = 1;
+
+	public float BackLightValue = 0.5f; // dummy default value
 
 	public String CurrentImageType = "0";
+	//
+	public Boolean TahfeezStatus = false;
+	public Integer TahfeezChapter = 0;
+	public Integer TahfeezSura = 0;
+	public Integer TahfeezFromAya = 0;
+	public Integer TahfeezToAya = 0;
+
 	public String CurrentReciter = "mashary";
 	public String LastVersion = "";
 	public Boolean AudioOn = false;
 	public Boolean ManualNavigation = false;
-
+	public Boolean HideStatusBar = true;
+	
 
 	public String ActivePath = "http://dl.dropbox.com/u/32200142/";// gmail:
 																	// 27675084
 																	// yahoo:32200142
 	public boolean ScreenOn = false;
+	public SQLiteDatabase db;
+	public ExternalStorageReadOnlyOpenHelper objdb;
 
 	@Override
 	public void onCreate() {
@@ -256,11 +277,10 @@ public class ApplicationController extends Application {
 			iPage = 604;
 		// if (i == 591) i = 5911;
 		// if (i >= 595) i = Integer.parseInt(Integer.toString(i) + "1");
-		
+
 		for (Integer i = 0; i < sorapages.length; i++) {
-			if (iPage < Integer.parseInt(sorapages[i]))
-			{
-				strCurrenSura =Integer.toString( i);
+			if (iPage < Integer.parseInt(sorapages[i])) {
+				strCurrenSura = Integer.toString(i);
 				return soranames[i - 1].trim();
 			}
 		}
@@ -370,5 +390,109 @@ public class ApplicationController extends Application {
 			return getText(i);
 		else
 			return getText(i + 1);
+	}
+
+	public boolean getQuranPoint(Context context, int x, int y) {
+		iCurrentFromX = 0;
+		iCurrentFromY = 0;
+		iCurrentToX = 0;
+		iCurrentToY = 0;
+		objdb = new ExternalStorageReadOnlyOpenHelper(context);
+		//
+		if (!CurrentImageType.equals("0"))
+			return false;
+		if (!objdb.databaseFileExists()) {
+			Toast.makeText(context, getTextbyLanguage(R.string.notexistdb),
+					Toast.LENGTH_LONG).show();
+			return false;
+		}
+		//
+		db = objdb.getReadableDatabase();
+		int id = 0;
+		Cursor mcursor = objdb.getQuranPoint(db, CurrentImageType,
+				iCurrentPage, x, y);
+		if (mcursor != null) {
+			mcursor.moveToFirst();
+			while (mcursor.isAfterLast() == false) {
+				id = mcursor.getInt(0);
+				iCurrentFromX = mcursor.getInt(4);
+				iCurrentFromY = mcursor.getInt(5);
+				mcursor.moveToNext();
+			}
+		}
+		mcursor.close();
+		//
+		// Log.d(">>>>>>>>>>>>>",Integer.toString( id));
+		if (id > 0) {
+			mcursor = objdb.getNextQuranPoint(db, CurrentImageType, id);
+			if (mcursor != null) {
+				mcursor.moveToFirst();
+				while (mcursor.isAfterLast() == false) {
+					iCurrentToX = Integer.parseInt(mcursor.getString(4));
+					iCurrentToY = Integer.parseInt(mcursor.getString(5));
+					mcursor.moveToNext();
+				}
+				mcursor.close();
+			}
+
+		}
+		objdb.close();
+		// return sb.toString();
+
+		//
+		return true;
+
+	}
+
+	public boolean getQuranPointBySura(Context context, int iPage, int iAya) {
+		iCurrentFromX = 0;
+		iCurrentFromY = 0;
+		iCurrentToX = 0;
+		iCurrentToY = 0;
+		objdb = new ExternalStorageReadOnlyOpenHelper(context);
+		//
+		if (!CurrentImageType.equals("0"))
+			return false;
+		if (!objdb.databaseFileExists()) {
+			Toast.makeText(context, getTextbyLanguage(R.string.notexistdb),
+					Toast.LENGTH_LONG).show();
+			return false;
+		}
+		//
+		db = objdb.getReadableDatabase();
+		int id = 0;
+		Cursor mcursor = objdb.getQuranPointBySura(db, CurrentImageType, iPage,
+				iCurrenSura, iAya);
+		if (mcursor != null) {
+			mcursor.moveToFirst();
+			while (mcursor.isAfterLast() == false) {
+				id = mcursor.getInt(0);
+				iCurrentFromX = mcursor.getInt(4);
+				iCurrentFromY = mcursor.getInt(5);
+				mcursor.moveToNext();
+			}
+		}
+		mcursor.close();
+		//
+		// Log.d(">>>>>>>>>>>>>",Integer.toString( id));
+		if (id > 0) {
+			mcursor = objdb.getNextQuranPoint(db, CurrentImageType, id);
+			if (mcursor != null) {
+				mcursor.moveToFirst();
+				while (mcursor.isAfterLast() == false) {
+					iCurrentToX = Integer.parseInt(mcursor.getString(4));
+					iCurrentToY = Integer.parseInt(mcursor.getString(5));
+					mcursor.moveToNext();
+				}
+				mcursor.close();
+			}
+
+		}
+		objdb.close();
+		// return sb.toString();
+
+		//
+		return true;
+
 	}
 }
