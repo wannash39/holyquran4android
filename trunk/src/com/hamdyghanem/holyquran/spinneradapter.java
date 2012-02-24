@@ -11,6 +11,8 @@
  */
 package com.hamdyghanem.holyquran;
 
+import com.hamdyghanem.holyquran.R.color;
+
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Typeface;
@@ -49,6 +51,8 @@ public class spinneradapter extends ArrayAdapter<CharSequence> {
 		TextView v = (TextView) super.getView(position, convertView, parent);
 		v.setTypeface(arabicFont);
 		v.setTextSize(20.f);
+        v.setTextColor(color.black);//choose your color :)         
+
 		return v;
 	}
 
@@ -59,7 +63,8 @@ public class spinneradapter extends ArrayAdapter<CharSequence> {
 		v.setTypeface(arabicFont);
 		v.setTextSize(27.f);
 		v.setGravity(Gravity.CENTER);
-		
+        v.setTextColor(color.black);//choose your color :)         
+
 		return v;
 	}
 

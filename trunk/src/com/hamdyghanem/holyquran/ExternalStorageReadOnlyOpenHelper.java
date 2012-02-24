@@ -19,6 +19,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.concurrent.ExecutionException;
 
+import android.R.string;
 import android.app.Application;
 import android.content.Context;
 import android.database.Cursor;
@@ -124,19 +125,55 @@ public class ExternalStorageReadOnlyOpenHelper extends Application {
 		return null;
 	}
 
+	public Cursor getQuranPoint(SQLiteDatabase db, String CurrentImageType,
+			int ipage, int x, int y) {
+		try {
+			String strTableName = "quranpoints" + CurrentImageType;
+			String strquery = "select id,  page, sura  , verse , x,y from "
+					+ strTableName + " where page =? AND x <= ? AND y <= ?";
+			Cursor mcursor = db.rawQuery(strquery,
+					new String[] {  String.valueOf(ipage)  ,String.valueOf(x),String.valueOf(y) });
+			return mcursor;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public Cursor getQuranPointBySura(SQLiteDatabase db, String CurrentImageType,
+			int ipage,int iCurrenSura,int iAya) {
+		try {
+			String strTableName = "quranpoints" + CurrentImageType;
+			String strquery = "select id,  page, sura  , verse , x,y from "
+					+ strTableName + " where page =? AND sura = ? AND verse = ?";
+			Cursor mcursor = db.rawQuery(strquery,
+					new String[] {  String.valueOf(ipage)  ,String.valueOf(iCurrenSura),String.valueOf(iAya) });
+			return mcursor;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public Cursor getNextQuranPoint(SQLiteDatabase db, String CurrentImageType,
+			int ipoint) {
+		try {
+			String strTableName = "quranpoints" + CurrentImageType;
+			String strquery = "select  id, page, sura  , verse , x,y from "
+					+ strTableName + " where id =?";
+			Cursor mcursor = db.rawQuery(strquery,
+					new String[] {  String.valueOf(ipoint+1)  });
+			return mcursor;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	public Cursor getQuerybyPageID(String pageid, SQLiteDatabase db) {
 		try {
-			// String data = "";
-			// String count = "SELECT count(*) FROM quran";
-
-			// Cursor cursor= db.query(TABLE_IMAGES, new String[]{"_id"}, "name"
-			// +" = ?", new String[]{compareToThis}, null, null, null);
-			// String strWhere = "content like " + "'%" + pageid + "%'";
-			// Cursor mcursor = db.query("quran", new String[] { "page",
-			// "surah",
-			// "verse", "content" }, strWhere, null, null, null, null);
 			String strquery = "select    quran.verse,   quran.page ,  quran.surah  , quran.content  , quranen.content as contenten  from quran INNER JOIN  quranen on quran.docid = quranen.docid where quran.page=?";
-
 			Cursor mcursor = db.rawQuery(strquery,
 					new String[] { String.valueOf(pageid) });
 			return mcursor;

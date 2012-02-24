@@ -17,12 +17,18 @@
 	<string name="Reciter">اختيار صوت الشيخ</string>
 	<string name="Reciter_en">Select reciter</string>
 
+
+	<string name="SCREEN_ORIENTATION">اختيار اسلوب العرض</string>
+	<string name="SCREEN_ORIENTATION_en">Select Orientattion</string>
+	<string name="SCREEN_ORIENTATION_enSumm">اتجاه الشاشة : أفقي أو عمودي</string>
+	<string name="SCREEN_ORIENTATION_enSumm_en">Screen orientation :Landscape or portrait</string>
+
 	<string name="ReciterSumm">البرنامج يدعم أكثر من قارئ للمصحف - بعد الاختيار
 		يمكنك تنزيل الملفات الصوتية</string>
 	<string name="ReciterSumm_en">ِApp supports diffrent type of reciter, You can
 		download the audio files</string>
-		
-		
+
+
 	<string name="ImgTypeSumm">البرنامج يدعم أكثر من نسخة للمصحف - بعد الاختيار
 		يمكنك تنزيل الصفحات</string>
 	<string name="ImgTypeSumm_en">ِApp supports diffrent type of edition, You can
@@ -35,6 +41,11 @@
 	<string name="downloadSumm_en">Downloads all data like pages ,database , tafseer
 		... etc</string>
 
+	<string name="Backlight">تحديد مستوى الاضاءة</string>
+	<string name="Backlight_en">Backlight value</string>
+	<string name="BacklightSumm"></string>
+	<string name="BacklightSumm_en"></string>
+		
 	<string name="btn_download_pages">تنزيل الصفحات</string>
 	<string name="btn_download_pages_en">Download pages</string>
 	<string name="btn_download_database">تنزيل قاعدة البيانات للبحث</string>
@@ -52,7 +63,23 @@
 	<string name="plzrestart">من فضلك اعد تشغيل البرنامج</string>
 	<string name="plzrestart_en">Please restart the application</string>
 
+	<string name="ActivateTahfeez">تفعيل التحفيظ</string>
+	<string name="ActivateTahfeez_en">Activate Repeating</string>
+ 
 
+	<string name="lblFromNum">من</string>
+	<string name="lblFromNum_en">From</string>
+<string name="lblToNum">إلي</string>
+	<string name="lblToNum_en">To</string>
+	
+	
+	<string name="HideStatusBar">ملء الشاشة</string>
+	<string name="HideStatusBar_en">Full screen</string>
+		<string name="HideStatusBarSum">ملئ الشاشة و اخفاء القضيب العلوي</string>
+	<string name="HideStatusBarSum_en">Full screen, Hide status bar</string>
+	
+	
+	
 	<string name="downloadingpages"> ... تنزيل الملفات</string>
 	<string name="downloadingpages_en">Downloading files ...</string>
 	<string name="downloadingtareef"> ... تنزيل كتاب التعريف</string>
@@ -98,6 +125,9 @@
 	<string name="English">ترجمة للانجليزية</string>
 	<string name="English_en">Translate to English</string>
 
+	<string name="TahfeezActivity">التحفيظ</string>
+	<string name="TahfeezActivity_en">Tahfeez</string>
+	
 	<string name="GoToActivity">ذهاب إلي</string>
 	<string name="GoToActivity_en">Navigate to</string>
 	<string name="AboutActivity">عن البرنامج</string>
