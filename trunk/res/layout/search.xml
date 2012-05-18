@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:scrollbars="vertical">
+	<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_weight="1" android:layout_width="fill_parent"
+		android:layout_height="fill_parent">
+
+		<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			android:layout_width="fill_parent" android:layout_height="fill_parent"
+			android:id="@+id/searchTableLayoutMain">
+
+			<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+				android:layout_width="fill_parent" android:layout_height="wrap_content"
+				android:id="@+id/searchTableLayoutHeader">
+				<TableRow android:id="@+id/TableRow01"
+					android:layout_width="fill_parent" android:layout_height="wrap_content">
+
+					<EditText android:id="@+id/editSearch"
+						android:layout_width="fill_parent" android:layout_height="wrap_content" />
+
+					<Button android:id="@+id/ButtSearch"
+						android:onClick="DoSearch" android:layout_height="wrap_content"
+						android:layout_width="wrap_content" android:layout_weight="1"></Button>
+				</TableRow>
+				<TableRow android:id="@+id/TableRow02"
+					android:layout_width="fill_parent" android:layout_height="wrap_content">
+					<RadioGroup android:layout_width="fill_parent"
+						android:layout_height="wrap_content" android:orientation="horizontal">
+						<RadioButton android:id="@+id/optAtabic"
+							android:layout_width="wrap_content" android:layout_height="wrap_content"
+							android:tag="0" />
+						<RadioButton android:id="@+id/optEnglish"
+							android:layout_width="wrap_content" android:layout_height="wrap_content"
+							android:tag="1" />
+
+					</RadioGroup>
+				</TableRow>
+
+			</TableLayout>
+
+
+			<TableLayout android:id="@+id/searchTableLayoutResult"
+				android:layout_margin="5dp" android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+
+
+			</TableLayout>
+		</TableLayout>
+	</HorizontalScrollView>
+</ScrollView>

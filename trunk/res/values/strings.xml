@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Holy Quran</string>
+
+	<string name="newversion">اصدار جديد</string>
+	<string name="newversion_en">New version</string>
+
+	<string name="NoInternet">لا يوجد اتصال بالشبكة</string>
+	<string name="NoInternet_en">New internet connection</string>
+
+	<string name="DownloadFailed">فشل التنزيل</string>
+	<string name="DownloadFailed_en">Download Failed</string>
+
+	<string name="ImgType">اختيار نوع الصفحات</string>
+	<string name="ImgType_en">Select page type</string>
+
+	<string name="Reciter">اختيار صوت الشيخ</string>
+	<string name="Reciter_en">Select reciter</string>
+
+<string name="SetLanguage">اختيار اللغة</string>
+	<string name="SetLanguage_en">Set Language</string>
+ 	
+<string name="Dictionary">المعجم</string>
+	<string name="Dictionary_en">Dictionary</string>
+	<string name="SelectImageType">اختيار المصحف</string>
+	<string name="SelectImageType_en">Select Image</string>
+	
+	<string name="SCREEN_ORIENTATION">اختيار اسلوب العرض</string>
+	<string name="SCREEN_ORIENTATION_en">Select Orientattion</string>
+	<string name="SCREEN_ORIENTATION_enSumm">اتجاه الشاشة :تلقائي أو  أفقي أو عمودي</string>
+	<string name="SCREEN_ORIENTATION_enSumm_en">Screen orientation :ِAutomatic or Landscape or portrait</string>
+
+	<string name="ReciterSumm">البرنامج يدعم أكثر من قارئ للمصحف - بعد الاختيار
+		يمكنك تنزيل الملفات الصوتية</string>
+	<string name="ReciterSumm_en">ِApp supports diffrent type of reciter, You can
+		download the audio files</string>
+
+
+	<string name="ImgTypeSumm">البرنامج يدعم أكثر من نسخة للمصحف - بعد الاختيار
+		يمكنك تنزيل الصفحات</string>
+	<string name="ImgTypeSumm_en">ِApp supports diffrent type of edition, You can
+		download the moshaf page</string>
+
+	<string name="download">تنزيلات</string>
+	<string name="download_en">Downloads</string>
+	<string name="downloadSumm">تنزيل جميع بيانات البرنامج مثل الصفحات و قاعدة
+		البيانات و التفسيير ... الخ</string>
+	<string name="downloadSumm_en">Downloads all data like pages ,database , tafseer
+		... etc</string>
+
+	<string name="Backlight">تحديد مستوى الاضاءة</string>
+	<string name="Backlight_en">Backlight value</string>
+	<string name="BacklightSumm"></string>
+	<string name="BacklightSumm_en"></string>
+		
+	<string name="btn_download_pages">تنزيل الصفحات</string>
+	<string name="btn_download_pages_en">Download pages</string>
+	<string name="btn_download_database">تنزيل قاعدة البيانات للبحث</string>
+	<string name="btn_download_database_en">Download database</string>
+	<string name="btn_download_tafser">تنزيل التفسير</string>
+	<string name="btn_download_tafser_en">Download Tafsier</string>
+	<string name="btn_download_tareef">تنزيل التعريف</string>
+	<string name="btn_download_tareef_en">Download Details book</string>
+	<string name="btn_download_dictionary">تنزيل المعجم</string>
+	<string name="btn_download_dictionary_en">Download dictionary</string>
+
+
+	<string name="BILanguage">Select the language اختر اللغة</string>
+
+	<string name="plzrestart">من فضلك اعد تشغيل البرنامج</string>
+	<string name="plzrestart_en">Please restart the application</string>
+
+	<string name="ActivateTahfeez">تفعيل التحفيظ</string>
+	<string name="ActivateTahfeez_en">Activate Repeating</string>
+ 
+
+	<string name="lblFromNum">من</string>
+	<string name="lblFromNum_en">From</string>
+<string name="lblToNum">إلي</string>
+	<string name="lblToNum_en">To</string>
+	
+	
+	<string name="HideStatusBar">ملء الشاشة</string>
+	<string name="HideStatusBar_en">Full screen</string>
+		<string name="HideStatusBarSum">ملئ الشاشة و اخفاء القضيب العلوي</string>
+	<string name="HideStatusBarSum_en">Full screen, Hide status bar</string>
+	
+	
+	
+	<string name="downloadingpages"> ... تنزيل الملفات</string>
+	<string name="downloadingpages_en">Downloading files ...</string>
+	<string name="downloadingtareef"> ... تنزيل كتاب التعريف</string>
+	<string name="downloadingtareef_en">Downloading Details book ...</string>
+	<string name="downloadingdictionary"> ... تنزيل المعجم</string>
+	<string name="downloadingdictionary_en">Downloading dictionary ...</string>
+	
+		<string name="createtabimagedialog"> ... تكوين الصفحات للجهاز اللوحي في الوضع العرضي </string>
+	<string name="createtabimagedialog_en">creating tablet (landscape) pages ...</string>
+	
+	<string name="downloadingdatabase"> ... تنزيل قاعدة البيانات للبحث</string>
+	<string name="downloadingdatabase_en">Downloading database ...</string>
+	<string name="downloadingtafseer"> ... تنزيل التفسير</string>
+	<string name="downloadingtafseer_en">Downloading Tafsier ...</string>
+	<string name="notexistpage">صفحة غير موجودة</string>
+	<string name="notexistpage_en">Not exist page ...</string>
+	<string name="found">نتيجية البحث </string>
+	<string name="found_en">Found</string>
+	<string name="SearchNoData">قيمة غير صالحة للبحث اقل قيمة ثلاثة أحرف</string>
+	<string name="SearchNoData_en">Not valid criteria, at leaset three characters
+		needed
+	</string>
+	<string name="downloadaudiofiles">تنزيل الملفات الصوتية</string>
+	<string name="downloadaudiofiles_en">Download audio files</string>
+
+	<string name="notexistaudio">ملف الصوت غير موجودة ...</string>
+	<string name="notexistaudio_en">The audio file not exist ...</string>
+	<string name="Searching"> ... جاري البحث</string>
+	<string name="Searching_en">Searching ... </string>
+	<string name="Search"> البحث</string>
+	<string name="Search_en"> Search</string>
+
+	<string name="defaultbookmark">الورد اليومي,0,0,1#الكهف,293,1,0</string>
+
+	<string name="zoommode"> شاشة اعداد التكبير و التصغير </string>
+	<string name="zoommode_en">Zoom mode</string>
+
+	<string name="btndownloadaudiopage">تنزيل ملفات الصفحة</string>
+	<string name="btndownloadaudiopage_en">Download the page</string>
+
+	<string name="btndownloadaudiosura">تنزيل ملفات السورة</string>
+	<string name="btndownloadaudiosura_en">Download the sura</string>
+
+	<string name="btndownloadaudioquran">تنزيل ملفات القرآن كاملاً</string>
+	<string name="btndownloadaudioquran_en">Download all Quran</string>
+
+	<string name="English">ترجمة للانجليزية</string>
+	<string name="English_en">Translate to English</string>
+
+	<string name="TahfeezActivity">التحفيظ</string>
+	<string name="TahfeezActivity_en">Tahfeez</string>
+	
+	<string name="GoToActivity">ذهاب إلي</string>
+	<string name="GoToActivity_en">Navigate to</string>
+	<string name="AboutActivity">عن البرنامج</string>
+	<string name="AboutActivity_en">About</string>
+	<string name="defaultname">افتراضية</string>
+	<string name="defaultname_en">Default</string>
+	<string name="notexisttafser">ملف التفسير لهذه الصفحة غير موجود . من فضلك قم
+		بتنزيل التفسير من قائمة اعدادات</string>
+	<string name="notexisttafser_en">You have to download the tafsier , Please go to
+		setting page and click download tafsier</string>
+	<string name="notexistdb">ملف قاعدة البيانات غير موجود . من فضلك قم
+		بتنزيله من
+		قائمة اعدادات</string>
+	<string name="notexistdb_en">You have to download the database , Please go to
+		setting page and click download database</string>
+	<string name="notexistimage">تحتاج للتنزيل صور صفحات المصحف الكريم . من فضلك قم
+		بتنزيل الصفحات من قائمة اعدادات</string>
+	<string name="notexistimage_en">You have to download the pages first , Please go to
+		setting page and click download pages</string>
+	<string name="notexistdictionary">لا يوجد معجم لهذه الصفحة </string>
+	<string name="notexistdictionary_en">No dictionary for this page</string>
+	<string name="alreadyexistbookmark">تم اضافتها بالفعل</string>
+	<string name="alreadyexistbookmark_en">Already exist</string>
+
+	<string name="searchPage">الصفحه</string>
+	<string name="searchPage_en">Page</string>
+	<string name="searchSura">السورة</string>
+	<string name="searchSura_en">Verse</string>
+	<string name="searchAya">رقم</string>
+	<string name="searchAya_en">No</string>
+	<string name="searchContent">الآية</string>
+	<string name="searchContent_en">Content</string>
+
+	<string name="Language">اللغة</string>
+	<string name="Language_en">Language</string>
+	<string name="LangEnglish">English</string>
+	<string name="LangArabic">العربية</string>
+
+	<string name="holyquran">القرآن الكريم</string>
+	<string name="holyquran_en">Holy Quran</string>
+	<string name="settings">إعدادات</string>
+	<string name="settings_en">Settings</string>
+	<string name="about">عن البرنامج</string>
+	<string name="about_en">About</string>
+	<string name="gotomenu">ذهاب إلي</string>
+	<string name="gotomenu_en">Navigate to</string>
+	<string name="tafseermenu">التفسير</string>
+	<string name="tafseermenu_en">Tafsier</string>
+
+
+	<string name="mnuTafseer">تفسير السعدي</string>
+	<string name="mnuTafseer_en">Alsaady Tafsier</string>
+	<string name="mnuTanslation">للانجليزية ترجمة</string>
+	<string name="mnuTanslation_en">English translation</string>
+	<string name="mnuTaareef">تعريف السورة</string>
+	<string name="mnuTaareef_en">Sura Detials</string>
+	<string name="mnuDictionary">المعجم</string>
+	<string name="mnuDictionary_en">Dictionary</string>
+	<string name="mnuZoom">تكبير</string>
+	<string name="mnuZoom_en">Zoom</string>
+
+	<string name="lbl_settings">إعدادات</string>
+	<string name="lbl_settings_en">Settings</string>
+	<string name="bookmark">العلامات</string>
+	<string name="bookmark_en">Bookmarks</string>
+
+	<string name="newbookmark">إعدادات العلامات</string>
+	<string name="newbookmark_en">Bookmark settings</string>
+	<string name="BookmarksActivity">العلامات</string>
+	<string name="BookmarksActivity_en">Bookmarks</string>
+
+	<string name="detailsmenu">أخرى</string>
+	<string name="detailsmenu_en">Others</string>
+
+
+	<string name="ManualNav">استخدام أزرار التصفح</string>
+	<string name="ManualNav_en">Show navigation buttons</string>
+
+	<string name="ManualNavSum">اظهار أزرار التصفح و ايقاف التصفح السريع عبر تمرير
+		الصفحات , لابد من اعادة فتح البرنامج</string>
+	<string name="ManualNavSum_en">Show navigation buttons and stop page dragging, You
+		have to restart</string>
+
+	<string name="zoomdefault">الغاء التكبير </string>
+	<string name="zoomdefault_en">Restore zoom default</string>
+
+	<string name="createtabimage"> تكوين صفحات للجهاز اللوحي </string>
+	<string name="createtabimage_en">Create pages fpr tablet </string>
+	
+	<string name="createtabimagesumm"> سوف تحتاج تقريبا 200  ميجا بايت </string>
+	<string name="createtabimagesumm_en">You will need approximately 200 mb</string>
+	
+	
+	
+	<string name="ScreenOn">اناره مستمرة للشاشة </string>
+	<string name="ScreenOn_en">Light on </string>
+	<string name="AudioOn">تلاوة</string>
+	<string name="AudioOn_en">Recitation</string>
+
+	<string name="ScreenOnAlert">كن حذرا ً في استخدام هذا الخيار حيث يأثر علي
+		البطارية</string>
+	<string name="ScreenOnAlert_en">Be careful about your battery</string>
+	<string name="AudioOnSumm">اظهار شريط أدوات التلاوة</string>
+	<string name="AudioOnSumm_en">Show recitation toolbar</string>
+
+	<string name="LanguageAlert">لا بد من اعادة تشغيل البرنامج</string>
+	<string name="LanguageAlert_en">You have to restart the application</string>
+
+	<string name="BookmarkEdit">اعدادت العلامات</string>
+	<string name="BookmarkEdit_en">Bookmark settings</string>
+	<string name="ButtOK">موافق</string>
+	<string name="ButtOK_en">OK</string>
+	<string name="ButtCancel">إلغاء</string>
+	<string name="ButtCancel_en">Cancel</string>
+	<string name="ButtNew">جديد</string>
+	<string name="ButtNew_en">New</string>
+	<string name="ButtNewCurrent">اضافة الحالية</string>
+	<string name="ButtNewCurrent_en">Add current</string>
+
+
+	<string name="Static">ثابتة</string>
+	<string name="Static_en">Static</string>
+	<string name="Delete">حذف</string>
+	<string name="Delete_en">Delete</string>
+	<string name="Name">اسم العلامة </string>
+	<string name="Name_en">Name</string>
+	<string name="Page">صفحة</string>
+	<string name="Pag_ene">Page</string>
+	<string name="Default">الحالية</string>
+	<string name="Default_en">Current</string>
+	<string name="tafseer">تفسير السعدي</string>
+	<string name="tafseer_en">Tafsier (explanation)</string>
+
+	<string name="gotoPageHeader">اختر الذهاب الي ...</string>
+	<string name="gotoPageHeader_en">Navigate to ...</string>
+	<string name="gotoPage1">صفحة</string>
+	<string name="gotoPage1_en">Page</string>
+	<string name="gotoPage2">جزء</string>
+	<string name="gotoPage2_en">Chapter</string>
+	<string name="gotoPage3">سورة</string>
+	<string name="gotoPage3_en">Surah</string>
+
+
+
+</resources>
