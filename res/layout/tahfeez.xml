@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:stretchColumns="1" android:id="@+id/TableLayoutMain">
+
+	<TextView android:id="@+id/TextViewHeader"
+		android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+
+	<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:stretchColumns="1">
+
+		<CheckBox android:id="@+id/chkUseTahfeez"
+			android:layout_width="wrap_content" android:layout_height="wrap_content" />
+
+
+
+
+	</TableLayout>
+	<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:stretchColumns="1" android:id="@+id/TableLayoutBody">
+		<TableRow>
+			<TextView android:id="@+id/lblFromNum" android:layout_width="wrap_content"
+				android:layout_height="wrap_content"></TextView>
+			<EditText android:id="@+id/txtFromNum" android:layout_width="wrap_content"
+				android:layout_height="wrap_content"></EditText>
+		</TableRow>
+		<TableRow>
+			<TextView android:id="@+id/lblToNum" android:layout_width="wrap_content"
+				android:layout_height="wrap_content"></TextView>
+			<EditText android:id="@+id/txtToNum" android:layout_width="wrap_content"
+				android:layout_height="wrap_content"></EditText>
+		</TableRow>
+		<TableRow>
+			<TextView android:id="@+id/lblChapter" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:visibility="gone"></TextView>
+			<Spinner android:id="@+id/spnChapter" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:visibility="gone"></Spinner>
+		</TableRow>
+		<TableRow>
+			<TextView android:id="@+id/lblSora" android:layout_width="wrap_content"
+				android:layout_height="wrap_content"></TextView>
+			<Spinner android:id="@+id/spnSora" android:layout_width="wrap_content"
+				android:layout_height="wrap_content"></Spinner>
+		</TableRow>
+		<TableRow>
+			<TextView android:id="@+id/lblSeprator"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+
+		</TableRow>
+
+	</TableLayout>
+
+
+	<TableLayout android:id="@+id/TableLayoutFooter"
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:stretchColumns="*">
+		<TableRow android:id="@+id/TableRow11" android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+			<Button android:text="@string/ButtCancel" android:id="@+id/ButCancel"
+				android:layout_height="wrap_content" android:layout_weight="1"
+				android:layout_width="wrap_content"></Button>
+			<Button android:text="@string/ButtOK" android:id="@+id/ButOK"
+				android:layout_height="wrap_content" android:layout_width="wrap_content"
+				android:layout_weight="1"></Button>
+		</TableRow>
+	</TableLayout>
+
+</TableLayout>

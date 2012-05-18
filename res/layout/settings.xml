@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:scrollbars="vertical">
+	<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_weight="1" android:layout_width="fill_parent"
+		android:layout_height="fill_parent">
+		<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			android:layout_width="fill_parent" android:layout_height="fill_parent"
+			android:id="@+id/TableLayoutMainsett">
+
+			<Button android:onClick="downloadPages" android:id="@+id/btnSettDownload"
+				android:layout_width="fill_parent" android:layout_height="wrap_content"></Button>
+			<Button android:onClick="downloadDatabase" android:id="@+id/btnDatabaseDownload"
+				android:layout_width="fill_parent" android:layout_height="wrap_content"></Button>
+			<Button android:onClick="downloadTafser" android:id="@+id/btnTafserDownload"
+				android:layout_width="fill_parent" android:layout_height="wrap_content"></Button>
+			<Button android:onClick="downloadTareef" android:id="@+id/btnTaareefDownload"
+				android:layout_width="fill_parent" android:layout_height="wrap_content"></Button>
+			<Button android:onClick="downloadDicttonary" android:id="@+id/btnDictionayDownload"
+				android:layout_width="fill_parent" android:layout_height="wrap_content"></Button>
+			<TableLayout android:id="@+id/TableLayoutFooter"
+				android:layout_width="fill_parent" android:layout_height="wrap_content">
+				<TableRow android:id="@+id/TableRow01"
+					android:layout_width="fill_parent" android:layout_height="wrap_content">
+					<TextView android:text="Label Text" android:id="@+id/vwLanguage" />
+
+					<RadioGroup android:layout_width="fill_parent"
+						android:layout_height="wrap_content" android:orientation="horizontal">
+						<RadioButton android:id="@+id/optAtabic"
+							android:layout_width="wrap_content" android:layout_height="wrap_content"
+							android:tag="0" />
+						<RadioButton android:id="@+id/optEnglish"
+							android:layout_width="wrap_content" android:layout_height="wrap_content"
+							android:tag="1" />
+
+					</RadioGroup>
+				</TableRow>
+			</TableLayout>
+			<TableLayout android:id="@+id/TableLayoutFooter2"
+				android:layout_width="fill_parent" android:layout_height="wrap_content">
+				<TableRow android:id="@+id/TableRow01"
+					android:layout_width="wrap_content" android:layout_height="wrap_content">
+					<Button android:text="@string/ButtCancel" android:id="@+id/ButCancel"
+						android:layout_height="wrap_content" android:layout_weight="1"
+						android:layout_width="wrap_content"></Button>
+					<Button android:text="@string/ButtOK" android:id="@+id/ButOK"
+						android:layout_height="wrap_content" android:layout_width="wrap_content"
+						android:layout_weight="1"></Button>
+				</TableRow>
+			</TableLayout>
+		</TableLayout>
+	</HorizontalScrollView>
+</ScrollView>

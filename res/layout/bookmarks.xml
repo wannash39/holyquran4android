@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scrollbars="vertical" >
+
+        <HorizontalScrollView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1" >
+
+            <TableLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/TableLayoutMain"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" >
+
+                <LinearLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+                    android:id="@+id/adhost"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="20dip"
+                    android:padding="5dip" >
+                </LinearLayout>
+
+                <RadioGroup
+                    android:id="@+id/RadioGroup01"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" >
+                </RadioGroup>
+
+                <TableLayout
+                    android:id="@+id/TableLayoutFooter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom" >
+
+                    <TableRow
+                        android:id="@+id/TableRow11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" >
+
+                        <Button
+                            android:id="@+id/ButAddNew"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:onClick="NewBookmarkClick" >
+                        </Button>
+
+                        <Button
+                            android:id="@+id/ButEditBookmark"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:onClick="EditBookmarkClick" >
+                        </Button>
+                    </TableRow>
+                </TableLayout>
+            </TableLayout>
+        </HorizontalScrollView>
+    </ScrollView>
+
+</RelativeLayout>
