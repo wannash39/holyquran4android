@@ -69,23 +69,14 @@ public class SearchActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		try {
 			super.onCreate(savedInstanceState);
-			final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
-			setContentView(R.layout.search);
+ 			setContentView(R.layout.search);
 			AC = (ApplicationController) getApplicationContext(); // RadioGroup.VERTICAL
 			// /////////CHANGE THE TITLE BAR///////////////
 			arabicFont = Typeface.createFromAsset(getAssets(),
 					"fonts/DroidSansArabic.ttf");
+			this.setTitle(AC.getTextbyLanguage(R.string.Search));
 
-			if (customTitleSupported) {
-				getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
-						R.layout.mytitle);
-			}
-
-			final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
-			if (myTitleText != null) {
-				myTitleText.setTypeface(arabicFont);
-				myTitleText.setText(AC.getTextbyLanguage(R.string.Search));
-			}
+			
 			// //////////////////////
 			tl = (TableLayout) findViewById(R.id.searchTableLayoutResult);
 

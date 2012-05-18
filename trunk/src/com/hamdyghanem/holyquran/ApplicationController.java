@@ -17,11 +17,14 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 import android.R.integer;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
@@ -44,10 +47,9 @@ public class ApplicationController extends Application {
 
 	public Integer iLanguage = 0;
 	public float imageScale = 1;
-	public Integer CurrentSCREEN_ORIENTATION = 1;
+	public Integer CurrentSCREEN_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_SENSOR;
 
 	public float BackLightValue = 0.5f; // dummy default value
-
 	public String CurrentImageType = "0";
 	//
 	public Boolean TahfeezStatus = false;
@@ -61,9 +63,9 @@ public class ApplicationController extends Application {
 	public Boolean AudioOn = false;
 	public Boolean ManualNavigation = false;
 	public Boolean HideStatusBar = true;
-	
+	public String MY_INTERSTITIAL_UNIT_ID = "a14f89eaaa7f1fd";
 
-	public String ActivePath = "http://dl.dropbox.com/u/32200142/";// gmail:
+	public String ActivePath = "http://dl.dropbox.com/u/27675084/";// gmail:
 																	// 27675084
 																	// yahoo:32200142
 	public boolean ScreenOn = false;
@@ -88,7 +90,9 @@ public class ApplicationController extends Application {
 	public void saveBookmarksDefalut() {
 		WriteBookmarks(bookmarkUtitliy.getBookmarksString());
 	}
-
+	public Boolean isOdd(int val) {
+		return (val & 0x01) != 0;
+	}
 	public Boolean isNetConnected() {
 		ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		// ARE WE CONNECTED TO THE NET
@@ -494,5 +498,24 @@ public class ApplicationController extends Application {
 		//
 		return true;
 
+	}
+
+	public boolean isTabletDevice() {
+		if (android.os.Build.VERSION.SDK_INT >= 11) { // honeycomb
+			// test screen size, use reflection because isLayoutSizeAtLeast is
+			// only available since 11
+			Configuration con = getResources().getConfiguration();
+			try {
+				Method mIsLayoutSizeAtLeast = con.getClass().getMethod(
+						"isLayoutSizeAtLeast", int.class);
+				Boolean r = (Boolean) mIsLayoutSizeAtLeast.invoke(con,
+						0x00000004); // Configuration.SCREENLAYOUT_SIZE_XLARGE
+				return r;
+			} catch (Exception x) {
+				x.printStackTrace();
+				return false;
+			}
+		}
+		return false;
 	}
 }

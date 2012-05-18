@@ -14,6 +14,8 @@ package com.hamdyghanem.holyquran;
 import java.io.File;
 import java.io.IOException;
 import com.hamdyghanem.holyquran.R;
+import com.hamdyghanem.holyquran.Download.CreateTabImages;
+import com.hamdyghanem.holyquran.Download.DownloadRecitationActivity;
 
 import android.R.integer;
 import android.app.Activity;
@@ -94,6 +96,7 @@ public class MainActivity extends Activity {
 
 	protected PowerManager pm;
 	protected PowerManager.WakeLock mWakeLock;
+	public boolean isTabletDevice = false;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -116,6 +119,8 @@ public class MainActivity extends Activity {
 			//
 			//
 			AC = (ApplicationController) getApplicationContext();
+			isTabletDevice = AC.isTabletDevice();
+
 			/*
 			 * if (customTitleSupported) {
 			 * getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
@@ -177,7 +182,9 @@ public class MainActivity extends Activity {
 				file.mkdirs();
 				bFirstTime = true;
 			}
+			//
 
+			//
 			AC.bookmarkUtitliy = new BookmarkUtil(AC.ReadBookmarks());
 			// Toast.makeText(this, AC.ActivePath, Toast.LENGTH_LONG).show();
 			mySharedPreferences = PreferenceManager
@@ -215,7 +222,7 @@ public class MainActivity extends Activity {
 				// Toast.LENGTH_LONG).show();
 				// CreateFolders();
 				// Open settings to load images directly
-				g.setSelection(604);
+				g.setSelection(g.getCount());
 				// callOptionsItemSelected(null, R.id.mnu_settings);
 				Toast.makeText(this,
 						AC.getTextbyLanguage(R.string.notexistimage),
@@ -227,11 +234,26 @@ public class MainActivity extends Activity {
 			} else {
 				// if (AC.NeedDownload())
 				// callOptionsItemSelected(null, R.id.mnu_settings);
+
 				AC.iCurrentPage = AC.bookmarkUtitliy.arr.get(
 						AC.bookmarkUtitliy.getDefault()).getPage();
+				if (AC.iCurrentPage == 0)
+					AC.iCurrentPage = 1;
 				AC.iCurrenSura = AC.GetSoraIndex(AC.iCurrentPage);
-				g.setSelection(604 - AC.iCurrentPage);
+				//
+				// Toast.makeText(this, Integer.toString(g.getCount()),
+				// Toast.LENGTH_LONG).show();
+				if (g.getCount() == 302) {
+					if (AC.isOdd(AC.iCurrentPage))
+						AC.iCurrentPage = AC.iCurrentPage + 1;
+					AC.iCurrentPage = AC.iCurrentPage / 2;
+				}
+				// Integer ii = g.getCount() - AC.iCurrentPage;
+				// Toast.makeText(this, Integer.toString(ii), Toast.LENGTH_LONG)
+				// .show();
+				g.setSelection(g.getCount() - AC.iCurrentPage);
 			}
+			//
 			setBackLightValue();
 
 			// CreateFolders();
@@ -248,6 +270,14 @@ public class MainActivity extends Activity {
 
 				}
 			});
+			//
+
+			// if (AC.isTabletDevice())
+			// Toast.makeText(this, "isT abletDevice", Toast.LENGTH_SHORT)
+			// .show();
+			// else
+			// Toast.makeText(this, "is not TabletDevice", Toast.LENGTH_SHORT)
+			// .show();
 
 		} catch (Throwable t) {
 			Toast.makeText(this, "Request failed: " + t.toString(),
@@ -308,7 +338,10 @@ public class MainActivity extends Activity {
 			//
 			AC.CurrentSCREEN_ORIENTATION = Integer.parseInt(mySharedPreferences
 					.getString("currentscreenorientation_preference", "1"));
+
+			// ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
 			setRequestedOrientation(AC.CurrentSCREEN_ORIENTATION);
+
 			//
 			String strBackLightValue = mySharedPreferences.getString(
 					"BackLightValue_preference", "0.5");
@@ -353,8 +386,8 @@ public class MainActivity extends Activity {
 				myHeaderText.setWidth(width);
 			}
 		} catch (Throwable t) {
-			Toast.makeText(this, "Error : " + t.toString(),
-					Toast.LENGTH_LONG).show();
+			Toast.makeText(this, "Error : " + t.toString(), Toast.LENGTH_LONG)
+					.show();
 		}
 		// Toast.makeText(this,
 		// "Request failed: " + Boolean.toString(AC.AudioOn),
@@ -431,6 +464,9 @@ public class MainActivity extends Activity {
 		if (!file.exists())
 			file.mkdirs();
 		file = new File(baseDir + "img/0/");
+		if (!file.exists())
+			file.mkdirs();
+		file = new File(baseDir + "img/0_tab/");
 		if (!file.exists())
 			file.mkdirs();
 		file = new File(baseDir + "img/2/");
@@ -596,7 +632,7 @@ public class MainActivity extends Activity {
 			// new Intent(this, BookmarkEditActivity.class), 1);
 			// return true;
 		case R.id.mnu_goto:
-			startActivityForResult(new Intent(this, GoToActivity.class), 1);
+			startActivityForResult(new Intent(this, GoToActivity.class), 11);
 
 			return true;
 		case R.id.mnu_about:
@@ -622,27 +658,35 @@ public class MainActivity extends Activity {
 					Bundle extras = data.getExtras();
 					Integer i = extras.getInt("returnKey");
 					AC.bookmarkUtitliy.setDefault(i);
-					//
-					// Toast.makeText(this, Integer.toString(i),
-					// Toast.LENGTH_LONG)
-					// .show();
+
 					AC.iCurrentPage = AC.bookmarkUtitliy.arr.get(
 							AC.bookmarkUtitliy.getDefault()).getPage();
 					AC.saveBookmarksDefalut();
-				}
-				// Toast.makeText(this, "Request failed: " +
-				// Integer.toString(i),
-				// Toast.LENGTH_LONG).show();
-				//
 
-				g.setSelection(604 - AC.bookmarkUtitliy.arr.get(
-						AC.bookmarkUtitliy.getDefault()).getPage());
-				// }
+					// Toast.makeText(this, "Request failed: " +
+					// Integer.toString(i),
+					// Toast.LENGTH_LONG).show();
+					//
+
+					g.setSelection(g.getCount()
+							- AC.bookmarkUtitliy.arr.get(
+									AC.bookmarkUtitliy.getDefault()).getPage());
+				}
+			} else if (requestCode == 11) {
+				if (!(data == null || data.getExtras() == null)) {
+
+					Bundle extras = data.getExtras();
+					Integer i = extras.getInt("returnKey");
+					AC.iCurrentPage = i;
+					AC.saveBookmarksDefalut();
+
+					g.setSelection(g.getCount() - i);
+				}
 			} else if (requestCode == 3) {
 				if (!(data == null || data.getExtras() == null)) {
 					Bundle extras = data.getExtras();
 					Integer i = extras.getInt("returnKey");
-					g.setSelection(604 - i);
+					g.setSelection(g.getCount() - i);
 				}
 			}
 			// Settinngs
@@ -715,15 +759,15 @@ public class MainActivity extends Activity {
 		AC.iCurrentPage -= 1;
 		if (AC.iCurrentPage < 0)
 			AC.iCurrentPage = 0;
-		g.setSelection(604 - AC.iCurrentPage);
+		g.setSelection(g.getCount() - AC.iCurrentPage);
 
 	}
 
 	public void OnNavBack(View view) {
 		AC.iCurrentPage += 1;
-		if (AC.iCurrentPage > 604)
-			AC.iCurrentPage = 604;
-		g.setSelection(604 - AC.iCurrentPage);
+		if (AC.iCurrentPage > g.getCount())
+			AC.iCurrentPage = g.getCount();
+		g.setSelection(g.getCount() - AC.iCurrentPage);
 	}
 
 	PhoneStateListener phoneStateListener = new PhoneStateListener() {
@@ -755,7 +799,7 @@ public class MainActivity extends Activity {
 
 	// Recitiation methods
 	public void OnPlayRecitation(View view) {
-		AC.iCurrentPage = 604 - g.getSelectedItemPosition();
+		AC.iCurrentPage = g.getCount() - g.getSelectedItemPosition();
 		// if (AC.iCurrentAya != -1) {
 		// AC.iCurrentAya -= 1;
 		// }
@@ -837,7 +881,7 @@ public class MainActivity extends Activity {
 				AC.iCurrentPage = AC.getAyaPage(AC.iCurrenSura,
 						AC.iCurrentAya + 1);
 			}
-			g.setSelection(604 - AC.iCurrentPage);
+			g.setSelection(g.getCount() - AC.iCurrentPage);
 			// if the Verrese is not in this sura, means sura is finished
 			// check if sura is finished
 			Integer iAyaCount = AC.getAyaCount(AC.iCurrenSura);
@@ -987,6 +1031,7 @@ public class MainActivity extends Activity {
 	public void PrintAya(Integer iPage, Integer iAya) {
 		if (AC.iCurrenSura == 9)
 			iAya += 1;
+		iPage += 1;
 		String strHeader = AC.GetChapter(iPage);
 		String strSuraName = AC.GetSora(iPage);
 		strHeader += " ( " + AC.strCurrenSura + " ) " + strSuraName;
@@ -994,11 +1039,11 @@ public class MainActivity extends Activity {
 				+ Integer.toString(iAya);
 		myHeaderText.setText(strHeader);
 		// Highlight
-		//boolean bResult = AC.getQuranPointBySura(this, iPage, iAya);
-		//if (bResult) {
-			// Manage scale
-			// this.invalidate();
-		//}
+		// boolean bResult = AC.getQuranPointBySura(this, iPage, iAya);
+		// if (bResult) {
+		// Manage scale
+		// this.invalidate();
+		// }
 	}
 
 	//
@@ -1009,6 +1054,10 @@ public class MainActivity extends Activity {
 		menu.setHeaderTitle(AC.getTextbyLanguage(R.string.holyquran));
 		menu.add(0, R.id.mnu_bookmark, 0,
 				AC.getTextbyLanguage(R.string.bookmark));
+		menu.add(0, R.id.mnu_settings, 0,
+				AC.getTextbyLanguage(R.string.settings));
+		menu.add(0, R.id.mnu_details, 0,
+				AC.getTextbyLanguage(R.string.detailsmenu));
 		menu.add(0, R.id.mnu_goto, 0,
 				AC.getTextbyLanguage(R.string.GoToActivity));
 		menu.add(0, R.id.mnu_search, 0, AC.getTextbyLanguage(R.string.Search));

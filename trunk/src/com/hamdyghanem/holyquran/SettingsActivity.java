@@ -12,6 +12,11 @@
 package com.hamdyghanem.holyquran;
 
 import com.hamdyghanem.holyquran.R;
+import com.hamdyghanem.holyquran.Download.CreateTabImages;
+import com.hamdyghanem.holyquran.Download.DownloadActivity;
+
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -30,6 +35,7 @@ public class SettingsActivity extends PreferenceActivity {
 	ApplicationController AC;
 	Typeface arabicFont = null;
 	RadioGroup radioGroup = null;
+	private SettingsActivity mContext;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -37,8 +43,11 @@ public class SettingsActivity extends PreferenceActivity {
 
 		arabicFont = Typeface.createFromAsset(getAssets(),
 				"fonts/DroidSansArabic.ttf");
+
 		// //////////////////////
 		AC = (ApplicationController) getApplicationContext(); // RadioGroup.VERTICAL
+		this.setTitle(AC.getTextbyLanguage(R.string.settings));
+		mContext = this;
 
 		setPreferenceScreen(createPreferenceHierarchy());
 	}
@@ -91,7 +100,27 @@ public class SettingsActivity extends PreferenceActivity {
 			intentPref.setTitle(AC.getTextbyLanguage(R.string.download));
 			intentPref.setSummary(AC.getTextbyLanguage(R.string.downloadSumm));
 			inlinePrefDownload.addPreference(intentPref);
-			// /
+			// Create tab images
+			Preference createtabPref = new Preference(this);
+			createtabPref.setTitle(AC
+					.getTextbyLanguage(R.string.createtabimage));
+			createtabPref.setSummary(AC
+					.getTextbyLanguage(R.string.createtabimagesumm));
+			//intentPref.addPreference(createtabPref);
+			inlinePrefDownload.addPreference(createtabPref);
+
+			createtabPref
+					.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+						@Override
+						public boolean onPreferenceClick(Preference preference) {
+							// TODO Auto-generated method stub
+							CreateTabImages cti = new CreateTabImages(mContext,
+									AC);
+							cti.SaveTabImage();
+							return false;
+						}
+					});
+			// ////////////////////////////
 			PreferenceCategory inlinePrefSetting = new PreferenceCategory(this);
 			inlinePrefSetting.setTitle(AC.getTextbyLanguage(R.string.settings));
 			root.addPreference(inlinePrefSetting);
@@ -116,7 +145,7 @@ public class SettingsActivity extends PreferenceActivity {
 					.getTextbyLanguage(R.string.SCREEN_ORIENTATION));
 			listPref.setEntryValues(R.array.SCREEN_ORIENTATION_Values);
 			listPref.setKey("currentscreenorientation_preference");
-			listPref.setValueIndex(AC.CurrentSCREEN_ORIENTATION);
+			listPref.setValue(Integer.toString(AC.CurrentSCREEN_ORIENTATION));
 			listPref.setTitle(AC.getTextbyLanguage(R.string.SCREEN_ORIENTATION));
 			listPref.setSummary(AC
 					.getTextbyLanguage(R.string.SCREEN_ORIENTATION_enSumm));
@@ -142,7 +171,8 @@ public class SettingsActivity extends PreferenceActivity {
 			togglePref = new CheckBoxPreference(this);
 			togglePref.setKey("hidestatusbar_preference");
 			togglePref.setTitle(AC.getTextbyLanguage(R.string.HideStatusBar));
-			togglePref.setSummary(AC.getTextbyLanguage(R.string.HideStatusBarSum));
+			togglePref.setSummary(AC
+					.getTextbyLanguage(R.string.HideStatusBarSum));
 			inlinePrefSetting.addPreference(togglePref);
 			//
 			togglePref = new CheckBoxPreference(this);

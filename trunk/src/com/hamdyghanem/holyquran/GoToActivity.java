@@ -52,26 +52,15 @@ public class GoToActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		try {
 			super.onCreate(savedInstanceState);
-			final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
-
+ 
 			setContentView(R.layout.navigate);
 			AC = (ApplicationController) getApplicationContext(); // RadioGroup.VERTICAL
 			// /////////CHANGE THE TITLE BAR///////////////
 			Typeface arabicFont = Typeface.createFromAsset(getAssets(),
 					"fonts/DroidSansArabic.ttf");
+			this.setTitle(AC.getTextbyLanguage(R.string.GoToActivity));
 
-			if (customTitleSupported) {
-				getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
-						R.layout.mytitle);
-			}
-
-			final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
-			if (myTitleText != null) {
-				myTitleText.setTypeface(arabicFont);
-				myTitleText
-						.setText(AC.getTextbyLanguage(R.string.GoToActivity));
-				// myTitleText.setBackgroundColor(R.color.blackblue);
-			}
+			
 			// //////////////////////
 			//
 			bDontFire = true;
@@ -85,6 +74,7 @@ public class GoToActivity extends Activity {
 			// textViewResId)
 			spinneradapter adapter = null;
 			if (AC.iLanguage == 0)
+				
 				adapter = spinneradapter.createFromResource(this,
 						R.array.Chapter_array,
 						android.R.layout.simple_spinner_item, arabicFont);
@@ -217,8 +207,10 @@ public class GoToActivity extends Activity {
 				Log.d("Page", Integer.toString(iPage));
 				Integer i = AC.bookmarkUtitliy.getDefault();
 				AC.bookmarkUtitliy.arr.get(i).setPage(iPage);
+			
 				Intent intent = new Intent();
-				intent.putExtra("returnKey", i);
+				//intent.putExtra("returnKey", i);
+				intent.putExtra("returnKey", iPage);
 				setResult(RESULT_OK, intent);
 				finish();
 

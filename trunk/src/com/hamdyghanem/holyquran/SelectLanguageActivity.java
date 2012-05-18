@@ -52,26 +52,13 @@ public class SelectLanguageActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		try {
-			final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 
 			setContentView(R.layout.selectlanguage);
 			AC = (ApplicationController) getApplicationContext();
 
-			// /////////CHANGE THE TITLE BAR///////////////
+			this.setTitle(AC.getTextbyLanguage(R.string.SetLanguage));
 			Typeface arabicFont = Typeface.createFromAsset(getAssets(),
 					"fonts/DroidSansArabic.ttf");
-
-			if (customTitleSupported) {
-				getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
-						R.layout.mytitle);
-			}
-
-			final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
-			if (myTitleText != null) {
-				myTitleText.setTypeface(arabicFont);
-				myTitleText.setText(AC.getTextbyLanguage(R.string.settings));
-				// myTitleText.setBackgroundColor(R.color.blackblue);
-			}
 			// //////////////////////
 			getWindow().setLayout(LayoutParams.FILL_PARENT,
 					LayoutParams.FILL_PARENT);
@@ -106,7 +93,7 @@ public class SelectLanguageActivity extends Activity {
 			try {
 				// Perform action on clicks
 				RadioButton rb = (RadioButton) v;
-				Integer lang= Integer.parseInt(rb.getTag().toString());
+				Integer lang = Integer.parseInt(rb.getTag().toString());
 				Intent intent = new Intent();
 				intent.putExtra("returnKey", lang);
 				setResult(RESULT_OK, intent);

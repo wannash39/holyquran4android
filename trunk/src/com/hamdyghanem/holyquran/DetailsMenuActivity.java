@@ -53,25 +53,15 @@ public class DetailsMenuActivity extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
-
+ 
 		// setContentView(R.layout.detailsmenu);
 		// /////////CHANGE THE TITLE BAR///////////////
 		arabicFont = Typeface.createFromAsset(getAssets(),
 				"fonts/DroidSansArabic.ttf");
-
-		if (customTitleSupported) {
-			getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
-					R.layout.mytitle);
-		}
-		final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
-		if (myTitleText != null) {
-			myTitleText.setTypeface(arabicFont);
-			myTitleText.setText(R.string.detailsmenu);
-			// myTitleText.setBackgroundColor(R.color.blackblue);
-		}
+ 
 		// //////////////////////
 		AC = (ApplicationController) getApplicationContext(); // RadioGroup.VERTICAL
+		this.setTitle(AC.getTextbyLanguage(R.string.detailsmenu));
 
 		getWindow().setLayout(LayoutParams.FILL_PARENT,
 				LayoutParams.FILL_PARENT);

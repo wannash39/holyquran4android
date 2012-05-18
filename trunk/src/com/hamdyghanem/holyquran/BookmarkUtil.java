@@ -74,14 +74,7 @@ public class BookmarkUtil {
 	protected void LoadBookmarks(String strBookmarks) {
 		try {
 			arr.clear();
-			// Retrieve an editor to modify the shared preferences.
-			// Store new primitive types in the shared preferences object.
 
-			// if (strBookmarks == null || strBookmarks.length() == 0)
-			// strBookmarks = mySharedPreferences.getString("Bookmarks",
-			// DefBookmarks);
-			// InitiateBookmars();
-			Log.d("err ->", strBookmarks);
 			String[] row = strBookmarks.split("#");
 			for (int i = 0; i < row.length; i++) {
 				String[] col = row[i].split(",");

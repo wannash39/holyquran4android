@@ -56,25 +56,11 @@ public class EnglishActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
-		setContentView(R.layout.english);
+ 		setContentView(R.layout.english);
 		AC = (ApplicationController) getApplicationContext(); // RadioGroup.VERTICAL
+		this.setTitle(AC.getTextbyLanguage(R.string.English));
 
-		// /////////CHANGE THE TITLE BAR///////////////
-		Typeface arabicFont = Typeface.createFromAsset(getAssets(),
-				"fonts/DroidSansArabic.ttf");
-
-		if (customTitleSupported) {
-			getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
-					R.layout.mytitle);
-		}
-
-		final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
-		if (myTitleText != null) {
-			myTitleText.setTypeface(arabicFont);
-			myTitleText.setText(AC.getTextbyLanguage(R.string.English));
-			// myTitleText.setBackgroundColor(R.color.blackblue);
-		}
+		
 		// //////////////////////
 		getWindow().setLayout(LayoutParams.FILL_PARENT,
 				LayoutParams.FILL_PARENT);
