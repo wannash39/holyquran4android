@@ -9,11 +9,67 @@ package com.hamdyghanem.holyquran;
 
 public final class R {
     public static final class array {
-        public static final int Chapter_array=0x7f070000;
-        public static final int SoraName_array=0x7f070001;
-        public static final int SoraValue_array=0x7f070002;
+        public static final int Chapter_array=0x7f050008;
+        public static final int Chapter_array_en=0x7f050009;
+        /**  Used in View/Spinner1.java 
+         */
+        public static final int Languages=0x7f050000;
+        public static final int LanguagesValues=0x7f050001;
+        public static final int PageVerse_array=0x7f05000d;
+        public static final int Reciter=0x7f050005;
+        public static final int ReciterValues=0x7f050007;
+        public static final int Reciter_en=0x7f050006;
+        public static final int SCREEN_ORIENTATION=0x7f050002;
+        public static final int SCREEN_ORIENTATION_EN=0x7f050003;
+        public static final int SCREEN_ORIENTATION_Values=0x7f050004;
+        public static final int SoraNameEn_array=0x7f05000b;
+        public static final int SoraName_array=0x7f05000a;
+        public static final int SoraValue_array=0x7f05000c;
     }
     public static final class attr {
+        /** <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int backgroundColor=0x7f010003;
+        /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int keywords=0x7f010006;
+        /** <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int primaryTextColor=0x7f010004;
+        /** <p>Must be an integer value, such as "<code>100</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int refreshInterval=0x7f010007;
+        /** <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int secondaryTextColor=0x7f010005;
         /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -43,118 +99,351 @@ containing a value of this type.
         public static final int textSize=0x7f010002;
     }
     public static final class color {
-        public static final int black=0x7f050001;
-        public static final int blackblue=0x7f050003;
-        public static final int white=0x7f050000;
-        public static final int whiteyellow=0x7f050002;
+        public static final int black=0x7f060001;
+        public static final int blackblue=0x7f060003;
+        public static final int white=0x7f060000;
+        public static final int whiteyellow=0x7f060002;
     }
     public static final class drawable {
         public static final int ic_about=0x7f020000;
         public static final int ic_bookmark=0x7f020001;
-        public static final int ic_goto=0x7f020002;
-        public static final int ic_launcher_hq=0x7f020003;
-        public static final int ic_newbookmark=0x7f020004;
-        public static final int ic_settings=0x7f020005;
-        public static final int ic_tafseer=0x7f020006;
-        public static final int icon=0x7f020007;
-        public static final int img_0=0x7f020008;
-        public static final int img_1=0x7f020009;
-        public static final int img_no=0x7f02000a;
+        public static final int ic_details=0x7f020002;
+        public static final int ic_goto=0x7f020003;
+        public static final int ic_launcher_hq=0x7f020004;
+        public static final int ic_newbookmark=0x7f020005;
+        public static final int ic_search=0x7f020006;
+        public static final int ic_settings=0x7f020007;
+        public static final int ic_tafseer=0x7f020008;
+        public static final int icon=0x7f020009;
+        public static final int img_0_50=0x7f02000a;
+        public static final int img_1_50=0x7f02000b;
+        public static final int img_2_50=0x7f02000c;
+        public static final int img_no=0x7f02000d;
+        public static final int navback=0x7f02000e;
+        public static final int navnext=0x7f02000f;
+        public static final int pause=0x7f020010;
+        public static final int play=0x7f020011;
+        public static final int recback=0x7f020012;
+        public static final int recnext=0x7f020013;
+        public static final int recsettings=0x7f020014;
+        public static final int stop=0x7f020015;
     }
     public static final class id {
-        public static final int ButAddNew=0x7f0a000c;
-        public static final int ButCancel=0x7f0a0007;
-        public static final int ButEditBookmark=0x7f0a000d;
-        public static final int ButNew=0x7f0a0006;
-        public static final int ButOK=0x7f0a0008;
-        public static final int EditText01=0x7f0a0010;
-        public static final int EditText02=0x7f0a0013;
-        public static final int EditText03=0x7f0a0016;
-        public static final int Gallery01=0x7f0a0017;
-        public static final int ProgressBar01=0x7f0a000e;
-        public static final int RadioGroup01=0x7f0a000a;
-        public static final int TableLayoutBody=0x7f0a0003;
-        public static final int TableLayoutFooter=0x7f0a0004;
-        public static final int TableLayoutMain=0x7f0a0002;
-        public static final int TableRow01=0x7f0a0005;
-        public static final int TableRow02=0x7f0a0011;
-        public static final int TableRow03=0x7f0a0014;
-        public static final int TableRow11=0x7f0a000b;
-        public static final int TextView01=0x7f0a0001;
-        public static final int TextView02=0x7f0a0012;
-        public static final int TextView03=0x7f0a0015;
-        public static final int TextViewHeader=0x7f0a000f;
-        public static final int btnSettDownload=0x7f0a0020;
-        public static final int btnTafserDownload=0x7f0a0021;
-        public static final int lblChapter=0x7f0a001b;
-        public static final int lblPageNum=0x7f0a0019;
-        public static final int lblSeprator=0x7f0a001f;
-        public static final int lblSora=0x7f0a001d;
-        public static final int mnu_about=0x7f0a0028;
-        public static final int mnu_bookmark=0x7f0a0023;
-        public static final int mnu_goto=0x7f0a0024;
-        public static final int mnu_newbookmark=0x7f0a0026;
-        public static final int mnu_settings=0x7f0a0027;
-        public static final int mnu_tafseer=0x7f0a0025;
-        public static final int myTitle=0x7f0a0018;
-        public static final int spnBookmarks=0x7f0a0009;
-        public static final int spnChapter=0x7f0a001c;
-        public static final int spnSora=0x7f0a001e;
+        public static final int ButAddNew=0x7f0a000f;
+        public static final int ButCancel=0x7f0a000a;
+        public static final int ButEditBookmark=0x7f0a0010;
+        public static final int ButNew=0x7f0a0009;
+        public static final int ButOK=0x7f0a000b;
+        public static final int ButtSearch=0x7f0a003e;
+        public static final int EditText01=0x7f0a001f;
+        public static final int EditText02=0x7f0a0022;
+        public static final int EditText03=0x7f0a0025;
+        public static final int Gallery01=0x7f0a0028;
+        public static final int HeaderLayout=0x7f0a0029;
+        public static final int ImageView01=0x7f0a0044;
+        public static final int LinearLayout01=0x7f0a0042;
+        public static final int ProgressBar01=0x7f0a001a;
+        public static final int RadioGroup01=0x7f0a000d;
+        public static final int RecetationLayout=0x7f0a002d;
+        public static final int ScrollView01=0x7f0a0027;
+        public static final int TableLayoutBody=0x7f0a0006;
+        public static final int TableLayoutFooter=0x7f0a0007;
+        public static final int TableLayoutFooter2=0x7f0a0046;
+        public static final int TableLayoutMain=0x7f0a0005;
+        public static final int TableLayoutMainsett=0x7f0a0011;
+        public static final int TableRow01=0x7f0a0008;
+        public static final int TableRow02=0x7f0a0020;
+        public static final int TableRow03=0x7f0a0023;
+        public static final int TableRow11=0x7f0a000e;
+        public static final int TextView01=0x7f0a0019;
+        public static final int TextView02=0x7f0a0021;
+        public static final int TextView03=0x7f0a0024;
+        public static final int TextViewHeader=0x7f0a001e;
+        public static final int adhost=0x7f0a000c;
+        public static final int backlightcontrol=0x7f0a0002;
+        public static final int backlightsetting=0x7f0a0003;
+        public static final int btnAudioDownload=0x7f0a0014;
+        public static final int btnDatabaseDownload=0x7f0a0013;
+        public static final int btnDictionayDownload=0x7f0a0017;
+        public static final int btnSettDownload=0x7f0a0012;
+        public static final int btnTaareefDownload=0x7f0a0016;
+        public static final int btnTafserDownload=0x7f0a0015;
+        public static final int btndownloadaudioquran=0x7f0a001c;
+        public static final int btndownloadaudiosura=0x7f0a001b;
+        public static final int buttonNavBack=0x7f0a002a;
+        public static final int buttonNavNext=0x7f0a002c;
+        public static final int buttonPlayBack=0x7f0a0030;
+        public static final int buttonPlayNext=0x7f0a0032;
+        public static final int buttonPlayPause=0x7f0a0031;
+        public static final int buttonRecitationSettings=0x7f0a002e;
+        public static final int buttonStop=0x7f0a002f;
+        public static final int chkUseTahfeez=0x7f0a0048;
+        public static final int editSearch=0x7f0a003d;
+        public static final int examplegallery=0x7f0a0043;
+        public static final int img=0x7f0a004e;
+        public static final int imgLeft=0x7f0a004d;
+        public static final int lblChapter=0x7f0a0036;
+        public static final int lblFromNum=0x7f0a0049;
+        public static final int lblPageNum=0x7f0a0034;
+        public static final int lblSeprator=0x7f0a003a;
+        public static final int lblSora=0x7f0a0038;
+        public static final int lblToNum=0x7f0a004b;
+        public static final int mnu_about=0x7f0a0054;
+        public static final int mnu_bookmark=0x7f0a004f;
+        public static final int mnu_details=0x7f0a0052;
+        public static final int mnu_goto=0x7f0a0050;
+        public static final int mnu_search=0x7f0a0051;
+        public static final int mnu_settings=0x7f0a0053;
+        public static final int myTitle=0x7f0a0033;
+        public static final int optAtabic=0x7f0a003f;
+        public static final int optEnglish=0x7f0a0040;
+        public static final int relative=0x7f0a0026;
+        public static final int searchTableLayoutHeader=0x7f0a003c;
+        public static final int searchTableLayoutMain=0x7f0a003b;
+        public static final int searchTableLayoutResult=0x7f0a0041;
+        public static final int spnChapter=0x7f0a0037;
+        public static final int spnSora=0x7f0a0039;
         public static final int test_image=0x7f0a0000;
-        public static final int txtPageNum=0x7f0a001a;
-        public static final int webviewtafseer=0x7f0a0022;
+        public static final int txtData=0x7f0a0001;
+        public static final int txtFromNum=0x7f0a004a;
+        public static final int txtHeader=0x7f0a002b;
+        public static final int txtPageNum=0x7f0a0035;
+        public static final int txtRecitationDownload=0x7f0a0018;
+        public static final int txtToNum=0x7f0a004c;
+        public static final int updatesystemsetting=0x7f0a0004;
+        public static final int vwLanguage=0x7f0a0045;
+        public static final int webviewenglish=0x7f0a001d;
+        public static final int webviewtafseer=0x7f0a0047;
     }
     public static final class layout {
         public static final int about=0x7f030000;
-        public static final int bookmarkedit=0x7f030001;
-        public static final int bookmarks=0x7f030002;
-        public static final int downloading=0x7f030003;
-        public static final int gotopage=0x7f030004;
-        public static final int main=0x7f030005;
-        public static final int mytitle=0x7f030006;
-        public static final int navigate=0x7f030007;
-        public static final int settings=0x7f030008;
-        public static final int tafseer=0x7f030009;
+        public static final int backlightsetting=0x7f030001;
+        public static final int bookmarkedit=0x7f030002;
+        public static final int bookmarks=0x7f030003;
+        public static final int download=0x7f030004;
+        public static final int downloadfailed=0x7f030005;
+        public static final int downloading=0x7f030006;
+        public static final int downloadrecitation=0x7f030007;
+        public static final int english=0x7f030008;
+        public static final int gotopage=0x7f030009;
+        public static final int main=0x7f03000a;
+        public static final int mytitle=0x7f03000b;
+        public static final int navigate=0x7f03000c;
+        public static final int search=0x7f03000d;
+        public static final int selectimagetype=0x7f03000e;
+        public static final int selectlanguage=0x7f03000f;
+        public static final int settings=0x7f030010;
+        public static final int tafseer=0x7f030011;
+        public static final int tahfeez=0x7f030012;
+        public static final int zoom=0x7f030013;
     }
     public static final class menu {
         public static final int hq_menu=0x7f090000;
     }
     public static final class string {
-        public static final int AboutActivity=0x7f060007;
-        public static final int BookmarkEdit=0x7f060015;
-        public static final int BookmarksActivity=0x7f060014;
-        public static final int ButtCancel=0x7f060017;
-        public static final int ButtNew=0x7f060018;
-        public static final int ButtOK=0x7f060016;
-        public static final int Default=0x7f06001d;
-        public static final int Delete=0x7f06001a;
-        public static final int GoToActivity=0x7f060006;
-        public static final int Name=0x7f06001b;
-        public static final int Page=0x7f06001c;
-        public static final int Static=0x7f060019;
-        public static final int about=0x7f06000e;
-        public static final int alreadyexistbookmark=0x7f06000b;
-        public static final int app_name=0x7f060000;
-        public static final int bookmark=0x7f060012;
-        public static final int btn_download_pages=0x7f060001;
-        public static final int btn_download_tafser=0x7f060002;
-        public static final int defaultbookmark=0x7f060005;
-        public static final int defaultname=0x7f060008;
-        public static final int downloading=0x7f060003;
-        public static final int gotoPage1=0x7f060020;
-        public static final int gotoPage2=0x7f060021;
-        public static final int gotoPage3=0x7f060022;
-        public static final int gotoPageHeader=0x7f06001f;
-        public static final int gotomenu=0x7f06000f;
-        public static final int holyquran=0x7f06000c;
-        public static final int lbl_settings=0x7f060011;
-        public static final int newbookmark=0x7f060013;
-        public static final int notexistimage=0x7f06000a;
-        public static final int notexistpage=0x7f060004;
-        public static final int notexisttafser=0x7f060009;
-        public static final int settings=0x7f06000d;
-        public static final int tafseer=0x7f06001e;
-        public static final int tafseermenu=0x7f060010;
+        public static final int AboutActivity=0x7f070061;
+        public static final int AboutActivity_en=0x7f070062;
+        public static final int ActivateTahfeez=0x7f07002e;
+        public static final int ActivateTahfeez_en=0x7f07002f;
+        public static final int AudioOn=0x7f0700a5;
+        public static final int AudioOnSumm=0x7f0700a9;
+        public static final int AudioOnSumm_en=0x7f0700aa;
+        public static final int AudioOn_en=0x7f0700a6;
+        public static final int BILanguage=0x7f07002b;
+        public static final int Backlight=0x7f07001d;
+        public static final int BacklightSumm=0x7f07001f;
+        public static final int BacklightSumm_en=0x7f070020;
+        public static final int Backlight_en=0x7f07001e;
+        public static final int BookmarkEdit=0x7f0700ad;
+        public static final int BookmarkEdit_en=0x7f0700ae;
+        public static final int BookmarksActivity=0x7f070095;
+        public static final int BookmarksActivity_en=0x7f070096;
+        public static final int ButtCancel=0x7f0700b1;
+        public static final int ButtCancel_en=0x7f0700b2;
+        public static final int ButtNew=0x7f0700b3;
+        public static final int ButtNewCurrent=0x7f0700b5;
+        public static final int ButtNewCurrent_en=0x7f0700b6;
+        public static final int ButtNew_en=0x7f0700b4;
+        public static final int ButtOK=0x7f0700af;
+        public static final int ButtOK_en=0x7f0700b0;
+        public static final int Default=0x7f0700bf;
+        public static final int Default_en=0x7f0700c0;
+        public static final int Delete=0x7f0700b9;
+        public static final int Delete_en=0x7f0700ba;
+        public static final int Dictionary=0x7f07000d;
+        public static final int Dictionary_en=0x7f07000e;
+        public static final int DownloadFailed=0x7f070005;
+        public static final int DownloadFailed_en=0x7f070006;
+        public static final int English=0x7f07005b;
+        public static final int English_en=0x7f07005c;
+        public static final int GoToActivity=0x7f07005f;
+        public static final int GoToActivity_en=0x7f070060;
+        public static final int HideStatusBar=0x7f070034;
+        public static final int HideStatusBarSum=0x7f070036;
+        public static final int HideStatusBarSum_en=0x7f070037;
+        public static final int HideStatusBar_en=0x7f070035;
+        public static final int ImgType=0x7f070007;
+        public static final int ImgTypeSumm=0x7f070017;
+        public static final int ImgTypeSumm_en=0x7f070018;
+        public static final int ImgType_en=0x7f070008;
+        public static final int LangArabic=0x7f07007a;
+        public static final int LangEnglish=0x7f070079;
+        public static final int Language=0x7f070077;
+        public static final int LanguageAlert=0x7f0700ab;
+        public static final int LanguageAlert_en=0x7f0700ac;
+        public static final int Language_en=0x7f070078;
+        public static final int ManualNav=0x7f070099;
+        public static final int ManualNavSum=0x7f07009b;
+        public static final int ManualNavSum_en=0x7f07009c;
+        public static final int ManualNav_en=0x7f07009a;
+        public static final int Name=0x7f0700bb;
+        public static final int Name_en=0x7f0700bc;
+        public static final int NoInternet=0x7f070003;
+        public static final int NoInternet_en=0x7f070004;
+        public static final int Pag_ene=0x7f0700be;
+        public static final int Page=0x7f0700bd;
+        public static final int Reciter=0x7f070009;
+        public static final int ReciterSumm=0x7f070015;
+        public static final int ReciterSumm_en=0x7f070016;
+        public static final int Reciter_en=0x7f07000a;
+        public static final int SCREEN_ORIENTATION=0x7f070011;
+        public static final int SCREEN_ORIENTATION_en=0x7f070012;
+        public static final int SCREEN_ORIENTATION_enSumm=0x7f070013;
+        public static final int SCREEN_ORIENTATION_enSumm_en=0x7f070014;
+        public static final int ScreenOn=0x7f0700a3;
+        public static final int ScreenOnAlert=0x7f0700a7;
+        public static final int ScreenOnAlert_en=0x7f0700a8;
+        public static final int ScreenOn_en=0x7f0700a4;
+        public static final int Search=0x7f070050;
+        public static final int SearchNoData=0x7f070048;
+        public static final int SearchNoData_en=0x7f070049;
+        public static final int Search_en=0x7f070051;
+        public static final int Searching=0x7f07004e;
+        public static final int Searching_en=0x7f07004f;
+        public static final int SelectImageType=0x7f07000f;
+        public static final int SelectImageType_en=0x7f070010;
+        public static final int SetLanguage=0x7f07000b;
+        public static final int SetLanguage_en=0x7f07000c;
+        public static final int Static=0x7f0700b7;
+        public static final int Static_en=0x7f0700b8;
+        public static final int TahfeezActivity=0x7f07005d;
+        public static final int TahfeezActivity_en=0x7f07005e;
+        public static final int about=0x7f07007f;
+        public static final int about_en=0x7f070080;
+        public static final int alreadyexistbookmark=0x7f07006d;
+        public static final int alreadyexistbookmark_en=0x7f07006e;
+        public static final int app_name=0x7f070000;
+        public static final int bookmark=0x7f070091;
+        public static final int bookmark_en=0x7f070092;
+        public static final int btn_download_database=0x7f070023;
+        public static final int btn_download_database_en=0x7f070024;
+        public static final int btn_download_dictionary=0x7f070029;
+        public static final int btn_download_dictionary_en=0x7f07002a;
+        public static final int btn_download_pages=0x7f070021;
+        public static final int btn_download_pages_en=0x7f070022;
+        public static final int btn_download_tafser=0x7f070025;
+        public static final int btn_download_tafser_en=0x7f070026;
+        public static final int btn_download_tareef=0x7f070027;
+        public static final int btn_download_tareef_en=0x7f070028;
+        public static final int btndownloadaudiopage=0x7f070055;
+        public static final int btndownloadaudiopage_en=0x7f070056;
+        public static final int btndownloadaudioquran=0x7f070059;
+        public static final int btndownloadaudioquran_en=0x7f07005a;
+        public static final int btndownloadaudiosura=0x7f070057;
+        public static final int btndownloadaudiosura_en=0x7f070058;
+        public static final int createtabimage=0x7f07009f;
+        public static final int createtabimage_en=0x7f0700a0;
+        public static final int createtabimagedialog=0x7f07003e;
+        public static final int createtabimagedialog_en=0x7f07003f;
+        public static final int createtabimagesumm=0x7f0700a1;
+        public static final int createtabimagesumm_en=0x7f0700a2;
+        public static final int defaultbookmark=0x7f070052;
+        public static final int defaultname=0x7f070063;
+        public static final int defaultname_en=0x7f070064;
+        public static final int detailsmenu=0x7f070097;
+        public static final int detailsmenu_en=0x7f070098;
+        public static final int download=0x7f070019;
+        public static final int downloadSumm=0x7f07001b;
+        public static final int downloadSumm_en=0x7f07001c;
+        public static final int download_en=0x7f07001a;
+        public static final int downloadaudiofiles=0x7f07004a;
+        public static final int downloadaudiofiles_en=0x7f07004b;
+        public static final int downloadingdatabase=0x7f070040;
+        public static final int downloadingdatabase_en=0x7f070041;
+        public static final int downloadingdictionary=0x7f07003c;
+        public static final int downloadingdictionary_en=0x7f07003d;
+        public static final int downloadingpages=0x7f070038;
+        public static final int downloadingpages_en=0x7f070039;
+        public static final int downloadingtafseer=0x7f070042;
+        public static final int downloadingtafseer_en=0x7f070043;
+        public static final int downloadingtareef=0x7f07003a;
+        public static final int downloadingtareef_en=0x7f07003b;
+        public static final int found=0x7f070046;
+        public static final int found_en=0x7f070047;
+        public static final int gotoPage1=0x7f0700c5;
+        public static final int gotoPage1_en=0x7f0700c6;
+        public static final int gotoPage2=0x7f0700c7;
+        public static final int gotoPage2_en=0x7f0700c8;
+        public static final int gotoPage3=0x7f0700c9;
+        public static final int gotoPage3_en=0x7f0700ca;
+        public static final int gotoPageHeader=0x7f0700c3;
+        public static final int gotoPageHeader_en=0x7f0700c4;
+        public static final int gotomenu=0x7f070081;
+        public static final int gotomenu_en=0x7f070082;
+        public static final int holyquran=0x7f07007b;
+        public static final int holyquran_en=0x7f07007c;
+        public static final int lblFromNum=0x7f070030;
+        public static final int lblFromNum_en=0x7f070031;
+        public static final int lblToNum=0x7f070032;
+        public static final int lblToNum_en=0x7f070033;
+        public static final int lbl_settings=0x7f07008f;
+        public static final int lbl_settings_en=0x7f070090;
+        public static final int mnuDictionary=0x7f07008b;
+        public static final int mnuDictionary_en=0x7f07008c;
+        public static final int mnuTaareef=0x7f070089;
+        public static final int mnuTaareef_en=0x7f07008a;
+        public static final int mnuTafseer=0x7f070085;
+        public static final int mnuTafseer_en=0x7f070086;
+        public static final int mnuTanslation=0x7f070087;
+        public static final int mnuTanslation_en=0x7f070088;
+        public static final int mnuZoom=0x7f07008d;
+        public static final int mnuZoom_en=0x7f07008e;
+        public static final int newbookmark=0x7f070093;
+        public static final int newbookmark_en=0x7f070094;
+        public static final int newversion=0x7f070001;
+        public static final int newversion_en=0x7f070002;
+        public static final int notexistaudio=0x7f07004c;
+        public static final int notexistaudio_en=0x7f07004d;
+        public static final int notexistdb=0x7f070067;
+        public static final int notexistdb_en=0x7f070068;
+        public static final int notexistdictionary=0x7f07006b;
+        public static final int notexistdictionary_en=0x7f07006c;
+        public static final int notexistimage=0x7f070069;
+        public static final int notexistimage_en=0x7f07006a;
+        public static final int notexistpage=0x7f070044;
+        public static final int notexistpage_en=0x7f070045;
+        public static final int notexisttafser=0x7f070065;
+        public static final int notexisttafser_en=0x7f070066;
+        public static final int plzrestart=0x7f07002c;
+        public static final int plzrestart_en=0x7f07002d;
+        public static final int searchAya=0x7f070073;
+        public static final int searchAya_en=0x7f070074;
+        public static final int searchContent=0x7f070075;
+        public static final int searchContent_en=0x7f070076;
+        public static final int searchPage=0x7f07006f;
+        public static final int searchPage_en=0x7f070070;
+        public static final int searchSura=0x7f070071;
+        public static final int searchSura_en=0x7f070072;
+        public static final int settings=0x7f07007d;
+        public static final int settings_en=0x7f07007e;
+        public static final int tafseer=0x7f0700c1;
+        public static final int tafseer_en=0x7f0700c2;
+        public static final int tafseermenu=0x7f070083;
+        public static final int tafseermenu_en=0x7f070084;
+        public static final int zoomdefault=0x7f07009d;
+        public static final int zoomdefault_en=0x7f07009e;
+        public static final int zoommode=0x7f070053;
+        public static final int zoommode_en=0x7f070054;
     }
     public static final class style {
         public static final int MyDefaultTextAppearance=0x7f080001;
@@ -164,26 +453,28 @@ containing a value of this type.
         public static final int bookmarks=0x7f040000;
     }
     public static final class styleable {
-        /**  These are the attributes that we want to retrieve from the theme
-         in view/Gallery1.java 
+        /** 
+         These are the attributes that we want to retrieve from the theme
+         in view/Gallery1.java
+    
            <p>Includes the following attributes:</p>
            <table>
            <colgroup align="left" />
            <colgroup align="left" />
            <tr><th>Attribute</th><th>Description</th></tr>
-           <tr><td><code>{@link #Gallery1_android_galleryItemBackground com.hamdyghanem.holyquran:android_galleryItemBackground}</code></td><td></td></tr>
+           <tr><td><code>{@link #GalleryTheme_android_galleryItemBackground com.hamdyghanem.holyquran:android_galleryItemBackground}</code></td><td></td></tr>
            </table>
-           @see #Gallery1_android_galleryItemBackground
+           @see #GalleryTheme_android_galleryItemBackground
          */
-        public static final int[] Gallery1 = {
+        public static final int[] GalleryTheme = {
             0x0101004c
         };
         /**
           <p>This symbol is the offset where the {@link com.hamdyghanem.holyquran.R.attr#android_galleryItemBackground}
-          attribute's value can be found in the {@link #Gallery1} array.
+          attribute's value can be found in the {@link #GalleryTheme} array.
           @attr name android:android_galleryItemBackground
         */
-        public static final int Gallery1_android_galleryItemBackground = 0;
+        public static final int GalleryTheme_android_galleryItemBackground = 0;
         /** Attributes that can be used with a LabelView.
            <p>Includes the following attributes:</p>
            <table>
@@ -246,8 +537,10 @@ containing a value of this type.
           @attr name android:textSize
         */
         public static final int LabelView_textSize = 2;
-        /**  These are the attributes that we want to retrieve from the theme
-         in app/PreferencesFromCode.java 
+        /** 
+         These are the attributes that we want to retrieve from the theme
+         in app/PreferencesFromCode.java
+    
            <p>Includes the following attributes:</p>
            <table>
            <colgroup align="left" />
@@ -266,5 +559,100 @@ containing a value of this type.
           @attr name android:android_preferenceLayoutChild
         */
         public static final int TogglePrefAttrs_android_preferenceLayoutChild = 0;
+        /** Attributes that can be used with a com_admob_android_ads_AdView.
+           <p>Includes the following attributes:</p>
+           <table>
+           <colgroup align="left" />
+           <colgroup align="left" />
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #com_admob_android_ads_AdView_backgroundColor com.hamdyghanem.holyquran:backgroundColor}</code></td><td></td></tr>
+           <tr><td><code>{@link #com_admob_android_ads_AdView_keywords com.hamdyghanem.holyquran:keywords}</code></td><td></td></tr>
+           <tr><td><code>{@link #com_admob_android_ads_AdView_primaryTextColor com.hamdyghanem.holyquran:primaryTextColor}</code></td><td></td></tr>
+           <tr><td><code>{@link #com_admob_android_ads_AdView_refreshInterval com.hamdyghanem.holyquran:refreshInterval}</code></td><td></td></tr>
+           <tr><td><code>{@link #com_admob_android_ads_AdView_secondaryTextColor com.hamdyghanem.holyquran:secondaryTextColor}</code></td><td></td></tr>
+           </table>
+           @see #com_admob_android_ads_AdView_backgroundColor
+           @see #com_admob_android_ads_AdView_keywords
+           @see #com_admob_android_ads_AdView_primaryTextColor
+           @see #com_admob_android_ads_AdView_refreshInterval
+           @see #com_admob_android_ads_AdView_secondaryTextColor
+         */
+        public static final int[] com_admob_android_ads_AdView = {
+            0x7f010003, 0x7f010004, 0x7f010005, 0x7f010006,
+            0x7f010007
+        };
+        /**
+          <p>This symbol is the offset where the {@link com.hamdyghanem.holyquran.R.attr#backgroundColor}
+          attribute's value can be found in the {@link #com_admob_android_ads_AdView} array.
+
+
+          <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name android:backgroundColor
+        */
+        public static final int com_admob_android_ads_AdView_backgroundColor = 0;
+        /**
+          <p>This symbol is the offset where the {@link com.hamdyghanem.holyquran.R.attr#keywords}
+          attribute's value can be found in the {@link #com_admob_android_ads_AdView} array.
+
+
+          <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name android:keywords
+        */
+        public static final int com_admob_android_ads_AdView_keywords = 3;
+        /**
+          <p>This symbol is the offset where the {@link com.hamdyghanem.holyquran.R.attr#primaryTextColor}
+          attribute's value can be found in the {@link #com_admob_android_ads_AdView} array.
+
+
+          <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name android:primaryTextColor
+        */
+        public static final int com_admob_android_ads_AdView_primaryTextColor = 1;
+        /**
+          <p>This symbol is the offset where the {@link com.hamdyghanem.holyquran.R.attr#refreshInterval}
+          attribute's value can be found in the {@link #com_admob_android_ads_AdView} array.
+
+
+          <p>Must be an integer value, such as "<code>100</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name android:refreshInterval
+        */
+        public static final int com_admob_android_ads_AdView_refreshInterval = 4;
+        /**
+          <p>This symbol is the offset where the {@link com.hamdyghanem.holyquran.R.attr#secondaryTextColor}
+          attribute's value can be found in the {@link #com_admob_android_ads_AdView} array.
+
+
+          <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name android:secondaryTextColor
+        */
+        public static final int com_admob_android_ads_AdView_secondaryTextColor = 2;
     };
 }
