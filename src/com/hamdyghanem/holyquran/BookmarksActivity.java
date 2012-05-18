@@ -13,6 +13,11 @@ package com.hamdyghanem.holyquran;
 
 import java.util.ArrayList;
 
+import com.google.ads.Ad;
+import com.google.ads.AdListener;
+import com.google.ads.AdRequest;
+import com.google.ads.AdSize;
+import com.google.ads.AdView;
 import com.hamdyghanem.holyquran.R;
 
 import android.app.Activity;
@@ -32,6 +37,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -42,16 +48,18 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Toast;
 
-public class BookmarksActivity extends Activity {
+public class BookmarksActivity extends Activity implements AdListener {
 	/** Called when the activity is first created. */
 	ApplicationController AC;
 	Typeface arabicFont = null;
 	RadioGroup radioGroup = null;
+	private AdView adView;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+		// final boolean customTitleSupported =
+		// requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 
 		setContentView(R.layout.bookmarks);
 		AC = (ApplicationController) getApplicationContext();
@@ -59,19 +67,20 @@ public class BookmarksActivity extends Activity {
 		// /////////CHANGE THE TITLE BAR///////////////
 		arabicFont = Typeface.createFromAsset(getAssets(),
 				"fonts/DroidSansArabic.ttf");
+		this.setTitle(AC.getTextbyLanguage(R.string.BookmarksActivity));
 
-		if (customTitleSupported) {
-			getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
-					R.layout.mytitle);
-		}
-
-		final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
-		if (myTitleText != null) {
-			myTitleText.setTypeface(arabicFont);
-			myTitleText.setText(AC
-					.getTextbyLanguage(R.string.BookmarksActivity));
-			// myTitleText.setBackgroundColor(R.color.blackblue);
-		}
+		// if (customTitleSupported) {
+		// getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
+		// R.layout.mytitle);
+		// }
+		//
+		// final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
+		// if (myTitleText != null) {
+		// // myTitleText.setTypeface(arabicFont);
+		// myTitleText.setText(AC
+		// .getTextbyLanguage(R.string.BookmarksActivity));
+		// myTitleText.setBackgroundColor(R.color.blackblue);
+		// }
 		// //////////////////////
 		getWindow().setLayout(LayoutParams.FILL_PARENT,
 				LayoutParams.FILL_PARENT);
@@ -89,12 +98,34 @@ public class BookmarksActivity extends Activity {
 		((Button) findViewById(R.id.ButEditBookmark)).setText(AC
 				.getTextbyLanguage(R.string.BookmarkEdit));
 		//
+
+		// Set the AdListener.
+		adView = new AdView(this, AdSize.BANNER, AC.MY_INTERSTITIAL_UNIT_ID);
+		adView.setAdListener(this);
+		LinearLayout layout = (LinearLayout) findViewById(R.id.adhost);
+
+		layout.addView(adView);
+		AdRequest adRequest = new AdRequest();
+		adRequest.addTestDevice("6FF5360DEE298C4BDCF32E5F6C3EEDEC");
+		adView.loadAd(adRequest);
+
+		Log.d("AdExamples_Class", "loadInterstitial");
 	}
 
 	@Override
 	public void onStop() {
 		AC.saveBookmarksDefalut();
 		super.onStop();
+	}
+
+	@Override
+	public void onDestroy() {
+		if (adView != null) {
+			// Destroy the AdView.
+			adView.destroy();
+		}
+
+		super.onDestroy();
 	}
 
 	/*
@@ -201,4 +232,50 @@ public class BookmarksActivity extends Activity {
 			finish();
 		}
 	};
+
+	@Override
+	public void onReceiveAd(Ad ad) {
+		Log.d("AdExamples_Class", "I received an ad");
+		// if (ad == interstitial) {
+		// interstitial.show();
+		// super.onReceiveAd ( adView );
+
+		// }
+	}
+
+	@Override
+	public void onFailedToReceiveAd(Ad ad, AdRequest.ErrorCode error) {
+		Log.d("AdExamples_Class", "I failed to receive an ad");
+		Log.d("AdExamples_Class", error.toString());
+	}
+
+	@Override
+	public void onPresentScreen(Ad ad) {
+		Log.d("AdExamples_Class", "Presenting screen");
+		// Deactivate buttons so interstitial returns before they can be
+		// clicked.
+		// if (bannerButton != null) {
+		// bannerButton.setEnabled(false);
+		// }
+		// if (interstitialButton != null) {
+		// interstitialButton.setEnabled(false);
+		// }
+	}
+
+	@Override
+	public void onDismissScreen(Ad ad) {
+		Log.d("AdExamples_Class", "Dismissing screen");
+		// Reactivate buttons after interstitial is dismissed.
+		// if (bannerButton != null) {
+		// bannerButton.setEnabled(true);
+		// }
+		// if (interstitialButton != null) {
+		// interstitialButton.setEnabled(true);
+		// }
+	}
+
+	@Override
+	public void onLeaveApplication(Ad ad) {
+		Log.d("AdExamples_Class", "Leaving application");
+	}
 }

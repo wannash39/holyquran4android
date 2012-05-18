@@ -76,9 +76,12 @@ public class ZoomActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		setContentView(R.layout.zoom);
+
 		getStatusbarHeight();
 		img = (ImageView) findViewById(R.id.img);
 		AC = (ApplicationController) getApplicationContext(); // RadioGroup.VERTICAL
+		this.setTitle(AC.getTextbyLanguage(R.string.zoomdefault));
+
 		strFile = baseImgDir + AC.CurrentImageType + "/"
 				+ Integer.toString(AC.iCurrentPage) + ".img";
 

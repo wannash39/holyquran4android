@@ -28,8 +28,7 @@ public class AboutActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
-
+ 
 		setContentView(R.layout.about);
 		//
 		AC = (ApplicationController) getApplicationContext(); // RadioGroup.VERTICAL
@@ -38,17 +37,8 @@ public class AboutActivity extends Activity {
 		Typeface arabicFont = Typeface.createFromAsset(getAssets(),
 				"fonts/DroidSansArabic.ttf");
 
-		if (customTitleSupported) {
-			getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
-					R.layout.mytitle);
-		}
-
-		final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
-		if (myTitleText != null) {
-			myTitleText.setTypeface(arabicFont);
-			myTitleText.setText(AC.getTextbyLanguage(R.string.AboutActivity));
-			// myTitleText.setBackgroundColor(R.color.blackblue);
-		}
+		this.setTitle(AC.getTextbyLanguage(R.string.AboutActivity));
+  
 		// //////////////////////
 		String strAbout = "<center><H1>";
 		strAbout += "<font color='black'>";

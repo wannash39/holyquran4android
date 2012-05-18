@@ -57,26 +57,15 @@ public class BookmarkEditActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		try {
 			super.onCreate(savedInstanceState);
-			final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
-			setContentView(R.layout.bookmarkedit);
+ 			setContentView(R.layout.bookmarkedit);
 			AC = (ApplicationController) getApplicationContext(); // RadioGroup.VERTICAL
 
 			// /////////CHANGE THE TITLE BAR///////////////
 			arabicFont = Typeface.createFromAsset(getAssets(),
 					"fonts/DroidSansArabic.ttf");
+		 
+			this.setTitle(AC.getTextbyLanguage(R.string.BookmarkEdit));
 
-			if (customTitleSupported) {
-				getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
-						R.layout.mytitle);
-			}
-
-			final TextView myTitleText = (TextView) findViewById(R.id.myTitle);
-			if (myTitleText != null) {
-				myTitleText.setTypeface(arabicFont);
-				myTitleText.setText(AC
-						.getTextbyLanguage(R.string.BookmarkEdit));
-				// myTitleText.setBackgroundColor(R.color.blackblue);
-			}
 			// //////////////////////
 			int i = 0;
 			tl = (TableLayout) findViewById(R.id.TableLayoutBody);

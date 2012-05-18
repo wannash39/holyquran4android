@@ -52,6 +52,7 @@ public class SelectImageType extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.selectimagetype);
 		AC = (ApplicationController) getApplicationContext();
+		this.setTitle(AC.getTextbyLanguage(R.string.SelectImageType));
 
 		imgView = (ImageView) findViewById(R.id.ImageView01);
 		// imgView.setImageResource(Imgid[0]);
